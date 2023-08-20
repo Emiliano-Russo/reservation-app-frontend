@@ -1,0 +1,7 @@
+{
+  "name": "reservation-app-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
