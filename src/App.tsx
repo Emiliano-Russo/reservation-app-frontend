@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { IonApp, setupIonicReact } from '@ionic/react';
-import Home from './pages/Home';
 import { SplashScreen } from '@capacitor/splash-screen';
 
 /* Core CSS required for Ionic components to work properly */
@@ -25,6 +24,7 @@ import { SignIn } from './pages/SignIn';
 import { SignUp } from './pages/SignUp';
 import { Provider } from 'react-redux';
 import store from "./redux/store";
+import { Home } from './pages/Home';
 
 setupIonicReact();
 

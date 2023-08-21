@@ -1,6 +1,6 @@
 import { IonLoading } from '@ionic/react';
 
-const LoadingScreen: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
+const SplashScreen: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
     return (
         <IonLoading
             isOpen={isOpen}
@@ -10,4 +10,4 @@ const LoadingScreen: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
     );
 };
 
-export default LoadingScreen;
+export default SplashScreen;

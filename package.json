@@ -12,6 +12,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.5",
     "@capacitor/app": "5.0.6",
     "@capacitor/core": "5.2.3",
     "@capacitor/haptics": "5.0.6",
