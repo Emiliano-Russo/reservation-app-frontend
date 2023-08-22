@@ -81,7 +81,7 @@ export const SignIn = withGuest(() => {
                 </div>
             </div>
             <div style={{ padding: '20px', textAlign: 'center' }}>
-                <h2 style={{ fontWeight: "bold" }}>Bienvenido!</h2>
+                <h2 style={{ fontWeight: "bold", color: "black" }}>Bienvenido!</h2>
                 <Input
                     type="email"
                     placeholder="Correo electrónico"

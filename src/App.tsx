@@ -23,8 +23,10 @@ import './theme/variables.css';
 import { SignIn } from './pages/SignIn';
 import { SignUp } from './pages/SignUp';
 import { Provider } from 'react-redux';
-import store from "./redux/store";
+import store from './redux/store';
 import { Home } from './pages/Home';
+import Reservations from './pages/Reservations';
+import { Profile } from './pages/Profile';
 
 setupIonicReact();
 
@@ -37,12 +39,14 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/reservations" element={<Reservations />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </BrowserRouter>
       </Provider>
     </IonApp>
-  )
+  );
 };
 
 export default App;
