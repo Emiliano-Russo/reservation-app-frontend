@@ -24,7 +24,7 @@ import { SignIn } from './pages/SignIn';
 import { SignUp } from './pages/SignUp';
 import { Provider } from 'react-redux';
 import store from './redux/store';
-import { Home } from './pages/Home';
+import { Home } from './pages/Home/Home';
 import Reservations from './pages/Reservations';
 import { Profile } from './pages/Profile/Profile';
 

@@ -6,6 +6,7 @@ import { ReservationStatus } from '../interfaces/reservation.status';
 import { withPageLayout } from '../wrappers/WithPageLayout';
 import Footer from '../components/Footer';
 import { tickets } from '../mocks/reservations';
+import SearchInput from '../components/SearchInput/SearchInput';
 
 const Reservations = withPageLayout(() => {
   return (
@@ -24,13 +25,7 @@ const Reservations = withPageLayout(() => {
         </p>
         <Button>Filtros</Button>
       </div>
-      <div style={{ padding: '0px 20px' }}>
-        <Input
-          placeholder=" Buscar algo"
-          prefix={<SearchOutlined />}
-          style={{ width: '100%', maxWidth: '400px', height: '57px' }}
-        />
-      </div>
+      <SearchInput />
       <div
         style={{
           display: 'flex',
