@@ -3,56 +3,11 @@ import { Button, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { ReservationCard } from '../components/ReservationCard';
 import { ReservationStatus } from '../interfaces/reservation.status';
+import { withPageLayout } from '../wrappers/WithPageLayout';
 import Footer from '../components/Footer';
-import { withFooterLayout } from '../wrappers/WithFooterLayout';
+import { tickets } from '../mocks/reservations';
 
-const Reservations = withFooterLayout(() => {
-  const tickets = [
-    {
-      name: 'Diego Billares',
-      date: '2023-08-20',
-      time: '02:00',
-      guests: 2,
-      status: ReservationStatus.Pending,
-    },
-    {
-      name: 'Diego Billares',
-      date: '2023-08-20',
-      time: '02:00',
-      guests: 3,
-      status: ReservationStatus.Pending,
-    },
-    {
-      name: 'Diego Billares',
-      date: '2023-08-20',
-      time: '02:00',
-      guests: 4,
-      status: ReservationStatus.Pending,
-    },
-    {
-      name: 'Diego Billares',
-      date: '2023-08-20',
-      time: '02:00',
-      guests: 7,
-      status: ReservationStatus.Pending,
-    },
-    {
-      name: 'Diego Billares',
-      date: '2023-08-20',
-      time: '02:00',
-      guests: 10,
-      status: ReservationStatus.Pending,
-    },
-    {
-      name: 'Fabi Billares',
-      date: '2023-08-20',
-      time: '02:00',
-      guests: 2,
-      status: ReservationStatus.Pending,
-    },
-    // Agrega más tickets aquí
-  ];
-
+const Reservations = withPageLayout(() => {
   return (
     <>
       <div
@@ -90,6 +45,7 @@ const Reservations = withFooterLayout(() => {
           <ReservationCard {...ticket} />
         ))}
       </div>
+      <Footer />
     </>
   );
 });

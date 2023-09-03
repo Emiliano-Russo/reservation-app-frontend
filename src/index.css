@@ -7,6 +7,7 @@
 body {
   background-color: white;
   color: black;
+  font-size: 16px; /* Esto establece un tamaño base para rem */
 }
 
 div::-webkit-scrollbar {

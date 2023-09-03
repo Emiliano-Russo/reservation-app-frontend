@@ -26,7 +26,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import { Home } from './pages/Home';
 import Reservations from './pages/Reservations';
-import { Profile } from './pages/Profile';
+import { Profile } from './pages/Profile/Profile';
 
 setupIonicReact();
 

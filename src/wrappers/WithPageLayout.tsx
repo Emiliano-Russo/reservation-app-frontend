@@ -1,18 +1,17 @@
-import React from 'react';
 import Footer from '../components/Footer';
+import React from 'react';
 
-export const withFooterLayout = (WrappedComponent) => {
+export const withPageLayout = (WrappedComponent, padding = '20px') => {
   return (props) => (
     <div
       style={{
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        padding: '20px',
+        padding: padding,
       }}
     >
       <WrappedComponent {...props} />
-      <Footer />
     </div>
   );
 };
