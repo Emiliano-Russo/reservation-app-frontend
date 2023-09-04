@@ -8,7 +8,7 @@ import {
   PhoneOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import Footer from '../../components/Footer';
+import Footer from '../../components/Footer/Footer';
 import styles from './Profile.module.css';
 import { StatusBar } from '@capacitor/status-bar';
 

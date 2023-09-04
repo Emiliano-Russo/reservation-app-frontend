@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from 'antd';
-import { ReservationCard } from '../../components/ReservationCard';
+import { ReservationCard } from '../../components/ReservationCard/ReservationCard';
 import { withPageLayout } from '../../wrappers/WithPageLayout';
-import Footer from '../../components/Footer';
+import Footer from '../../components/Footer/Footer';
 import { tickets } from '../../mocks/reservations';
 import SearchInput from '../../components/SearchInput/SearchInput';
 import styles from './Reservations.module.css';

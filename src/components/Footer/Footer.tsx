@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedPath } from '../redux/footerSlice';
+import { setSelectedPath } from '../../redux/footerSlice';
+import styles from './Footer.module.css';
 
 const buttonsConfig = [
   {
@@ -29,31 +30,17 @@ const Footer = ({ style = {} }) => {
     dispatch(setSelectedPath(path));
   };
 
-  const defaultStyle = {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    alignContent: 'center',
-    padding: '20px',
-    height: '68px',
-    borderRadius: '30px',
-    background: '#101323',
-  };
-
   return (
-    <div style={{ ...defaultStyle, ...style }}>
+    <div className={styles.footer} style={style}>
       {buttonsConfig.map((button) => (
         <Button
-          style={{
-            background:
-              selectedPath === button.path ? '#FD6F8E' : 'transparent',
-            border: 'none',
-            borderRadius: '30px',
-            width: '100px',
-            height: '50px',
-          }}
+          className={`${styles.buttonStyle} ${
+            selectedPath === button.path ? styles.buttonSelected : ''
+          }`}
           onClick={() => handleNavigation(button.path)}
-          icon={<img style={{ width: '27px' }} src={button.icon} alt="Icono" />}
+          icon={
+            <img className={styles.iconStyle} src={button.icon} alt="Icono" />
+          }
         ></Button>
       ))}
     </div>

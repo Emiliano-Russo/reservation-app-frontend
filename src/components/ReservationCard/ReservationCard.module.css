@@ -1,0 +1,57 @@
+.card {
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background: white;
+}
+
+.header,
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.header {
+  height: 57px;
+  border-bottom: 1px solid #eaecf5;
+}
+
+.content {
+  height: 67px;
+}
+
+.name,
+.date-time {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.dateTime {
+  display: flex;
+  align-items: center;
+}
+
+.date,
+.time {
+  font-size: 12px;
+  color: #9ea5d1;
+}
+
+.time {
+  margin-left: 10px;
+}
+
+.guests {
+  font-size: 20px;
+}
+
+.status {
+  background: #e0f2fe;
+  font-size: 12px;
+  padding: 10px 15px;
+  border-radius: 30px;
+  color: #36bffa;
+}

@@ -1,4 +1,4 @@
-import Footer from '../components/Footer';
+import Footer from '../components/Footer/Footer';
 import React from 'react';
 
 export const withPageLayout = (WrappedComponent, padding = '20px') => {
