@@ -27,6 +27,7 @@ import store from './redux/store';
 import { Home } from './pages/Home/Home';
 import Reservations from './pages/Reservations/Reservations';
 import { Profile } from './pages/Profile/Profile';
+import { Settings } from './pages/Settings/Settings';
 
 setupIonicReact();
 
@@ -41,6 +42,7 @@ const App: React.FC = () => {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/reservations" element={<Reservations />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </BrowserRouter>

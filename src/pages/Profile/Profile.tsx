@@ -11,6 +11,7 @@ import {
 import Footer from '../../components/Footer/Footer';
 import styles from './Profile.module.css';
 import { StatusBar } from '@capacitor/status-bar';
+import { useNavigate } from 'react-router-dom';
 
 const BasicProfileInfoWidget = () => {
   return (
@@ -54,6 +55,8 @@ const LoyaltyPointsWidget = () => {
 };
 
 const ProfileHeader = () => {
+  const nav = useNavigate();
+
   return (
     <>
       <div className={styles.profileHeader}>
@@ -66,7 +69,12 @@ const ProfileHeader = () => {
           </button>
         </div>
         <div className={styles.settingsButtonContainer}>
-          <button style={{ color: 'black', background: 'white' }}>
+          <button
+            style={{ color: 'black', background: 'white' }}
+            onClick={() => {
+              nav('/settings');
+            }}
+          >
             <SettingOutlined style={{ fontSize: '1.5rem' }} />
           </button>
         </div>

@@ -30,17 +30,45 @@ const Footer = ({ style = {} }) => {
     dispatch(setSelectedPath(path));
   };
 
+  const footerStyle = {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    alignContent: 'center',
+    padding: '20px',
+    height: '68px',
+    borderRadius: '30px',
+    background: '#101323',
+    ...style, // para agregar cualquier otro estilo que desees pasar al componente
+  };
+
+  const buttonStyle = {
+    border: 'none',
+    borderRadius: '30px',
+    width: '100px',
+    height: '50px',
+    background: 'transparent',
+  };
+
+  const buttonSelectedStyle = {
+    ...buttonStyle, // para heredar los estilos del botón
+    background: '#fd6f8e',
+  };
+
+  const iconStyle = {
+    width: '27px',
+  };
+
   return (
-    <div className={styles.footer} style={style}>
+    <div style={footerStyle}>
       {buttonsConfig.map((button) => (
         <Button
-          className={`${styles.buttonStyle} ${
-            selectedPath === button.path ? styles.buttonSelected : ''
-          }`}
-          onClick={() => handleNavigation(button.path)}
-          icon={
-            <img className={styles.iconStyle} src={button.icon} alt="Icono" />
+          key={button.path}
+          style={
+            selectedPath === button.path ? buttonSelectedStyle : buttonStyle
           }
+          onClick={() => handleNavigation(button.path)}
+          icon={<img style={iconStyle} src={button.icon} alt="Icono" />}
         ></Button>
       ))}
     </div>
