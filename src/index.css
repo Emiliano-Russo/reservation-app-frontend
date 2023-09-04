@@ -13,3 +13,7 @@ body {
 div::-webkit-scrollbar {
   display: none;
 }
+
+.ant-tabs-content-holder {
+  overflow-y: scroll;
+}
