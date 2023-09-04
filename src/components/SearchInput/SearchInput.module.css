@@ -9,6 +9,7 @@
   border-radius: 10px;
   transition: border 0.3s ease;
   outline: none;
+  flex-shrink: 0;
 }
 
 .inputStyle:focus {
