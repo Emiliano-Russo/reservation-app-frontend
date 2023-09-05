@@ -11,7 +11,7 @@ const buttonsConfig = [
     icon: 'https://img.icons8.com/ios-filled/100/FFFFFF/reservation-2.png',
   },
   {
-    path: '/',
+    path: '/business',
     icon: 'https://img.icons8.com/ios-filled/50/FFFFFF/home.png',
   },
   {

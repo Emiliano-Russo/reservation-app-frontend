@@ -4,28 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import styles from './Settings.module.css';
+import { BackNavigationHeader } from '../../components/BackNavigationHeader/BackNavigationHeader';
 
 export const Settings = withPageLayout(() => {
   const nav = useNavigate();
 
   return (
     <>
-      <header className={styles.header}>
-        <Button
-          type="text"
-          icon={<ArrowLeftOutlined />}
-          onClick={() => nav(-1)}
-        />
-        <h1>Settings</h1>
-        <Button
-          style={{
-            visibility: 'hidden',
-          }}
-          type="text"
-          icon={<ArrowLeftOutlined />}
-          onClick={() => nav(-1)}
-        />
-      </header>
+      <BackNavigationHeader title={'Settings'} />
       <div className={styles.buttonContainer}>
         <Button className={styles.button}>Editar Datos</Button>
         <Button className={styles.button}>Abrir mi Negocio</Button>

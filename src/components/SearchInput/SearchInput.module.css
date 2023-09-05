@@ -5,7 +5,7 @@
   background: transparent url('https://img.icons8.com/color/48/search--v1.png')
     no-repeat right 15px center;
   background-size: 24px 24px; /* ajusta el tamaño del ícono */
-  border: 1px solid rgb(196, 196, 196);
+  border: 1px solid #eaecf5;
   border-radius: 10px;
   transition: border 0.3s ease;
   outline: none;
@@ -15,4 +15,8 @@
 .inputStyle:focus {
   border-color: #fd6f8e; /* Cambia el color del borde a azul cuando el input esté enfocado */
   box-shadow: 0 0 5px rgba(0, 0, 255, 0.3); /* Agregado para darle un ligero resplandor azul alrededor */
+}
+
+.inputStyle::placeholder {
+  color: #9ea5d1;
 }

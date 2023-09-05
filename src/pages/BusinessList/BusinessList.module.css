@@ -1,0 +1,32 @@
+.businessContainer {
+  overflow-y: scroll;
+}
+
+.businessCard {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 12px;
+  margin: 16px;
+}
+
+.businessCard div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.businessCard p {
+  margin: 0px 10px;
+}
+
+.rating {
+  width: 50px;
+}
+
+.rating p {
+  color: gray;
+}

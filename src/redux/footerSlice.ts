@@ -5,7 +5,7 @@ interface FooterState {
 }
 
 const initialState: FooterState = {
-  selectedPath: '/',
+  selectedPath: '/business',
 };
 
 const footerSlice = createSlice({
