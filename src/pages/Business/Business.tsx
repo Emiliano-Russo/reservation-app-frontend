@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { withPageLayout } from '../../wrappers/WithPageLayout';
 import { Image, Typography, Rate, Tabs, Button, List, Avatar } from 'antd';
-import { EnvironmentOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import styles from './Business.module.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import { BusinessService } from '../../services/business.service';
+import { REACT_APP_BASE_URL } from '../../../env';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -25,37 +28,72 @@ const reviews = [
   },
 ];
 
+const businessService = new BusinessService(REACT_APP_BASE_URL);
+
 export const Business = withPageLayout(() => {
+  const { id } = useParams<any>(); // Obtener el id desde la URL
+  const nav = useNavigate();
+  const [business, setBusiness] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchBusinessDetails() {
+      try {
+        if (id) {
+          const businessData = await businessService.mock_GetBusiness(id);
+          setBusiness(businessData);
+          console.log('businessData ', businessData);
+        }
+      } catch (error) {
+        console.error('Error fetching business data:', error);
+      }
+    }
+
+    fetchBusinessDetails();
+  }, [id]);
+
+  if (business == null) {
+    return (
+      <>
+        <h1>No se encontro el negocio</h1>
+      </>
+    );
+  }
+
   return (
     <>
       {/* Banner Image */}
       <Image
         width="100%"
         height="40vh"
-        src="https://media-cdn.tripadvisor.com/media/photo-s/16/eb/43/cc/hard-rock-cafe-montevideo.jpg"
+        src={business.multimediaURL[0]}
         alt="Business Banner"
         style={{ objectFit: 'cover' }}
+      />
+      <Button
+        icon={<ArrowLeftOutlined />}
+        onClick={() => nav(-1)}
+        style={{
+          position: 'absolute',
+          color: 'black',
+          top: '10px',
+          left: '10px',
+        }}
       />
 
       {/* Business Details */}
       <div className={styles.businessDetails}>
-        <Title level={2}>Hard Rock Cafe</Title>
+        <Title level={2}>{business.name}</Title>
         <div className={styles.businessLocation}>
           <EnvironmentOutlined />
-          <span>Av. Saborcito 1234</span>
+          <span>{business.address}</span>
         </div>
-        <Rate allowHalf defaultValue={4.5} />
+        <div>
+          <span style={{ marginRight: '10px' }}>{business.rating}</span>
+          <Rate allowHalf defaultValue={business.rating} />
+        </div>
         <Tabs defaultActiveKey="1" className={styles.businessTabs}>
           <TabPane tab="Detalles" key="1">
-            <Paragraph>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              accumsan leo a velit convallis, eu hendrerit velit fermentum.
-              Fusce at accumsan ligula, eget consequat nisl. Sed eu lacinia
-              orci. ... Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Sed accumsan leo a velit convallis, eu hendrerit velit fermentum.
-              Fusce at accumsan ligula, eget consequat nisl. Sed eu lacinia
-              orci.
-            </Paragraph>
+            <Paragraph>{business.description}</Paragraph>
           </TabPane>
           <TabPane tab="Reseñas" key="2">
             <List
