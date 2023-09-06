@@ -1,51 +1,75 @@
-export const items = [
+export const mock_businessType = [
   {
+    id: '1',
     name: 'Canchas de \n Futbol',
-    icon: 'https://img.icons8.com/ios-filled/100/football2--v1.png',
+    description: 'Description1',
+    icon: 'https://img.icons8.com/color/48/football2--v1.png',
   },
   {
+    id: '2',
     name: 'Restaurantes de Comida',
-    icon: 'https://img.icons8.com/ios/50/restaurant.png',
+    description: 'Description2',
+    icon: 'https://img.icons8.com/color/96/dining-room.png',
+    controls: [
+      {
+        type: 'select-one',
+        label: 'Preferencia de asiento',
+        options: ['Ventana', 'Interior', 'Cerca de la entrada', 'Afuera'],
+        default: 'Interior',
+      },
+      {
+        type: 'counter',
+        label: 'Cantidad de invitados',
+        min: 1,
+        max: 10,
+        default: 1,
+      },
+    ],
   },
   {
-    name: 'Salon de Peluqueria',
-    icon: 'https://img.icons8.com/external-jumpicon-glyph-ayub-irawan/64/external-haircutting-scissors-barbershop-jumpicon-(glyph)-jumpicon-glyph-ayub-irawan.png',
+    id: '3',
+    name: 'Salones de Peluqueria',
+    icon: 'https://img.icons8.com/plasticine/100/barber-scissors.png',
   },
   {
-    name: 'Cafe de \n Reunion',
-    icon: 'https://img.icons8.com/pastel-glyph/64/drink-to-go--v1.png',
+    id: '4',
+    name: 'Clases de \n Yoga',
+    icon: 'https://img.icons8.com/officel/80/meditation-guru.png',
   },
   {
-    name: 'Solamente es un relleno',
-    icon: 'https://img.icons8.com/ios/100/blow.png',
+    id: '5',
+    name: 'Salones de \n belleza',
+    description: 'Salon de belleza facial, manicura, etc',
+    icon: 'https://img.icons8.com/external-flaticons-flat-flat-icons/64/external-nails-anatomy-flaticons-flat-flat-icons.png',
   },
   {
-    name: 'Solamente es un relleno',
-    icon: 'https://img.icons8.com/ios/100/blow.png',
+    id: '6',
+    name: 'Gimnasios',
+    description: 'Lugares para hacer ejercicio y mantenerse en forma.',
+    icon: 'https://img.icons8.com/color/96/dumbbell.png',
   },
   {
-    name: 'Solamente es un relleno',
-    icon: 'https://img.icons8.com/ios/100/blow.png',
+    id: '6',
+    name: 'Bares \n Nocturnos',
+    description: 'Lugares  para ir a tomar con amigos',
+    icon: 'https://img.icons8.com/plasticine/100/cocktail.png',
   },
   {
-    name: 'Solamente es un relleno',
-    icon: 'https://img.icons8.com/ios/100/blow.png',
+    id: '8',
+    name: 'Espacios de \n Coworking',
+    description: 'Salas para concentrarse y trabajar',
+    icon: 'https://img.icons8.com/office/80/office.png',
   },
   {
-    name: 'Solamente es un relleno',
-    icon: 'https://img.icons8.com/ios/100/blow.png',
+    id: '9',
+    name: 'Entrenamiento \n Funcional',
+    description: '',
+    icon: 'https://img.icons8.com/external-photo3ideastudio-flat-photo3ideastudio/64/external-fitness-home-activity-photo3ideastudio-flat-photo3ideastudio.png',
   },
   {
-    name: 'Solamente es un relleno',
-    icon: 'https://img.icons8.com/ios/100/blow.png',
+    id: '10',
+    name: 'Clínicas \n Dentales',
+    description: '',
+    icon: 'https://img.icons8.com/external-tal-revivo-fresh-tal-revivo/56/external-old-age-weak-tooth-begin-removed-in-dental-care-dentistry-fresh-tal-revivo.png',
   },
-  {
-    name: 'Solamente es un relleno',
-    icon: 'https://img.icons8.com/ios/100/blow.png',
-  },
-  {
-    name: 'Solamente es un relleno',
-    icon: 'https://img.icons8.com/ios/100/blow.png',
-  },
-  // Agrega más items aquí
 ];

@@ -112,7 +112,13 @@ export const Business = withPageLayout(() => {
             />
           </TabPane>
         </Tabs>
-        <Button type="primary" style={{ margin: 'auto 0px 0px 0px' }}>
+        <Button
+          type="primary"
+          style={{ margin: 'auto 0px 0px 0px' }}
+          onClick={() => {
+            nav(`/new-reservation/${id}`);
+          }}
+        >
           Reservar
         </Button>
       </div>
