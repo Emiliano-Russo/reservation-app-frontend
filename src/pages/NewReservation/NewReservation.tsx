@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withPageLayout } from '../../wrappers/WithPageLayout';
 import { IonDatetime } from '@ionic/react';
-import { Button, Input, Modal, Select } from 'antd';
+import { Button, Input, Modal, Select, message } from 'antd';
 import { BackNavigationHeader } from '../../components/BackNavigationHeader/BackNavigationHeader';
 import styles from './NewReservation.module.css';
 import { BusinessService } from '../../services/business.service';
@@ -177,7 +177,9 @@ export const NewReservation = withPageLayout(() => {
             <Button
               type="primary"
               onClick={() => {
-                setModalOpen(true);
+                if (controlValues.date && controlValues.date != null)
+                  setModalOpen(true);
+                else message.error('Porfavor selecciona una fecha');
               }}
             >
               Enviar
@@ -196,7 +198,9 @@ export const NewReservation = withPageLayout(() => {
           <Button
             type="primary"
             onClick={() => {
-              setModalOpen(true);
+              if (controlValues.date && controlValues.date != null)
+                setModalOpen(true);
+              else message.error('Porfavor selecciona una fecha');
             }}
           >
             Enviar
@@ -208,7 +212,9 @@ export const NewReservation = withPageLayout(() => {
         <Modal
           open={modalOpen}
           onCancel={() => {
-            setModalOpen(false);
+            if (controlValues.date && controlValues.date != null)
+              setModalOpen(true);
+            else message.error('Porfavor selecciona una fecha');
           }}
           bodyStyle={{ padding: 0 }}
           footer={
@@ -221,12 +227,7 @@ export const NewReservation = withPageLayout(() => {
               >
                 Cancelar
               </Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  //con el servicio de reserva enviar una
-                }}
-              >
+              <Button type="primary" onClick={() => {}}>
                 Confimar
               </Button>
             </div>

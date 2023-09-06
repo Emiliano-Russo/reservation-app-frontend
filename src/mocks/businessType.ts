@@ -24,6 +24,17 @@ export const mock_businessType = [
         max: 10,
         default: 1,
       },
+      // {
+      //   type: 'checkbox',
+      //   label: '¿Necesita silla para bebé?',
+      //   default: false,
+      // },
+      // {
+      //   type: 'select-multiple',
+      //   label: 'Aderezos adicionales',
+      //   options: ['Mayonesa', 'Mostaza', 'Ketchup', 'Ranch', 'BBQ'],
+      //   default: ['Mayonesa', 'Ketchup'],
+      // },
     ],
   },
   {
