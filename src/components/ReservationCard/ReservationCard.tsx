@@ -5,6 +5,7 @@ import {
 } from '../../interfaces/reservation.status';
 import styles from './ReservationCard.module.css';
 import { Modal, Button } from 'antd';
+import { motion } from 'framer-motion';
 
 interface Props {
   id: string;
@@ -12,6 +13,7 @@ interface Props {
   reservationDate: Date;
   status: ReservationStatus;
   extras: any;
+  index: number;
 }
 
 const getStatusColor = (status: ReservationStatus) => {
@@ -65,7 +67,10 @@ export const ReservationCard = (ticket: Props) => {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ x: -400, opacity: 0, scale: 0.8 }} // Configuración inicial: movido hacia la izquierda, casi invisible y ligeramente reducido
+      animate={{ x: 0, opacity: 1, scale: 1 }} // Configuración final: posición original, completamente visible y a tamaño original
+      transition={{ ease: 'easeOut', duration: 0.8, delay: ticket.index * 0.1 }} // Retraso basado en el id para dar un efecto en cascada
       key={ticket.id}
       className={styles.card}
       onClick={() => {
@@ -147,6 +152,6 @@ export const ReservationCard = (ticket: Props) => {
             <p key={extra.label}>{renderExtra(extra)}</p>
           ))}
       </Modal>
-    </div>
+    </motion.div>
   );
 };

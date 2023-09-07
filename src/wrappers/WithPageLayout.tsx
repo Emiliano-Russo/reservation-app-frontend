@@ -2,7 +2,11 @@ import Footer from '../components/Footer/Footer';
 import React from 'react';
 import AnimatedRouteWrapper from './AnimatedRouteWrapper';
 
-export const withPageLayout = (WrappedComponent, padding = '20px') => {
+export const withPageLayout = (
+  WrappedComponent,
+  padding = '20px',
+  footer: boolean = true,
+) => {
   return (props) => (
     <>
       <div
@@ -14,7 +18,7 @@ export const withPageLayout = (WrappedComponent, padding = '20px') => {
         }}
       >
         <WrappedComponent {...props} />
-        <Footer style={{ margin: 'auto 20px 20px 20px' }} />
+        {footer && <Footer style={{ margin: 'auto 20px 20px 20px' }} />}
       </div>
     </>
   );

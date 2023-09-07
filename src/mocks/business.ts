@@ -163,4 +163,166 @@ export const mocked_business = [
       open: true,
     },
   },
+  {
+    id: 'id6',
+    ownerId: 'mockOwnerId890',
+    typeId: '2',
+    name: 'Golden Sushi',
+    address: '107 Ocean Dr, Mock City, 12345',
+    coordinates: {
+      pointX: '50.1234',
+      pointY: '128.4567',
+    },
+    activePremiumSubscriptionID: 'mockSubsId890',
+    logoURL:
+      'https://images.pexels.com/photos/2069596/pexels-photo-2069596.jpeg',
+    multimediaURL: [
+      'https://example.com/mock-image17.png',
+      'https://example.com/mock-image18.png',
+    ],
+    description: 'Experience the best sushi in town!',
+    assistantsID: ['mockAssistantId17', 'mockAssistantId18'],
+    pendingInvitationsID: ['mockInviteId17', 'mockInviteId18'],
+    status: 'Operating',
+    rating: '4.9',
+    availability: {
+      day: 'Saturday',
+      shifts: [
+        {
+          openingTime: '12:00',
+          closingTime: '23:00',
+        },
+      ],
+      open: true,
+    },
+  },
+  {
+    id: 'id7',
+    ownerId: 'mockOwnerId901',
+    typeId: '2',
+    name: 'Taco Fiesta',
+    address: '108 Spice St, Mock City, 12345',
+    coordinates: {
+      pointX: '51.1234',
+      pointY: '129.4567',
+    },
+    activePremiumSubscriptionID: 'mockSubsId901',
+    logoURL: 'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg',
+    multimediaURL: [
+      'https://example.com/mock-image19.png',
+      'https://example.com/mock-image20.png',
+    ],
+    description: 'Authentic Mexican flavors right at your doorstep.',
+    assistantsID: ['mockAssistantId19', 'mockAssistantId20'],
+    pendingInvitationsID: ['mockInviteId19', 'mockInviteId20'],
+    status: 'Operating',
+    rating: '4.8',
+    availability: {
+      day: 'Sunday',
+      shifts: [
+        {
+          openingTime: '13:00',
+          closingTime: '00:00',
+        },
+      ],
+      open: true,
+    },
+  },
+  {
+    id: 'id8',
+    ownerId: 'mockOwnerId912',
+    typeId: '2',
+    name: 'Curry Palace',
+    address: '109 Flavor Ave, Mock City, 12345',
+    coordinates: {
+      pointX: '52.1234',
+      pointY: '130.4567',
+    },
+    activePremiumSubscriptionID: 'mockSubsId912',
+    logoURL:
+      'https://images.pexels.com/photos/2226456/pexels-photo-2226456.jpeg',
+    multimediaURL: [
+      'https://example.com/mock-image21.png',
+      'https://example.com/mock-image22.png',
+    ],
+    description: 'Dive into the spicy world of Indian cuisine.',
+    assistantsID: ['mockAssistantId21', 'mockAssistantId22'],
+    pendingInvitationsID: ['mockInviteId21', 'mockInviteId22'],
+    status: 'Operating',
+    rating: '5.0',
+    availability: {
+      day: 'Monday',
+      shifts: [
+        {
+          openingTime: '11:00',
+          closingTime: '22:00',
+        },
+      ],
+      open: true,
+    },
+  },
+  {
+    id: 'id9',
+    ownerId: 'mockOwnerId923',
+    typeId: '2',
+    name: 'The French Bistro',
+    address: '110 Parisian Way, Mock City, 12345',
+    coordinates: {
+      pointX: '53.1234',
+      pointY: '131.4567',
+    },
+    activePremiumSubscriptionID: 'mockSubsId923',
+    logoURL: 'https://images.pexels.com/photos/628754/pexels-photo-628754.jpeg',
+    multimediaURL: [
+      'https://example.com/mock-image23.png',
+      'https://example.com/mock-image24.png',
+    ],
+    description: 'Taste the elegance of French cuisine.',
+    assistantsID: ['mockAssistantId23', 'mockAssistantId24'],
+    pendingInvitationsID: ['mockInviteId23', 'mockInviteId24'],
+    status: 'Operating',
+    rating: '4.7',
+    availability: {
+      day: 'Tuesday',
+      shifts: [
+        {
+          openingTime: '14:00',
+          closingTime: '23:30',
+        },
+      ],
+      open: true,
+    },
+  },
+  {
+    id: 'id10',
+    ownerId: 'mockOwnerId923',
+    typeId: '2',
+    name: 'The Pizza Loca',
+    address: '110 Parisian Way, Mock City, 12345',
+    coordinates: {
+      pointX: '53.1234',
+      pointY: '131.4567',
+    },
+    activePremiumSubscriptionID: 'mockSubsId923',
+    logoURL: 'https://images.pexels.com/photos/628754/pexels-photo-628754.jpeg',
+    multimediaURL: [
+      'https://example.com/mock-image23.png',
+      'https://example.com/mock-image24.png',
+    ],
+    description: 'Taste the elegance of French cuisine.',
+    assistantsID: ['mockAssistantId23', 'mockAssistantId24'],
+    pendingInvitationsID: ['mockInviteId23', 'mockInviteId24'],
+    status: 'Operating',
+    rating: '4.7',
+    availability: {
+      day: 'Tuesday',
+      shifts: [
+        {
+          openingTime: '14:00',
+          closingTime: '23:30',
+        },
+      ],
+      open: true,
+    },
+  },
 ];

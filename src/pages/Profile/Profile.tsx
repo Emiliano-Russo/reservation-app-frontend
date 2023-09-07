@@ -8,10 +8,10 @@ import {
   PhoneOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import Footer from '../../components/Footer/Footer';
 import styles from './Profile.module.css';
 import { StatusBar } from '@capacitor/status-bar';
 import { useNavigate } from 'react-router-dom';
+import { FadeFromTop } from '../../animations/FadeFromTop';
 
 const BasicProfileInfoWidget = () => {
   return (
@@ -93,13 +93,12 @@ export const Profile = withPageLayout(() => {
   StatusBar.setBackgroundColor({ color: '#fd6f8e' });
 
   return (
-    <>
+    <FadeFromTop>
       <ProfileHeader />
       <SectionLine title={'Información'} />
       <BasicProfileInfoWidget />
       <SectionLine title={'Puntos de Fidelidad'} />
       <LoyaltyPointsWidget />
-      {/* <Footer style={{ margin: 'auto 1.25rem 1.25rem 1.25rem' }} /> */}
-    </>
+    </FadeFromTop>
   );
 }, '0px');

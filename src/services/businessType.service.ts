@@ -51,7 +51,7 @@ export class BusinessTypeService {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(mock_businessType);
-      }, 2000); // Simulando un retraso de 2 segundos
+      }, 0); // Simulando un retraso de 2 segundos
     });
   }
 
