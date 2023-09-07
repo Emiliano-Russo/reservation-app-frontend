@@ -3,13 +3,13 @@ import { Avatar, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { withPageLayout } from '../../wrappers/WithPageLayout';
 import { BusinessTypeCard } from '../../components/BusinessTypeCard/BusinessTypeCard';
-import { items } from '../../mocks/businessType';
 import Footer from '../../components/Footer/Footer';
 import styles from './Home.module.css';
 import { StatusBar } from '@capacitor/status-bar';
 import SearchInput from '../../components/SearchInput/SearchInput';
 import { BusinessTypeService } from '../../services/businessType.service';
 import { REACT_APP_BASE_URL } from '../../../env';
+import AnimatedRouteWrapper from '../../wrappers/AnimatedRouteWrapper';
 
 export const Home = withPageLayout(() => {
   const [userName, setUsername] = useState('Diego');
@@ -33,11 +33,10 @@ export const Home = withPageLayout(() => {
       </div>
       <SearchInput />
       <div className={styles.businessTypeContainer}>
-        {businessTypes.map((val: any) => (
-          <BusinessTypeCard {...val} />
+        {businessTypes.map((val: any, index: number) => (
+          <BusinessTypeCard {...val} index={index} />
         ))}
       </div>
-      <Footer style={{ margin: '0px 20px 20px 20px' }} />
     </>
   );
 }, '0px');

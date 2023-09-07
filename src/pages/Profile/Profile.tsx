@@ -99,7 +99,7 @@ export const Profile = withPageLayout(() => {
       <BasicProfileInfoWidget />
       <SectionLine title={'Puntos de Fidelidad'} />
       <LoyaltyPointsWidget />
-      <Footer style={{ margin: 'auto 1.25rem 1.25rem 1.25rem' }} />
+      {/* <Footer style={{ margin: 'auto 1.25rem 1.25rem 1.25rem' }} /> */}
     </>
   );
 }, '0px');

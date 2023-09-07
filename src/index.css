@@ -17,3 +17,23 @@ div::-webkit-scrollbar {
 .ant-tabs-content-holder {
   overflow-y: scroll;
 }
+
+/* ok aca es la transicion estilos */
+
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}

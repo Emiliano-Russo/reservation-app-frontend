@@ -53,7 +53,6 @@ const Reservations = withPageLayout(() => {
           <ReservationCard key={reservation.id} {...reservation} />
         ))}
       </div>
-      <Footer style={{ margin: 'auto 1.25rem 1.25rem 1.25rem' }} />
     </>
   );
 }, '0px');
