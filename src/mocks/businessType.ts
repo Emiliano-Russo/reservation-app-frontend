@@ -60,7 +60,7 @@ export const mock_businessType = [
     icon: 'https://img.icons8.com/color/96/dumbbell.png',
   },
   {
-    id: '6',
+    id: '7',
     name: 'Bares \n Nocturnos',
     description: 'Lugares  para ir a tomar con amigos',
     icon: 'https://img.icons8.com/plasticine/100/cocktail.png',

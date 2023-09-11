@@ -118,4 +118,25 @@ export class BusinessService {
     // Puedes ajustar la respuesta según tus necesidades.
     return mocked_business.filter((business) => business.typeId === typeId);
   }
+
+  async mock_RegisterBusiness(
+    business: any,
+    logoImage?: File | null,
+  ): Promise<any> {
+    // Simular un tiempo de espera de 2 segundos como si estuviera haciendo una solicitud HTTP.
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    // Simular la respuesta del servidor después del registro
+    return {
+      data: {
+        message: 'Business registered successfully!',
+        business: {
+          id: 'mocked-id',
+          ...business, // Aquí se devuelven los datos del negocio registrados
+          logoImage: logoImage ? `mocked_url_for/${logoImage.name}` : null,
+        },
+      },
+      status: 201, // Simular un código de estado HTTP 201 para "creado"
+    };
+  }
 }

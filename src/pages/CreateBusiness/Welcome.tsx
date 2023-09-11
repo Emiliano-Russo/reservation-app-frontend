@@ -16,7 +16,7 @@ export const Welcome = ({ onNext }) => {
           <h1 className={styles.title}>Bienvenido a </h1>
           <h1>Tu Mejor Reserva</h1>
           <p className={styles.description}>
-            Empieza a crear y gestionar tu negocio con nosotros.
+            Empieza a crear y gestionar tu negocio con nosotros. v6!
           </p>
           <Button onClick={onNext} type="primary">
             Empezar

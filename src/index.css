@@ -10,6 +10,12 @@ body {
   font-size: 16px; /* Esto establece un tamaño base para rem */
 }
 
+/* html,
+body,
+ion-content {
+  background-color: transparent !important;
+} */
+
 div::-webkit-scrollbar {
   display: none;
 }

@@ -8,18 +8,37 @@ import { mock_businessType } from '../../mocks/businessType';
 const { Option } = Select;
 const { TextArea } = Input;
 
-export const BasicInfo = () => {
-  const [businessName, setBusinessName] = useState('');
-  const [businessType, setBusinessType] = useState(null);
-  const [businessDescription, setBusinessDescription] = useState('');
-  const [logoFileList, setLogoFileList] = useState<any>([]);
-  const [bannerFileList, setBannerFileList] = useState<any>([]);
+export const BasicInfo = ({
+  businessName,
+  businessType,
+  businessDescription,
+  logoFileList,
+  bannerFileList,
+  onBusinessNameChange,
+  onBusinessTypeChange,
+  onBusinessDescriptionChange,
+  onLogoFileListChange,
+  onBannerFileListChange,
+}) => {
+  const [logoFileName, setLogoFileName] = useState('');
+  const [bannerFileName, setBannerFileName] = useState('');
 
-  const handleUploadChange = (info, type) => {
-    if (type === 'logo') {
-      setLogoFileList([...info.fileList]);
-    } else if (type === 'banner') {
-      setBannerFileList([...info.fileList]);
+  const handleUploadChange = (e, type) => {
+    console.log('type: ', type);
+    const fileName = e.nativeEvent.target.files[0].name;
+    if (e.target.files.length > 0) {
+      const selectedFile = e.target.files[0];
+      // Hacer lo que necesites con el archivo seleccionado.
+      // Si solo deseas almacenar una referencia al archivo para subirlo más tarde, puedes simplemente almacenarlo en el estado.
+      if (type === 'logo') {
+        console.log('logooo');
+        setLogoFileName(fileName);
+        onLogoFileListChange([selectedFile]);
+      } else if (type === 'banner') {
+        console.log('banner!');
+        setBannerFileName(fileName);
+        onBannerFileListChange([selectedFile]);
+      }
     }
   };
 
@@ -29,18 +48,18 @@ export const BasicInfo = () => {
         <Input
           placeholder="Nombre del Negocio"
           value={businessName}
-          onChange={(e) => setBusinessName(e.target.value)}
+          onChange={(e) => onBusinessNameChange(e.target.value)}
           className={styles.input}
         />
 
         <Select
           placeholder="Tipo de Negocio"
           value={businessType}
-          onChange={(value) => setBusinessType(value)}
+          onChange={(value) => onBusinessTypeChange(value)}
           className={styles.select}
         >
           {mock_businessType.map((business: any) => (
-            <Option key={business.id} value={business.id}>
+            <Option key={business.id} value={business.name}>
               {business.name}
             </Option>
           ))}
@@ -49,26 +68,59 @@ export const BasicInfo = () => {
         <TextArea
           placeholder="Descripción del Negocio"
           value={businessDescription}
-          onChange={(e) => setBusinessDescription(e.target.value)}
+          onChange={(e) => onBusinessDescriptionChange(e.target.value)}
           className={styles.textArea}
           rows={4}
         />
 
-        <Upload
-          fileList={logoFileList}
-          onChange={(info) => handleUploadChange('logo', info)}
-          className={styles.upload}
-        >
-          <Button icon={<UploadOutlined />}>Sube tu Logo</Button>
-        </Upload>
+        <div>
+          {/* Input oculto */}
+          <input
+            style={{ display: 'none' }}
+            id="fileInput"
+            type="file"
+            accept="image/*"
+            onChange={(info) => handleUploadChange(info, 'logo')}
+          />
 
-        <Upload
-          fileList={bannerFileList}
-          onChange={(info) => handleUploadChange('banner', info)}
-          className={styles.upload}
-        >
-          <Button icon={<UploadOutlined />}>Sube tu Banner</Button>
-        </Upload>
+          {/* Label personalizado */}
+          <label
+            htmlFor="fileInput"
+            style={{
+              cursor: 'pointer',
+              color: 'blue',
+              textDecoration: 'underline',
+            }}
+          >
+            Sube tu Logo
+          </label>
+          <p>{logoFileName != '' ? logoFileName : null}</p>
+        </div>
+        <hr></hr>
+        <div>
+          {/* Input oculto */}
+          <input
+            style={{ display: 'none' }}
+            id="bannerFileInput"
+            type="file"
+            accept="image/*"
+            onChange={(info) => handleUploadChange(info, 'banner')}
+          />
+          {}
+
+          {/* Label personalizado */}
+          <label
+            htmlFor="bannerFileInput"
+            style={{
+              cursor: 'pointer',
+              color: 'blue',
+              textDecoration: 'underline',
+            }}
+          >
+            Sube tu Banner
+          </label>
+          <p>{bannerFileName != '' ? bannerFileName : null}</p>
+        </div>
       </div>
     </GrowsFromLeft>
   );

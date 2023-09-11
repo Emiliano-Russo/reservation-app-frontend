@@ -1,0 +1,11 @@
+.map-responsive {
+  display: inline-block;
+  width: 275px;
+  height: 400px;
+}
+
+@media (max-height: 670px) {
+  .map-responsive {
+    height: 300px;
+  }
+}
