@@ -63,7 +63,7 @@ export class BusinessTypeService {
           (business) => business.id === businessTypeId,
         );
         resolve(business);
-      }, 2000);
+      }, 200);
     });
   }
 

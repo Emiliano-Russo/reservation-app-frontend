@@ -5,7 +5,7 @@ import {
 } from '../../interfaces/reservation.status';
 import styles from './ReservationCard.module.css';
 import { Modal, Button } from 'antd';
-import { motion } from 'framer-motion';
+import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
 
 interface Props {
   id: string;
@@ -67,16 +67,14 @@ export const ReservationCard = (ticket: Props) => {
   };
 
   return (
-    <motion.div
-      initial={{ x: -400, opacity: 0, scale: 0.8 }} // Configuración inicial: movido hacia la izquierda, casi invisible y ligeramente reducido
-      animate={{ x: 0, opacity: 1, scale: 1 }} // Configuración final: posición original, completamente visible y a tamaño original
-      transition={{ ease: 'easeOut', duration: 0.8, delay: ticket.index * 0.1 }} // Retraso basado en el id para dar un efecto en cascada
+    <AnimatedFromLeft
       key={ticket.id}
       className={styles.card}
       onClick={() => {
         console.log('setting true');
         setIsModalVisible(true);
       }}
+      delay={ticket.index * 0.1}
     >
       <div className={styles.header}>
         <span className={styles.name}>{ticket.businessName}</span>
@@ -152,6 +150,6 @@ export const ReservationCard = (ticket: Props) => {
             <p key={extra.label}>{renderExtra(extra)}</p>
           ))}
       </Modal>
-    </motion.div>
+    </AnimatedFromLeft>
   );
 };

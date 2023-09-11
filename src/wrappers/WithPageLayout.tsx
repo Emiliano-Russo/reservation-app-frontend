@@ -1,6 +1,5 @@
 import Footer from '../components/Footer/Footer';
 import React from 'react';
-import AnimatedRouteWrapper from './AnimatedRouteWrapper';
 
 export const withPageLayout = (
   WrappedComponent,

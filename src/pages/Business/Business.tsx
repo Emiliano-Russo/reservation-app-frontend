@@ -15,7 +15,8 @@ import styles from './Business.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BusinessService } from '../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../env';
-import { motion } from 'framer-motion';
+import { FadeFromTop } from '../../animations/FadeFromTop';
+import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -93,12 +94,7 @@ export const Business = withPageLayout(
 
     return (
       <>
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeIn}
-          transition={{ duration: 0.5 }}
-        >
+        <FadeFromTop>
           <Image
             width="100%"
             height="40vh"
@@ -106,7 +102,7 @@ export const Business = withPageLayout(
             alt="Business Banner"
             style={{ objectFit: 'cover' }}
           />
-        </motion.div>
+        </FadeFromTop>
 
         <Button
           icon={<ArrowLeftOutlined />}
@@ -119,51 +115,47 @@ export const Business = withPageLayout(
           }}
         />
 
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={slideInLeft}
-          transition={{ duration: 0.5 }}
-          className={styles.businessDetails}
-        >
-          <Title level={2}>{business.name}</Title>
+        <div className={styles.businessDetails}>
+          <FadeFromTop>
+            <Title level={2}>{business.name}</Title>
+          </FadeFromTop>
 
-          <div className={styles.businessLocation}>
-            <EnvironmentOutlined />
-            <motion.span variants={slideInLeft}>{business.address}</motion.span>
-          </div>
-          <div>
-            <span style={{ marginRight: '10px' }}>{business.rating}</span>
-            <Rate allowHalf defaultValue={business.rating} />
-          </div>
+          <FadeFromTop>
+            <div className={styles.businessLocation}>
+              <EnvironmentOutlined />
+              <span>{business.address}</span>
+            </div>
+          </FadeFromTop>
+          <FadeFromTop>
+            <div>
+              <span style={{ marginRight: '10px' }}>{business.rating}</span>
+              <Rate allowHalf defaultValue={business.rating} />
+            </div>
+          </FadeFromTop>
+          <AnimatedFromLeft>
+            <Tabs defaultActiveKey="1" className={styles.businessTabs}>
+              <TabPane tab="Detalles" key="1">
+                <Paragraph>{business.description}</Paragraph>
+              </TabPane>
 
-          <Tabs defaultActiveKey="1" className={styles.businessTabs}>
-            <TabPane tab="Detalles" key="1">
-              <Paragraph>{business.description}</Paragraph>
-            </TabPane>
-
-            <TabPane tab="Reseñas" key="2">
-              <List
-                dataSource={reviews}
-                renderItem={(item) => (
-                  <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    variants={fadeIn}
-                    className={styles.review}
-                  >
-                    <div className={styles.reviewHeader}>
-                      <Avatar src={item.avatar} />
-                      <span className={styles.author}>{item.author}</span>
-                      <Rate disabled defaultValue={item.rating} />
+              <TabPane tab="Reseñas" key="2">
+                <List
+                  dataSource={reviews}
+                  renderItem={(item) => (
+                    <div className={styles.review}>
+                      <div className={styles.reviewHeader}>
+                        <Avatar src={item.avatar} />
+                        <span className={styles.author}>{item.author}</span>
+                        <Rate disabled defaultValue={item.rating} />
+                      </div>
+                      <p>{item.content}</p>
+                      <span className={styles.datetime}>{item.datetime}</span>
                     </div>
-                    <p>{item.content}</p>
-                    <span className={styles.datetime}>{item.datetime}</span>
-                  </motion.div>
-                )}
-              />
-            </TabPane>
-          </Tabs>
+                  )}
+                />
+              </TabPane>
+            </Tabs>
+          </AnimatedFromLeft>
 
           <Button
             type="primary"
@@ -174,7 +166,7 @@ export const Business = withPageLayout(
           >
             Reservar
           </Button>
-        </motion.div>
+        </div>
       </>
     );
   },

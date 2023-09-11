@@ -10,6 +10,7 @@ import { Button, Modal, message } from 'antd';
 import dayjs from 'dayjs';
 import { BusinessService } from '../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../env';
+import { FadeFromTop } from '../../animations/FadeFromTop';
 
 export const CreateBusiness = withPageLayout(
   () => {

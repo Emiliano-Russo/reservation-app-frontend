@@ -1,0 +1,58 @@
+/* animted from left */
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animatedFromLeft {
+  transform: translateX(-400px);
+  opacity: 0;
+  animation: slideInFromLeft 0.8s forwards;
+}
+
+/* grows from left */
+
+@keyframes growsFromLeft {
+  from {
+    transform: translateX(-100px);
+    opacity: 0;
+    scale: 0.3;
+  }
+  to {
+    transform: translateX(0px);
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.animatedGrowsFromLeft {
+  transform: translateX(-100px);
+  opacity: 0;
+  scale: 0.3;
+  animation: growsFromLeft 0.5s forwards;
+}
+
+/* fade from top */
+
+@keyframes fadeFromTop {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+.animatedFadeFromTop {
+  transform: translateY(-30px);
+  opacity: 0;
+  animation: fadeFromTop 0.5s forwards;
+}

@@ -13,7 +13,7 @@ export const BackNavigationHeader = ({ title }) => {
         icon={<ArrowLeftOutlined />}
         onClick={() => nav(-1)}
       />
-      <h1>{title}</h1>
+      <p>{title}</p>
       <Button
         style={{
           visibility: 'hidden',

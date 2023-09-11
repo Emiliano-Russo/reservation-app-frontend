@@ -8,6 +8,9 @@ import { BusinessService } from '../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../env';
 import { useParams } from 'react-router-dom';
 import { BusinessTypeService } from '../../services/businessType.service';
+import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
+import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
+import { FadeFromTop } from '../../animations/FadeFromTop';
 
 const { Option } = Select;
 
@@ -142,32 +145,35 @@ export const NewReservation = withPageLayout(
 
     return (
       <>
-        <BackNavigationHeader title={'Reserva'} />
-        <div
-          style={{ display: step === 2 ? 'none' : 'flex' }}
-          className={styles.calendarContainer}
-        >
-          <IonDatetime
-            className={styles.calendarStyle}
-            placeholder="Seleccione una fecha"
-            onIonChange={(e) =>
-              setControlValues((prevState) => ({
-                ...prevState,
-                date: e.detail.value,
-              }))
-            }
-          ></IonDatetime>
-        </div>
-
+        <GrowsFromLeft>
+          <BackNavigationHeader title={'Reserva'} />
+        </GrowsFromLeft>
+        <AnimatedFromLeft>
+          <div
+            style={{ display: step === 2 ? 'none' : 'flex' }}
+            className={styles.calendarContainer}
+          >
+            <IonDatetime
+              className={styles.calendarStyle}
+              placeholder="Seleccione una fecha"
+              onIonChange={(e) =>
+                setControlValues((prevState) => ({
+                  ...prevState,
+                  date: e.detail.value,
+                }))
+              }
+            ></IonDatetime>
+          </div>
+        </AnimatedFromLeft>
         {(step == 2 || (step == 1 && innerHeight >= 680)) &&
         businessType &&
         businessType.controls ? (
-          <>
+          <FadeFromTop>
             <Controls
               controls={businessType.controls}
               setControlValues={setControlValues}
             />
-          </>
+          </FadeFromTop>
         ) : null}
 
         {step == 2 && (

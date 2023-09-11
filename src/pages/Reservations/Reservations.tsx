@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Spin } from 'antd';
+import { Spin } from 'antd';
 import { ReservationCard } from '../../components/ReservationCard/ReservationCard';
 import { withPageLayout } from '../../wrappers/WithPageLayout';
-import Footer from '../../components/Footer/Footer';
 import SearchInput from '../../components/SearchInput/SearchInput';
 import styles from './Reservations.module.css';
 import { ReservationService } from '../../services/reservation.service';
 import { REACT_APP_BASE_URL } from '../../../env';
-import { motion } from 'framer-motion';
 import { FadeFromTop } from '../../animations/FadeFromTop';
-import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
 
 const Reservations = withPageLayout(() => {
   const [reservations, setReservations] = useState([]); // Estado para las reservaciones
@@ -51,10 +48,8 @@ const Reservations = withPageLayout(() => {
           <p className={styles.headerText}>Reservas Solicitadas</p>
           <button>Filtros</button>
         </div>
-      </FadeFromTop>
-      <GrowsFromLeft>
         <SearchInput />
-      </GrowsFromLeft>
+      </FadeFromTop>
       {sortedTickets.length == 0 && <Spin style={{ marginTop: '100px' }} />}
       <div className={styles.ticketsContainer}>
         {sortedTickets.map((reservation: any, index: number) => (

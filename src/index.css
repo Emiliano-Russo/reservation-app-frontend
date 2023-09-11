@@ -10,12 +10,6 @@ body {
   font-size: 16px; /* Esto establece un tamaño base para rem */
 }
 
-/* html,
-body,
-ion-content {
-  background-color: transparent !important;
-} */
-
 div::-webkit-scrollbar {
   display: none;
 }
@@ -42,4 +36,25 @@ div::-webkit-scrollbar {
 .fade-exit-active {
   opacity: 0;
   transition: opacity 300ms;
+}
+
+/* animations */
+
+/* Animación */
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Estado inicial de la animación */
+.animatedFromLeft {
+  transform: translateX(-400px);
+  opacity: 0;
+  animation: slideInFromLeft 0.8s forwards;
 }

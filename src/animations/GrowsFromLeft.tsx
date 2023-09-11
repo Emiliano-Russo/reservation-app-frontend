@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import styles from './animations.module.css';
 
 interface AnimatedRouteWrapperProps {
   children: React.ReactNode;
@@ -8,10 +8,8 @@ export const GrowsFromLeft: React.FC<AnimatedRouteWrapperProps> = ({
   children,
 }) => {
   return (
-    <motion.div
-      initial={{ x: -100, opacity: 0, scale: 0.3 }}
-      animate={{ x: 0, opacity: 1, scale: 1 }}
-      transition={{ ease: 'easeOut', duration: 0.2, delay: 0.2 }}
+    <div
+      className={styles.animatedGrowsFromLeft}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -19,6 +17,6 @@ export const GrowsFromLeft: React.FC<AnimatedRouteWrapperProps> = ({
       }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 };

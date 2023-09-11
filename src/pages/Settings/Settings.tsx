@@ -2,10 +2,8 @@ import React from 'react';
 import { withPageLayout } from '../../wrappers/WithPageLayout';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 import styles from './Settings.module.css';
 import { BackNavigationHeader } from '../../components/BackNavigationHeader/BackNavigationHeader';
-import { motion } from 'framer-motion';
 import { FadeFromTop } from '../../animations/FadeFromTop';
 
 export const Settings = withPageLayout(

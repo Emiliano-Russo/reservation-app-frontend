@@ -8,12 +8,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { BackNavigationHeader } from '../../components/BackNavigationHeader/BackNavigationHeader';
 import { BusinessService } from '../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../env';
-import { motion } from 'framer-motion';
+import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
+import { BusinessTypeService } from '../../services/businessType.service';
 
 const { Title } = Typography;
 const Search = Input.Search;
 
 const businessService = new BusinessService(REACT_APP_BASE_URL);
+const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
 
 export const BusinessList = withPageLayout(
   () => {
@@ -21,11 +23,16 @@ export const BusinessList = withPageLayout(
     const { type } = useParams(); // Aquí estamos obteniendo el typeId desde la URL
     console.log('we got the typeId: ', type);
 
+    const [businessTypeName, setBusinessTypeName] = useState('');
     const [businesses, setBusinesses] = useState([]);
 
     useEffect(() => {
       async function fetchBusinesses() {
         if (type) {
+          const businessType =
+            await businessTypeService.mock_getBusinessType(type);
+          console.log('we got businessType: ', businessType);
+          setBusinessTypeName(businessType.name);
           const businessesByType =
             await businessService.mock_GetBusinessesByTypeId(type);
           setBusinesses(businessesByType);
@@ -39,48 +46,33 @@ export const BusinessList = withPageLayout(
 
     return (
       <>
-        <motion.div
-          initial={{ x: -400, opacity: 0, scale: 0.8 }}
-          animate={{ x: 0, opacity: 1, scale: 1 }}
-          transition={{ ease: 'easeOut', duration: 0.2, delay: 0.2 }}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'stretch',
-          }}
-        >
-          <BackNavigationHeader title={'Restaurante'} />
+        <AnimatedFromLeft>
+          <BackNavigationHeader title={businessTypeName} />
           <div style={{ height: '20px' }}></div>
           <SearchInput placeholder="Buscar negocios..." />
-        </motion.div>
+        </AnimatedFromLeft>
         {businesses.length == 0 && <Spin style={{ marginTop: '100px' }} />}
         <div className={styles.businessContainer}>
           {businesses.map((business: any, index: number) => (
-            <motion.div
-              initial={{ x: -400, opacity: 0, scale: 0.8 }} // Configuración inicial: movido hacia la izquierda, casi invisible y ligeramente reducido
-              animate={{ x: 0, opacity: 1, scale: 1 }} // Configuración final: posición original, completamente visible y a tamaño original
-              transition={{
-                ease: 'easeOut',
-                duration: 0.8,
-                delay: index * 0.1,
-              }} // Retraso basado en el id para dar un efecto en cascada
-              key={business.id}
-              className={styles.businessCard}
-              onClick={() => {
-                nav(`/business/${type}/${business.id}`);
-              }}
-            >
-              <div>
-                <Avatar src={business.logoURL} size={42}>
-                  E
-                </Avatar>
-                <p>{business.name}</p>
+            <AnimatedFromLeft delay={index * 0.1} key={business.id}>
+              <div
+                className={styles.businessCard}
+                onClick={() => {
+                  nav(`/business/${type}/${business.id}`);
+                }}
+              >
+                <div>
+                  <Avatar src={business.logoURL} size={42}>
+                    E
+                  </Avatar>
+                  <p>{business.name}</p>
+                </div>
+                <div className={styles.rating}>
+                  <StarFilled style={{ color: 'gold' }} />
+                  <p>{business.rating}</p>
+                </div>
               </div>
-              <div className={styles.rating}>
-                <StarFilled style={{ color: 'gold' }} />
-                <p>{business.rating}</p>
-              </div>
-            </motion.div>
+            </AnimatedFromLeft>
           ))}
         </div>
       </>

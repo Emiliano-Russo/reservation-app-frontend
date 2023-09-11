@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Input, Spin } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Avatar, Spin } from 'antd';
 import { withPageLayout } from '../../wrappers/WithPageLayout';
 import { BusinessTypeCard } from '../../components/BusinessTypeCard/BusinessTypeCard';
-import Footer from '../../components/Footer/Footer';
 import styles from './Home.module.css';
-import { StatusBar } from '@capacitor/status-bar';
 import SearchInput from '../../components/SearchInput/SearchInput';
 import { BusinessTypeService } from '../../services/businessType.service';
 import { REACT_APP_BASE_URL } from '../../../env';
-import AnimatedRouteWrapper from '../../wrappers/AnimatedRouteWrapper';
-import { motion } from 'framer-motion';
 import { FadeFromTop } from '../../animations/FadeFromTop';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
 
@@ -35,10 +30,8 @@ export const Home = withPageLayout(() => {
           </Avatar>
           <p className={styles.greetingText}>Hola, {userName}!</p>
         </div>
-      </FadeFromTop>
-      <GrowsFromLeft>
         <SearchInput />
-      </GrowsFromLeft>
+      </FadeFromTop>
       {businessTypes.length == 0 && <Spin style={{ marginTop: '100px' }} />}
       <div className={styles.businessTypeContainer}>
         {businessTypes.map((val: any, index: number) => (
