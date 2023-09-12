@@ -10,10 +10,11 @@ import { FadeFromTop } from '../../animations/FadeFromTop';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
 import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
 import { withAuth } from '../../wrappers/WithAuth';
+import { useSelector } from 'react-redux';
 
 export const Home = withAuth(
   withPageLayout(() => {
-    const [userName, setUsername] = useState('Diego');
+    const userState = useSelector((state: any) => state.user.user);
     const [businessTypes, setBusinessTypes] = useState([]);
 
     useEffect(() => {
@@ -33,7 +34,7 @@ export const Home = withAuth(
             <Avatar size={64} className={styles.avatarStyle}>
               D
             </Avatar>
-            <p className={styles.greetingText}>Hola, {userName}!</p>
+            <p className={styles.greetingText}>Hola, {userState.name}!</p>
           </div>
         </FadeFromTop>
         <SearchInput />

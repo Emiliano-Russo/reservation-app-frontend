@@ -1,34 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { withGuest } from '../../wrappers/WithGuest';
 import { UserService } from '../../services/user.service';
 import { REACT_APP_BASE_URL } from '../../../env';
-import { Input, Select, Button } from 'antd';
+import { Input, Select, Button, message } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUserAndToken } from '../../redux/userSlice';
 
 export const SignUp = withGuest(() => {
   const nav = useNavigate();
   const { Option } = Select;
-
   const userService = new UserService(REACT_APP_BASE_URL!);
+  const dispatch = useDispatch();
+  const userState = useSelector((state: any) => state.user.user);
+  const [formData, setFormData] = useState({
+    name: '',
+    lastname: '',
+    email: '',
+    password: '',
+    identityNumber: '',
+    country: '',
+  });
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (user: any) => {
+  useEffect(() => {
+    if (userState) {
+      nav('/business');
+    }
+  }, [userState, nav]);
+
+  const handleSubmit = async (user) => {
+    setLoading(true);
     user.provider = 'local';
     user.emailVerified = false;
     user.isPrivate = false;
 
     try {
       const res = await userService.registerUser(user);
+      const userRes = res.data.user;
+      const tokenRes = res.data.token;
 
       if (res.status === 201) {
-        nav('/signin');
+        dispatch(addUserAndToken({ user: userRes, token: tokenRes }));
       } else {
-        console.error('Hubo un error en el registro');
+        message.error('Hubo un error en el registro');
       }
     } catch (error) {
-      console.error('Error en el registro:', error);
+      message.error('Error en el registro');
     }
+    setLoading(false);
   };
 
   const banner =
@@ -85,22 +107,36 @@ export const SignUp = withGuest(() => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            height: 'calc(85vh - 3rem)', // 85vh (100vh - 15vh del banner) - el marginTop
+            height: 'calc(85vh - 3rem)',
             width: '60%',
             margin: '2rem auto 0 auto',
-            paddingBottom: '2rem', // Espacio en el fondo
+            paddingBottom: '2rem',
           }}
         >
           <div>
             <label style={{ display: 'block', marginBottom: '5px' }}>
               Nombre
             </label>
-            <Input placeholder="Nombre" style={{ marginBottom: '15px' }} />
+            <Input
+              placeholder="Nombre"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              style={{ marginBottom: '15px' }}
+            />
 
             <label style={{ display: 'block', marginBottom: '5px' }}>
               Apellido
             </label>
-            <Input placeholder="Apellido" style={{ marginBottom: '15px' }} />
+            <Input
+              placeholder="Apellido"
+              value={formData.lastname}
+              onChange={(e) =>
+                setFormData({ ...formData, lastname: e.target.value })
+              }
+              style={{ marginBottom: '15px' }}
+            />
 
             <label style={{ display: 'block', marginBottom: '5px' }}>
               Correo Electrónico
@@ -108,6 +144,10 @@ export const SignUp = withGuest(() => {
             <Input
               type="email"
               placeholder="Correo electrónico"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               style={{ marginBottom: '15px' }}
             />
 
@@ -116,6 +156,10 @@ export const SignUp = withGuest(() => {
             </label>
             <Input.Password
               placeholder="Contraseña"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
               style={{ marginBottom: '15px' }}
             />
 
@@ -124,6 +168,10 @@ export const SignUp = withGuest(() => {
             </label>
             <Input
               placeholder="Documento de Identidad"
+              value={formData.identityNumber}
+              onChange={(e) =>
+                setFormData({ ...formData, identityNumber: e.target.value })
+              }
               style={{ marginBottom: '15px' }}
             />
 
@@ -132,6 +180,8 @@ export const SignUp = withGuest(() => {
             </label>
             <Select
               placeholder="Selecciona tu país"
+              value={formData.country}
+              onChange={(value) => setFormData({ ...formData, country: value })}
               style={{ marginBottom: '20px', width: '100%' }}
             >
               <Option value="Argentina">Argentina</Option>
@@ -141,7 +191,12 @@ export const SignUp = withGuest(() => {
             </Select>
           </div>
 
-          <Button type="primary" style={{ width: '100%' }}>
+          <Button
+            loading={loading}
+            type="primary"
+            onClick={() => handleSubmit(formData)}
+            style={{ width: '100%' }}
+          >
             Registrarse
           </Button>
         </div>
