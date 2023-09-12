@@ -11,11 +11,11 @@ export class UserService {
 
   public registerUser(user: any) {
     const formData = new FormData();
-
-    formData.append('username', user.username);
     formData.append('name', user.name);
     formData.append('email', user.email);
     formData.append('password', user.password);
+    formData.append('phone', user.phone);
+    formData.append('civilIdDoc', user.civilIdDoc);
 
     if (user.userImage) {
       formData.append('userImage', user.userImage, user.userImage.name);

@@ -17,10 +17,10 @@ export const SignUp = withGuest(() => {
   const userState = useSelector((state: any) => state.user.user);
   const [formData, setFormData] = useState({
     name: '',
-    lastname: '',
+    phone: '',
     email: '',
     password: '',
-    identityNumber: '',
+    civilIdDoc: '',
     country: '',
   });
   const [loading, setLoading] = useState(false);
@@ -55,6 +55,14 @@ export const SignUp = withGuest(() => {
 
   const banner =
     'https://i.pinimg.com/564x/6f/91/9f/6f919f28cb7a830481f9b0866fc2c15b.jpg';
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    if (/^[0-9]*$/.test(value)) {
+      // Asegura que solo se estén introduciendo números
+      setFormData({ ...formData, phone: value });
+    }
+  };
 
   return (
     <GrowsFromLeft>
@@ -127,14 +135,13 @@ export const SignUp = withGuest(() => {
             />
 
             <label style={{ display: 'block', marginBottom: '5px' }}>
-              Apellido
+              Teléfono
             </label>
             <Input
-              placeholder="Apellido"
-              value={formData.lastname}
-              onChange={(e) =>
-                setFormData({ ...formData, lastname: e.target.value })
-              }
+              type="tel"
+              placeholder="Teléfono"
+              value={formData.phone}
+              onChange={handlePhoneChange}
               style={{ marginBottom: '15px' }}
             />
 
@@ -168,9 +175,9 @@ export const SignUp = withGuest(() => {
             </label>
             <Input
               placeholder="Documento de Identidad"
-              value={formData.identityNumber}
+              value={formData.civilIdDoc}
               onChange={(e) =>
-                setFormData({ ...formData, identityNumber: e.target.value })
+                setFormData({ ...formData, civilIdDoc: e.target.value })
               }
               style={{ marginBottom: '15px' }}
             />

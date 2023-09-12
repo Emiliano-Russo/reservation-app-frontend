@@ -13,20 +13,22 @@ import { StatusBar } from '@capacitor/status-bar';
 import { useNavigate } from 'react-router-dom';
 import { FadeFromTop } from '../../animations/FadeFromTop';
 import { withAuth } from '../../wrappers/WithAuth';
+import { useSelector } from 'react-redux';
 
-const BasicProfileInfoWidget = () => {
+const BasicProfileInfoWidget = ({ phone, email, docId, emailVerified }) => {
   return (
     <div className={styles.container}>
       <div className={styles.row}>
-        <p>092 084 834</p>
+        <p>{phone}</p>
         <PhoneOutlined style={{ color: 'gray' }} />
       </div>
       <div className={styles.row}>
-        <p>emiliano@gmail.com</p>
+        <p style={{ color: emailVerified ? 'black' : 'red' }}>{email}</p>
+        {emailVerified == false && <Button>Verificar</Button>}
         <MailOutlined style={{ color: 'gray' }} />
       </div>
       <div className={styles.row}>
-        <p>4870685-4</p>
+        <p>{docId}</p>
         <ContactsOutlined style={{ color: 'gray' }} />
       </div>
     </div>
@@ -55,14 +57,22 @@ const LoyaltyPointsWidget = () => {
   );
 };
 
-const ProfileHeader = () => {
+interface PropsHeader {
+  url: string;
+  name: string;
+}
+
+const ProfileHeader = (props: PropsHeader) => {
   const nav = useNavigate();
 
   return (
     <>
       <div className={styles.profileHeader}>
         <div className={styles.avatarContainer}>
-          <Avatar size={80}>E</Avatar> {/* 96px */}
+          <Avatar src={props.url} size={80}>
+            E
+          </Avatar>{' '}
+          {/* 96px */}
         </div>
         <div className={styles.messageButtonContainer}>
           <button style={{ color: 'black', background: 'white' }}>
@@ -81,7 +91,7 @@ const ProfileHeader = () => {
         </div>
       </div>
       <div className={styles.profileName}>
-        <p>Emiliano Russo</p>
+        <p>{props.name}</p>
         <button>
           <DownOutlined style={{ color: 'black' }} />
         </button>
@@ -94,11 +104,24 @@ export const Profile = withAuth(
   withPageLayout(() => {
     StatusBar.setBackgroundColor({ color: '#fd6f8e' });
 
+    const user = useSelector((state: any) => state.user.user);
+    console.log('user: ', user);
+
     return (
       <FadeFromTop>
-        <ProfileHeader />
+        <ProfileHeader
+          name={user.name}
+          url={
+            'https://i.pinimg.com/564x/66/44/b3/6644b34c91f57f8d40a4eaa94e3cb797.jpg'
+          }
+        />
         <SectionLine title={'Información'} />
-        <BasicProfileInfoWidget />
+        <BasicProfileInfoWidget
+          phone={user.phone}
+          email={user.email}
+          docId={user.civilIdDoc}
+          emailVerified={user.emailVerified}
+        />
         <SectionLine title={'Puntos de Fidelidad'} />
         <LoyaltyPointsWidget />
       </FadeFromTop>
