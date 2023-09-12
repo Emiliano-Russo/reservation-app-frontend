@@ -20,7 +20,7 @@ export const Home = withAuth(
     useEffect(() => {
       const service = new BusinessTypeService(REACT_APP_BASE_URL);
       service
-        .mock_getBusinessTypes()
+        .getBusinessTypes()
         .then((data) => setBusinessTypes(data))
         .catch((error) =>
           console.error('Error fetching business types:', error),
