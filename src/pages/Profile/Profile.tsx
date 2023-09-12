@@ -12,6 +12,7 @@ import styles from './Profile.module.css';
 import { StatusBar } from '@capacitor/status-bar';
 import { useNavigate } from 'react-router-dom';
 import { FadeFromTop } from '../../animations/FadeFromTop';
+import { withAuth } from '../../wrappers/WithAuth';
 
 const BasicProfileInfoWidget = () => {
   return (
@@ -89,16 +90,18 @@ const ProfileHeader = () => {
   );
 };
 
-export const Profile = withPageLayout(() => {
-  StatusBar.setBackgroundColor({ color: '#fd6f8e' });
+export const Profile = withAuth(
+  withPageLayout(() => {
+    StatusBar.setBackgroundColor({ color: '#fd6f8e' });
 
-  return (
-    <FadeFromTop>
-      <ProfileHeader />
-      <SectionLine title={'Información'} />
-      <BasicProfileInfoWidget />
-      <SectionLine title={'Puntos de Fidelidad'} />
-      <LoyaltyPointsWidget />
-    </FadeFromTop>
-  );
-}, '0px');
+    return (
+      <FadeFromTop>
+        <ProfileHeader />
+        <SectionLine title={'Información'} />
+        <BasicProfileInfoWidget />
+        <SectionLine title={'Puntos de Fidelidad'} />
+        <LoyaltyPointsWidget />
+      </FadeFromTop>
+    );
+  }, '0px'),
+);

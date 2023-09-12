@@ -20,8 +20,8 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import { SignIn } from './pages/SignIn';
-import { SignUp } from './pages/SignUp';
+import { SignIn } from './pages/SignIn/SignIn';
+import { SignUp } from './pages/SignUp/SignUp';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import { Home } from './pages/Home/Home';

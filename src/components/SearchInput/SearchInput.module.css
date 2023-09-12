@@ -20,3 +20,23 @@
 .inputStyle::placeholder {
   color: #9ea5d1;
 }
+
+@keyframes growsFromLeft {
+  from {
+    transform: translateX(-100px);
+    opacity: 0;
+    scale: 0.3;
+  }
+  to {
+    transform: translateX(0px);
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.animatedGrowsFromLeft {
+  transform: translateX(-100px);
+  opacity: 0;
+  scale: 0.3;
+  animation: growsFromLeft 0.5s forwards;
+}

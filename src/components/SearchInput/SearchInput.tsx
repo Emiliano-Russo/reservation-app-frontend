@@ -3,7 +3,11 @@ import styles from './SearchInput.module.css';
 
 const SearchInput = ({ placeholder = 'Buscar algo...', ...props }) => {
   return (
-    <input placeholder={placeholder} className={styles.inputStyle} {...props} />
+    <input
+      placeholder={placeholder}
+      className={`${styles.animatedGrowsFromLeft} ${styles.inputStyle}`}
+      {...props}
+    />
   );
 };
 

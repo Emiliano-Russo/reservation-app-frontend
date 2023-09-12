@@ -49,8 +49,9 @@ export const BusinessList = withPageLayout(
         <AnimatedFromLeft>
           <BackNavigationHeader title={businessTypeName} />
           <div style={{ height: '20px' }}></div>
-          <SearchInput placeholder="Buscar negocios..." />
         </AnimatedFromLeft>
+        <SearchInput placeholder="Buscar negocios..." />
+
         {businesses.length == 0 && <Spin style={{ marginTop: '100px' }} />}
         <div className={styles.businessContainer}>
           {businesses.map((business: any, index: number) => (
