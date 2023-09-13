@@ -6,14 +6,18 @@ import { BackNavigationHeader } from '../../components/BackNavigationHeader/Back
 import styles from './NewReservation.module.css';
 import { BusinessService } from '../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../env';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { BusinessTypeService } from '../../services/businessType.service';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
 import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
 import { FadeFromTop } from '../../animations/FadeFromTop';
+import { useSelector } from 'react-redux';
+import { ReservationService } from '../../services/reservation.service';
+import { CheckCircleOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
+const reservationService = new ReservationService(REACT_APP_BASE_URL);
 const businessService = new BusinessService(REACT_APP_BASE_URL);
 const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
 
@@ -56,10 +60,31 @@ const Controls = ({ controls, setControlValues }) => {
   if (controls == null) return null;
 
   const handleValueChange = (label, value) => {
-    setControlValues((prevState) => ({
-      ...prevState,
-      [label]: value,
-    }));
+    const obj = {
+      label,
+      value,
+      labelFirst: true,
+    };
+    setControlValues((prevState) => {
+      // Filtrar el array para quitar el elemento con el mismo label
+      const newExtras = prevState.extras?.filter(
+        (item) => item.label !== label,
+      );
+
+      if (newExtras) {
+        // Pushear el nuevo objeto al array
+        newExtras.push(obj);
+
+        return {
+          ...prevState,
+          extras: newExtras,
+        };
+      } else
+        return {
+          ...prevState,
+          extras: [obj],
+        };
+    });
   };
 
   return (
@@ -109,8 +134,12 @@ export const NewReservation = withPageLayout(
     const [businessType, setBusinessType] = useState<any>(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [innerHeight, setInnerHeight] = useState<number>(0);
+    const [doneModal, setDoneModal] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const { id } = useParams<any>();
+    const user = useSelector((state: any) => state.user.user);
+    const nav = useNavigate();
 
     useEffect(() => {
       console.log('setting inner height');
@@ -121,17 +150,14 @@ export const NewReservation = withPageLayout(
       async function fetchBusinessDetails() {
         try {
           if (id) {
-            const businessData = await businessService.mock_GetBusiness(id);
+            const businessData = await businessService.getBusiness(id);
             setBusiness(businessData);
             businessTypeService
-              .mock_getBusinessType(businessData.typeId)
+              .getBusinessType(businessData.typeId)
               .then((val) => {
-                console.log('this is the value business type ', val);
                 setBusinessType(val);
               })
-              .catch((err) => {
-                console.log('wtf an error');
-              });
+              .catch((err) => {});
           }
         } catch (error) {
           console.error('Error fetching business data:', error);
@@ -141,12 +167,30 @@ export const NewReservation = withPageLayout(
       fetchBusinessDetails();
     }, [id]);
 
-    console.log('control values! ', controlValues);
+    const createReservation = () => {
+      setLoading(true);
+      const create_dto = {
+        date: controlValues.date,
+        userId: user.id,
+        businessId: business.id,
+        status: 'Pending',
+        extras: controlValues.extras,
+      };
+      reservationService
+        .createReservation(create_dto)
+        .then(() => {
+          setModalOpen(false);
+          setDoneModal(true);
+        })
+        .catch(() => {
+          message.error('Error!');
+        });
+    };
 
     return (
       <>
         <GrowsFromLeft>
-          <BackNavigationHeader title={'Reserva'} />
+          <BackNavigationHeader title={business ? business.name : 'Reserva'} />
         </GrowsFromLeft>
         <AnimatedFromLeft>
           <div
@@ -156,21 +200,22 @@ export const NewReservation = withPageLayout(
             <IonDatetime
               className={styles.calendarStyle}
               placeholder="Seleccione una fecha"
-              onIonChange={(e) =>
+              onIonChange={(e) => {
                 setControlValues((prevState) => ({
                   ...prevState,
                   date: e.detail.value,
-                }))
-              }
+                }));
+              }}
             ></IonDatetime>
           </div>
         </AnimatedFromLeft>
         {(step == 2 || (step == 1 && innerHeight >= 680)) &&
         businessType &&
-        businessType.controls ? (
+        businessType[0] &&
+        businessType[0].controls ? (
           <FadeFromTop>
             <Controls
-              controls={businessType.controls}
+              controls={businessType[0].controls}
               setControlValues={setControlValues}
             />
           </FadeFromTop>
@@ -201,8 +246,11 @@ export const NewReservation = withPageLayout(
           </div>
         ) : step === 1 ? (
           <div className={styles.buttonsContainer}>
-            <Button>Cancelar</Button>
+            <Button loading={loading} style={{ visibility: 'hidden' }}>
+              Enviar
+            </Button>
             <Button
+              loading={loading}
               type="primary"
               onClick={() => {
                 if (controlValues.date && controlValues.date != null)
@@ -215,46 +263,66 @@ export const NewReservation = withPageLayout(
           </div>
         ) : null}
 
-        {modalOpen && (
-          <Modal
-            open={modalOpen}
-            onCancel={() => {
-              if (controlValues.date && controlValues.date != null)
-                setModalOpen(true);
-              else message.error('Porfavor selecciona una fecha');
-            }}
-            bodyStyle={{ padding: 0 }}
-            footer={
-              <div>
-                <Button
-                  danger
-                  onClick={() => {
-                    setModalOpen(false);
-                  }}
-                >
-                  Cancelar
-                </Button>
-                <Button type="primary" onClick={() => {}}>
-                  Confimar
-                </Button>
-              </div>
-            }
-          >
-            <div className={styles.modalContent}>
-              <h3>{business.name}</h3>
-              <p>Fecha</p>
-              <span>{formatDate(controlValues.date)}</span>
-              {businessType.controls.map((val) => {
-                return (
-                  <>
-                    <p key={val.label}>{val.label}</p>
-                    <span>{controlValues[val.label]}</span>
-                  </>
-                );
-              })}
+        <Modal
+          open={modalOpen}
+          onCancel={() => {
+            if (loading == false) setModalOpen(false);
+          }}
+          bodyStyle={{ padding: 0 }}
+          footer={
+            <div>
+              <Button
+                danger
+                onClick={() => {
+                  if (loading == false) setModalOpen(false);
+                }}
+              >
+                Cancelar
+              </Button>
+              <Button type="primary" onClick={createReservation}>
+                Confimar
+              </Button>
             </div>
-          </Modal>
-        )}
+          }
+        >
+          <div className={styles.modalContent}>
+            <h3>{business?.name}</h3>
+            <p>Fecha</p>
+            <span>{formatDate(controlValues.date)}</span>
+            {controlValues.extras?.map((val) => {
+              console.log('extra: ', val);
+              return (
+                <>
+                  <p>{val.label}</p>
+                  <span>{val.value}</span>
+                </>
+              );
+            })}
+          </div>
+        </Modal>
+
+        <Modal
+          open={doneModal}
+          onCancel={() => {
+            setDoneModal(false);
+          }}
+          footer={null}
+          centered
+          closable={false}
+        >
+          <div style={{ textAlign: 'center' }}>
+            <CheckCircleOutlined style={{ fontSize: '72px', color: 'green' }} />
+            <h2>Reserva Lista</h2>
+            <p>Tu reserva ha sido enviada con éxito!</p>
+            <Button
+              onClick={() => {
+                nav('/business');
+              }}
+            >
+              Volver al Inicio
+            </Button>
+          </div>
+        </Modal>
       </>
     );
   },
