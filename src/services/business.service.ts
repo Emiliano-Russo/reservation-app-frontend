@@ -41,7 +41,7 @@ export class BusinessService {
   async getBusiness(businessId: string): Promise<any> {
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
-      `/businesses/${businessId}`,
+      `/business?businessId=${businessId}`,
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       },

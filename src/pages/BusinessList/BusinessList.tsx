@@ -25,13 +25,14 @@ export const BusinessList = withPageLayout(
 
     const [businessTypeName, setBusinessTypeName] = useState('');
     const [businesses, setBusinesses] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
       async function fetchBusinesses() {
         if (type) {
           const businessType = await businessTypeService.getBusinessType(type);
           console.log('we got businessType: ', businessType);
-          setBusinessTypeName(businessType.name);
+          setBusinessTypeName(businessType[0].name);
           const businessesByType =
             await businessService.getBusinessesByTypeId(type);
           console.log('business: ', businessesByType);
@@ -39,6 +40,7 @@ export const BusinessList = withPageLayout(
         } else {
           setBusinesses([]);
         }
+        setLoading(false);
       }
 
       fetchBusinesses();
@@ -51,8 +53,13 @@ export const BusinessList = withPageLayout(
           <div style={{ height: '20px' }}></div>
         </AnimatedFromLeft>
         <SearchInput placeholder="Buscar negocios..." />
+        {loading == false && businesses.length == 0 ? (
+          <h6 style={{ textAlign: 'center' }}>
+            Todavía no tenemos negocios registrados. ¡Pero estamos en ello!
+          </h6>
+        ) : null}
 
-        {businesses.length == 0 && <Spin style={{ marginTop: '100px' }} />}
+        {loading && <Spin style={{ marginTop: '100px' }} />}
         <div className={styles.businessContainer}>
           {businesses.map((business: any, index: number) => (
             <AnimatedFromLeft delay={index * 0.1} key={business.id}>
@@ -70,7 +77,7 @@ export const BusinessList = withPageLayout(
                 </div>
                 <div className={styles.rating}>
                   <StarFilled style={{ color: 'gold' }} />
-                  <p>{business.rating}</p>
+                  <p>{business.averageRating}</p>
                 </div>
               </div>
             </AnimatedFromLeft>

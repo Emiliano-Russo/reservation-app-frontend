@@ -24,6 +24,13 @@ export class ReservationService {
     return response.data;
   }
 
+  async getReservationsByBusinessId(businessId: string): Promise<any> {
+    const response: AxiosResponse<any> = await this.api.get(
+      `/reservation?businessId=${businessId}`,
+    );
+    return response.data;
+  }
+
   async getReservation(reservationId: string): Promise<any> {
     const response: AxiosResponse<any> = await this.api.get(
       `/reservation?reservationId=${reservationId}`,
