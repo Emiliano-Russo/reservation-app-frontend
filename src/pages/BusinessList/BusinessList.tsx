@@ -29,12 +29,12 @@ export const BusinessList = withPageLayout(
     useEffect(() => {
       async function fetchBusinesses() {
         if (type) {
-          const businessType =
-            await businessTypeService.mock_getBusinessType(type);
+          const businessType = await businessTypeService.getBusinessType(type);
           console.log('we got businessType: ', businessType);
           setBusinessTypeName(businessType.name);
           const businessesByType =
-            await businessService.mock_GetBusinessesByTypeId(type);
+            await businessService.getBusinessesByTypeId(type);
+          console.log('business: ', businessesByType);
           setBusinesses(businessesByType);
         } else {
           setBusinesses([]);

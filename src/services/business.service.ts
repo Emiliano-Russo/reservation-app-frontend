@@ -52,7 +52,7 @@ export class BusinessService {
   async getBusinessesByTypeId(typeId: string): Promise<any> {
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
-      `/businesses/type/${typeId}`,
+      `/business?typeId=${typeId}`,
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       },
