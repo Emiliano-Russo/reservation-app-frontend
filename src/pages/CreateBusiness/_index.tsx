@@ -18,11 +18,14 @@ import {
   WeekDays,
   mapDayToEnglish,
 } from '../../interfaces/interfaces';
+import { CheckCircleOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 export const CreateBusiness = withPageLayout(
   () => {
     const businessServices = new BusinessService(REACT_APP_BASE_URL);
 
+    const nav = useNavigate();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [step, setStep] = useState(1);
@@ -307,13 +310,28 @@ export const CreateBusiness = withPageLayout(
           >
             Crear Negocio
           </Button>
-          <Modal
-            title="Negocio Creado"
-            open={isModalVisible}
-            onOk={handleModalOk}
-            onCancel={handleModalCancel}
-          >
-            <p>¡Tu negocio ha sido creado satisfactoriamente!</p>
+          <Modal footer={null} closable={false} open={isModalVisible}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+              }}
+            >
+              <h2>Negocio Creado</h2>
+              <CheckCircleOutlined
+                style={{ fontSize: '72px', color: 'green' }}
+              />
+              <p>¡Tu negocio ha sido creado satisfactoriamente!</p>
+              <Button
+                onClick={() => {
+                  nav('/business');
+                }}
+              >
+                Volver al Inicio
+              </Button>
+            </div>
           </Modal>
         </div>
       </>
