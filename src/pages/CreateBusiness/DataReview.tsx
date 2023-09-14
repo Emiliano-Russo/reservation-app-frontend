@@ -17,7 +17,7 @@ export const DataReview = ({ businessData }) => {
           <strong>Nombre del negocio:</strong> {businessData.businessName}
         </p>
         <p>
-          <strong>Tipo de negocio:</strong> {businessData.businessType}
+          <strong>Tipo de negocio:</strong> {businessData.businessType.name}
         </p>
         <p>
           <strong>Descripción:</strong> {businessData.businessDescription}
@@ -31,9 +31,6 @@ export const DataReview = ({ businessData }) => {
         </p>
         <p>
           <strong>Departamento:</strong> {businessData.locationInfo.department}
-        </p>
-        <p>
-          <strong>Email:</strong> {businessData.locationInfo.email}
         </p>
         <p>
           <strong>Dirección:</strong> {businessData.locationInfo.address}

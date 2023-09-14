@@ -12,25 +12,40 @@ export class BusinessService {
   public async registerBusiness(
     business: any,
     logoImage?: File | null,
+    bannerImage?: File | null,
   ): Promise<any> {
     const formData = new FormData();
+
+    console.log('BUSINESS: ', business);
+    const objnewCoordinates = {
+      pointX: business.coordinates.latitude.toString(),
+      pointY: business.coordinates.longitude.toString(),
+    };
+    console.log('obj coordinates: ', objnewCoordinates);
 
     formData.append('ownerId', business.ownerId);
     formData.append('typeId', business.typeId);
     formData.append('name', business.name);
+    formData.append('country', business.country);
     formData.append('address', business.address);
     formData.append('description', business.description);
-
-    if (business.coordinates) {
-      formData.append('coordinates[pointX]', business.coordinates.pointX);
-      formData.append('coordinates[pointY]', business.coordinates.pointY);
-    }
+    formData.append('department', business.department);
+    formData.append('coordinates', JSON.stringify(objnewCoordinates));
+    formData.append('availability', JSON.stringify(business.availability));
 
     if (logoImage) {
-      formData.append('logoImage', logoImage, logoImage.name);
+      formData.append('logo', logoImage, logoImage.name);
     }
 
-    return this.api.post('/businesses', formData, {
+    if (bannerImage) {
+      formData.append('banner', bannerImage, bannerImage.name);
+    }
+
+    console.log('-------------------------------------');
+    console.log('EL FORM DATA');
+    console.log(formData);
+
+    return this.api.post('/business', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,

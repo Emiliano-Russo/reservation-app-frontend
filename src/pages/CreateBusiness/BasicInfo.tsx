@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
 import { Input, Select, Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import styles from './CreateBusiness.module.css';
 import { mock_businessType } from '../../mocks/businessType';
+import { BusinessTypeService } from '../../services/businessType.service';
+import { REACT_APP_BASE_URL } from '../../../env';
 
 const { Option } = Select;
 const { TextArea } = Input;
+
+const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
 
 export const BasicInfo = ({
   businessName,
@@ -22,6 +26,7 @@ export const BasicInfo = ({
 }) => {
   const [logoFileName, setLogoFileName] = useState('');
   const [bannerFileName, setBannerFileName] = useState('');
+  const [businessTypes, setBusinessTypes] = useState<any>([]);
 
   const handleUploadChange = (e, type) => {
     console.log('type: ', type);
@@ -42,6 +47,16 @@ export const BasicInfo = ({
     }
   };
 
+  useEffect(() => {
+    const downloadBusinessType = async () => {
+      const res = await businessTypeService.getBusinessTypes();
+      setBusinessTypes(res);
+      console.log('res businessTypes: ', res);
+    };
+
+    downloadBusinessType();
+  }, []);
+
   return (
     <GrowsFromLeft>
       <div className={styles.container}>
@@ -54,12 +69,18 @@ export const BasicInfo = ({
 
         <Select
           placeholder="Tipo de Negocio"
-          value={businessType}
-          onChange={(value) => onBusinessTypeChange(value)}
+          value={businessType.name}
+          onChange={(value) => {
+            const indexBusinessType = businessTypes.findIndex(
+              (val) => val.id == value,
+            );
+            console.log('index: ', indexBusinessType);
+            onBusinessTypeChange(businessTypes[indexBusinessType]);
+          }}
           className={styles.select}
         >
-          {mock_businessType.map((business: any) => (
-            <Option key={business.id} value={business.name}>
+          {businessTypes.map((business: any) => (
+            <Option key={business.id} value={business.id}>
               {business.name}
             </Option>
           ))}

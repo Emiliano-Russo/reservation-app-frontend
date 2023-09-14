@@ -11,6 +11,13 @@ import dayjs from 'dayjs';
 import { BusinessService } from '../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../env';
 import { FadeFromTop } from '../../animations/FadeFromTop';
+import { useSelector } from 'react-redux';
+import {
+  IAvailability,
+  IShift,
+  WeekDays,
+  mapDayToEnglish,
+} from '../../interfaces/interfaces';
 
 export const CreateBusiness = withPageLayout(
   () => {
@@ -19,12 +26,15 @@ export const CreateBusiness = withPageLayout(
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [step, setStep] = useState(1);
-    const [businessData, setBusinessData] = useState({
+    const [businessData, setBusinessData] = useState<any>({
       businessName: '',
-      businessType: null,
+      businessType: {
+        id: null,
+        name: null,
+      },
       businessDescription: '',
-      logoFileList: [],
-      bannerFileList: [],
+      logoFileList: [''],
+      bannerFileList: [''],
       welcomeData: {},
       locationInfo: {
         country: null,
@@ -39,6 +49,8 @@ export const CreateBusiness = withPageLayout(
         daysAvailable: [],
       },
     });
+
+    const user = useSelector((state: any) => state.user.user);
 
     const handleReservationDetailsChange = (key, value) => {
       setBusinessData((prevData) => {
@@ -82,6 +94,7 @@ export const CreateBusiness = withPageLayout(
     };
 
     const handleBusinessTypeChange = (value) => {
+      console.log('value businessType: ', value);
       setBusinessData((prevData) => ({ ...prevData, businessType: value }));
     };
 
@@ -105,6 +118,60 @@ export const CreateBusiness = withPageLayout(
     const updateBusinessData = (data) => {
       setBusinessData((prevData) => ({ ...prevData, ...data }));
     };
+
+    const createBusiness = () => {
+      console.log('creating business: ', businessData);
+      const availabilityTransformed = transformToAvailability(
+        businessData.reservationDetails,
+      );
+      const obj = {
+        ownerId: user.id,
+        typeId: businessData.businessType.id,
+        name: businessData.businessName,
+        description: businessData.businessDescription,
+        country: businessData.locationInfo.country,
+        department: businessData.locationInfo.department,
+        address: businessData.locationInfo.address,
+        coordinates: businessData.locationInfo.selectedLocation,
+        availability: availabilityTransformed,
+      };
+      console.log('final obj: ', obj);
+      console.log('logo: ', businessData.logoFileList);
+      console.log('banner: ', businessData.bannerFileList);
+      businessServices
+        .registerBusiness(
+          obj,
+          businessData.logoFileList[0],
+          businessData.bannerFileList[0],
+        )
+        .then(() => {
+          showModal();
+        })
+        .catch(() => {
+          message.error('error creating business');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+
+    function transformToAvailability(reservationDetails: any): IAvailability[] {
+      const shifts: IShift[] = [
+        {
+          openingTime: reservationDetails.openingTime,
+          closingTime: reservationDetails.closingTime,
+        },
+      ];
+
+      const availability: IAvailability[] =
+        reservationDetails.daysAvailable.map((dayInSpanish: string) => ({
+          day: mapDayToEnglish(dayInSpanish),
+          shifts: shifts,
+          open: true,
+        }));
+
+      return availability;
+    }
 
     const renderScreen = () => {
       switch (step) {
@@ -235,24 +302,14 @@ export const CreateBusiness = withPageLayout(
             }}
             onClick={() => {
               setLoading(true);
-              businessServices
-                .mock_RegisterBusiness(businessData)
-                .then(() => {
-                  showModal(); // Muestra el modal en lugar de un mensaje
-                })
-                .catch(() => {
-                  message.error('error creating business');
-                })
-                .finally(() => {
-                  setLoading(false);
-                });
+              createBusiness();
             }}
           >
             Crear Negocio
           </Button>
           <Modal
             title="Negocio Creado"
-            visible={isModalVisible}
+            open={isModalVisible}
             onOk={handleModalOk}
             onCancel={handleModalCancel}
           >

@@ -5,8 +5,12 @@ import styles from './CreateBusiness.module.css';
 import { mockCountries, mockDepartments } from '../../mocks/Countries';
 import MyMap from '../../components/Map/Map';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
+import { BusinessTypeService } from '../../services/businessType.service';
+import { REACT_APP_BASE_URL } from '../../../env';
 
 const { Option } = Select;
+
+const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
 
 export const LocationInfo = ({
   country,
@@ -79,13 +83,6 @@ export const LocationInfo = ({
             ))}
           </Select>
         )}
-
-        <Input
-          placeholder="Correo Electrónico"
-          value={email}
-          onChange={(e) => onEmailChange(e.target.value)}
-          className={styles.input}
-        />
 
         <Input
           placeholder="Dirección"
