@@ -19,7 +19,7 @@ export class ReservationService {
 
   async getReservationsByUserId(userId: string): Promise<any> {
     const response: AxiosResponse<any> = await this.api.get(
-      `/reservation/user/${userId}`,
+      `/reservation?userId=${userId}`,
     );
     return response.data;
   }

@@ -8,27 +8,22 @@ import { ReservationService } from '../../services/reservation.service';
 import { REACT_APP_BASE_URL } from '../../../env';
 import { FadeFromTop } from '../../animations/FadeFromTop';
 import { withAuth } from '../../wrappers/WithAuth';
+import { useSelector } from 'react-redux';
+import { ReservationStatus } from '../../interfaces/reservation.status';
 
 const Reservations = withAuth(
   withPageLayout(() => {
     const [reservations, setReservations] = useState([]); // Estado para las reservaciones
-    const userId = 'diego123'; // Aquí debes obtener el userId, ya sea desde el contexto, props o cualquier otro método que utilices
+    const user = useSelector((state: any) => state.user.user);
 
     useEffect(() => {
-      // Creamos una instancia del servicio
-      const reservationService = new ReservationService(REACT_APP_BASE_URL); // Asegúrate de reemplazar 'BASE_URL' por la URL base de tu backend
+      const reservationService = new ReservationService(REACT_APP_BASE_URL);
 
       // Obtenemos las reservaciones
       async function fetchReservations() {
         try {
           const userReservations =
-            await reservationService.mock_getReservationsByUserId(userId);
-          console.log(
-            'the reservations with the user id: ',
-            userId,
-            ' are : ',
-            userReservations,
-          );
+            await reservationService.getReservationsByUserId(user.id);
           setReservations(userReservations);
         } catch (error) {
           console.error('Error al obtener las reservaciones:', error);
@@ -36,12 +31,29 @@ const Reservations = withAuth(
       }
 
       fetchReservations();
-    }, [userId]); // El hook se ejecuta cuando el componente se monta y cuando el userId cambie
+    }, [user.id]); // El hook se ejecuta cuando el componente se monta y cuando el userId cambie
 
     const sortedTickets = reservations.sort(
       (a: any, b: any) =>
-        b.reservationDate.getTime() - a.reservationDate.getTime(),
+        new Date(b.reservationDate).getTime() -
+        new Date(a.reservationDate).getTime(),
     );
+
+    const cancelReservation = (reservationId: string) => {
+      // Encuentra el índice del ticket que ha sido cancelado
+      const index = reservations.findIndex(
+        (res: any) => res.id === reservationId,
+      );
+
+      // Crea una copia del array de reservaciones
+      const updatedReservations: any = [...reservations];
+
+      // Actualiza el estado del ticket cancelado
+      if (index !== -1) {
+        updatedReservations[index].status = ReservationStatus.Cancelled;
+        setReservations(updatedReservations);
+      }
+    };
 
     return (
       <>
@@ -60,6 +72,7 @@ const Reservations = withAuth(
               key={reservation.id}
               {...reservation}
               index={index}
+              onCancel={cancelReservation}
             />
           ))}
         </div>

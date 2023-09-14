@@ -4,8 +4,10 @@ import {
   translateStatus,
 } from '../../interfaces/reservation.status';
 import styles from './ReservationCard.module.css';
-import { Modal, Button } from 'antd';
+import { Modal, Button, message } from 'antd';
 import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
+import { REACT_APP_BASE_URL } from '../../../env';
+import { ReservationService } from '../../services/reservation.service';
 
 interface Props {
   id: string;
@@ -14,6 +16,7 @@ interface Props {
   status: ReservationStatus;
   extras: any;
   index: number;
+  onCancel: any;
 }
 
 const getStatusColor = (status: ReservationStatus) => {
@@ -49,6 +52,8 @@ const getStatusColor = (status: ReservationStatus) => {
   };
 };
 
+const reservationService = new ReservationService(REACT_APP_BASE_URL);
+
 const renderExtra = (extra) => {
   if (extra.labelFirst) {
     return `${extra.label} ${extra.value}`;
@@ -59,10 +64,24 @@ const renderExtra = (extra) => {
 
 export const ReservationCard = (ticket: Props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const statusStyle = getStatusColor(ticket.status);
 
   const handleReservationCancel = () => {
     // Aquí puedes implementar la lógica para cancelar la reserva
+    setLoading(true);
+    reservationService
+      .updateReservation(ticket.id, { status: 'Cancelled' })
+      .then(() => {
+        ticket.onCancel(ticket.id);
+        message.success('Reserva Cancelada!');
+      })
+      .catch((err) => {
+        console.log('error');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
     setIsModalVisible(false);
   };
 
@@ -71,7 +90,6 @@ export const ReservationCard = (ticket: Props) => {
       key={ticket.id}
       className={styles.card}
       onClick={() => {
-        console.log('setting true');
         setIsModalVisible(true);
       }}
       delay={ticket.index * 0.1}
@@ -80,10 +98,10 @@ export const ReservationCard = (ticket: Props) => {
         <span className={styles.name}>{ticket.businessName}</span>
         <span className={styles.dateTime}>
           <span className={styles.date}>
-            {ticket.reservationDate.toLocaleDateString('es-ES')}
+            {new Date(ticket.reservationDate).toLocaleDateString('es-ES')}
           </span>
           <span className={styles.time}>
-            {ticket.reservationDate.toLocaleTimeString('es-ES', {
+            {new Date(ticket.reservationDate).toLocaleTimeString('es-ES', {
               hour: '2-digit',
               minute: '2-digit',
             })}
@@ -113,9 +131,9 @@ export const ReservationCard = (ticket: Props) => {
         }}
         footer={[
           <Button
+            loading={loading}
             key="cancel"
             onClick={(e: any) => {
-              console.log('estoy cancelando');
               e.stopPropagation();
               setIsModalVisible(false);
             }}
@@ -125,6 +143,7 @@ export const ReservationCard = (ticket: Props) => {
           (ticket.status === ReservationStatus.Pending ||
             ticket.status === ReservationStatus.Confirmed) && (
             <Button
+              loading={loading}
               key="submit"
               type="primary"
               danger
@@ -137,10 +156,12 @@ export const ReservationCard = (ticket: Props) => {
       >
         {/* Aquí puedes agregar más detalles del ticket si es necesario */}
         <p>Reserva para: {ticket.businessName}</p>
-        <p>Fecha: {ticket.reservationDate.toLocaleDateString('es-ES')}</p>
+        <p>
+          Fecha: {new Date(ticket.reservationDate).toLocaleDateString('es-ES')}
+        </p>
         <p>
           Hora:{' '}
-          {ticket.reservationDate.toLocaleTimeString('es-ES', {
+          {new Date(ticket.reservationDate).toLocaleTimeString('es-ES', {
             hour: '2-digit',
             minute: '2-digit',
           })}

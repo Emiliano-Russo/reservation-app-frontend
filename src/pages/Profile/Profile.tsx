@@ -112,7 +112,7 @@ export const Profile = withAuth(
         <ProfileHeader
           name={user.name}
           url={
-            !user.profileImage
+            user.profileImage
               ? user.profileImage
               : 'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'
           }
@@ -121,7 +121,7 @@ export const Profile = withAuth(
         <BasicProfileInfoWidget
           phone={user.phone}
           email={user.email}
-          docId={user.civilDocId}
+          docId={user.civilIdDoc}
           emailVerified={user.emailVerified}
         />
         <SectionLine title={'Puntos de Fidelidad'} />

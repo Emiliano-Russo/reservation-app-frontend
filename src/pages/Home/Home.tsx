@@ -31,7 +31,11 @@ export const Home = withAuth(
       <>
         <FadeFromTop>
           <div className={styles.greetingContainer}>
-            <Avatar size={64} className={styles.avatarStyle}>
+            <Avatar
+              src={userState.profileImage}
+              size={64}
+              className={styles.avatarStyle}
+            >
               D
             </Avatar>
             <p className={styles.greetingText}>Hola, {userState.name}!</p>
