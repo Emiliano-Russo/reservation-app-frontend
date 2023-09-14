@@ -1,4 +1,4 @@
-import { Avatar, Button, Progress } from 'antd';
+import { Avatar, Button, Progress, Modal, Menu } from 'antd';
 import { withPageLayout } from '../../wrappers/WithPageLayout';
 import {
   ContactsOutlined,
@@ -14,6 +14,13 @@ import { useNavigate } from 'react-router-dom';
 import { FadeFromTop } from '../../animations/FadeFromTop';
 import { withAuth } from '../../wrappers/WithAuth';
 import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { UserService } from '../../services/user.service';
+import { REACT_APP_BASE_URL } from '../../../env';
+import { BusinessService } from '../../services/business.service';
+import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
+import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
+import { ModalAccountChanger } from '../../components/ModalAccountChanger/ModalAccountChanger';
 
 const BasicProfileInfoWidget = ({ phone, email, docId, emailVerified }) => {
   return (
@@ -64,6 +71,20 @@ interface PropsHeader {
 
 const ProfileHeader = (props: PropsHeader) => {
   const nav = useNavigate();
+  const user = useSelector((state: any) => state.user.user);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [businesses, setBusinesses] = useState<any>([]);
+  const businessService = new BusinessService(REACT_APP_BASE_URL);
+
+  useEffect(() => {
+    const getBusinessByOwnerId = () => {
+      businessService.getBusinessesByOwnerId(user.id).then((data) => {
+        console.log('business by owner id: ', data);
+        setBusinesses(data);
+      });
+    };
+    getBusinessByOwnerId();
+  }, []);
 
   return (
     <>
@@ -92,10 +113,21 @@ const ProfileHeader = (props: PropsHeader) => {
       </div>
       <div className={styles.profileName}>
         <p>{props.name}</p>
-        <button>
+        <button
+          onClick={() => {
+            setIsModalVisible(true);
+          }}
+        >
           <DownOutlined style={{ color: 'black' }} />
         </button>
       </div>
+      <ModalAccountChanger
+        showUserAccount={false}
+        nav={nav}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        businesses={businesses}
+      />
     </>
   );
 };

@@ -64,6 +64,17 @@ export class BusinessService {
     return response.data;
   }
 
+  async getBusinessesByOwnerId(ownerId: string): Promise<any> {
+    const jwtToken = localStorage.getItem('jwtToken');
+    const response: AxiosResponse<any> = await this.api.get(
+      `/business?ownerId=${ownerId}`,
+      {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      },
+    );
+    return response.data;
+  }
+
   async getBusinessesByTypeId(typeId: string): Promise<any> {
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
