@@ -33,11 +33,13 @@ export const BusinessProfile = withPageLayout(
     const businesses = useSelector((state: any) => state.business.myBusinesses);
     console.log('## my business: ', business);
     const [loading, setLoading] = useState(false);
-    const [businessType, setBusinessType] = useState<any>();
     const [availabilityModal, setAvailabilityModal] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     console.log('business: ', business);
     const nav = useNavigate();
+    const businessTypeList = useSelector(
+      (state: any) => state.business.businessTypes,
+    );
 
     if (loading)
       return (
@@ -95,7 +97,7 @@ export const BusinessProfile = withPageLayout(
           <p className={styles.businessType}>
             <strong>Tipo de Negocio</strong>
             <br></br>
-            {businessType?.name}
+            {businessTypeList.find((type) => type.id == business.typeId).name}
           </p>{' '}
           <p className={styles.location}>
             <strong>Direccion</strong>

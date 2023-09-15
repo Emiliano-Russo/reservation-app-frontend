@@ -27,6 +27,7 @@ export const ModalAccountChanger = ({
           <h4>No tienes negocios todavía!</h4>
           <Button
             onClick={() => {
+              setIsModalVisible(false);
               nav('/create-business');
             }}
           >
@@ -43,6 +44,7 @@ export const ModalAccountChanger = ({
                     console.log('setteamos el current business: ', business);
                     dispatch(setSelectedPath('/businessPrivateProfile'));
                     dispatch(setCurrentBusiness(business));
+                    setIsModalVisible(false);
                     nav(`/businessPrivateProfile`);
                   }}
                   style={{

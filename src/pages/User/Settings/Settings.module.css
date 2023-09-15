@@ -1,0 +1,19 @@
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 10px; /* Ajusta según tu preferencia */
+  padding-right: 20px; /* Ajusta según tu preferencia */
+  padding-top: 20px;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Alinea el texto a la izquierda del botón */
+  width: 100%;
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: none;
+}
