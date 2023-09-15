@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedPath } from '../../redux/footerSlice';
 import styles from './Footer.module.css';
 
-const buttonsConfig = [
+const userButtonsConfig = [
   {
     path: '/reservations',
     icon: 'https://img.icons8.com/ios-filled/100/FFFFFF/reservation-2.png',
@@ -20,15 +20,34 @@ const buttonsConfig = [
   },
 ];
 
-const Footer = ({ style = {} }) => {
+const businessButtonsConfig = [
+  {
+    path: '/businessReservation',
+    icon: 'https://img.icons8.com/ios-filled/100/FFFFFF/reservation-2.png',
+  },
+  {
+    path: '/businessHome',
+    icon: 'https://img.icons8.com/ios-filled/50/FFFFFF/home.png',
+  },
+  {
+    path: '/businessPrivateProfile',
+    icon: 'https://img.icons8.com/material-sharp/96/FFFFFF/user.png',
+  },
+];
+
+const Footer = ({ isBusiness = false, style = {} }) => {
   const nav = useNavigate();
   const dispatch = useDispatch();
   const selectedPath = useSelector((state: any) => state.footer.selectedPath);
 
-  const handleNavigation = (path: string) => {
+  const handleNavigation = (path) => {
     nav(path);
     dispatch(setSelectedPath(path));
   };
+
+  const currentButtonsConfig = isBusiness
+    ? businessButtonsConfig
+    : userButtonsConfig;
 
   const footerStyle = {
     display: 'flex',
@@ -39,7 +58,7 @@ const Footer = ({ style = {} }) => {
     height: '68px',
     borderRadius: '30px',
     background: '#101323',
-    ...style, // para agregar cualquier otro estilo que desees pasar al componente
+    ...style,
   };
 
   const buttonStyle = {
@@ -50,18 +69,22 @@ const Footer = ({ style = {} }) => {
     background: 'transparent',
   };
 
+  const selectedColor = isBusiness ? '#1677ff' : '#fd6f8e';
+
   const buttonSelectedStyle = {
-    ...buttonStyle, // para heredar los estilos del botón
-    background: '#fd6f8e',
+    ...buttonStyle,
+    background: selectedColor,
   };
 
   const iconStyle = {
     width: '27px',
   };
 
+  console.log('selected path: ', selectedPath);
+
   return (
     <div style={footerStyle}>
-      {buttonsConfig.map((button) => (
+      {currentButtonsConfig.map((button) => (
         <Button
           key={button.path}
           style={

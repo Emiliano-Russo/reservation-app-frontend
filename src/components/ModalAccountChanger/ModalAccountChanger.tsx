@@ -1,5 +1,8 @@
 import { Avatar, Button, Modal } from 'antd';
 import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
+import { useDispatch } from 'react-redux';
+import { setCurrentBusiness } from '../../redux/businessSlice';
+import { setSelectedPath } from '../../redux/footerSlice';
 
 export const ModalAccountChanger = ({
   businesses,
@@ -8,6 +11,7 @@ export const ModalAccountChanger = ({
   nav,
   showUserAccount,
 }) => {
+  const dispatch = useDispatch();
   return (
     <Modal
       title="Elige una cuenta"
@@ -36,7 +40,10 @@ export const ModalAccountChanger = ({
               <AnimatedFromLeft delay={index * 0.1}>
                 <div
                   onClick={() => {
-                    nav(`/businessPrivateProfile/${business.id}`);
+                    console.log('setteamos el current business: ', business);
+                    dispatch(setSelectedPath('/businessPrivateProfile'));
+                    dispatch(setCurrentBusiness(business));
+                    nav(`/businessPrivateProfile`);
                   }}
                   style={{
                     display: 'flex',

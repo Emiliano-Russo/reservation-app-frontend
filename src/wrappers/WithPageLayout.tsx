@@ -5,6 +5,7 @@ export const withPageLayout = (
   WrappedComponent,
   padding = '20px',
   footer: boolean = true,
+  isBusiness: boolean = false,
 ) => {
   return (props) => (
     <>
@@ -17,7 +18,12 @@ export const withPageLayout = (
         }}
       >
         <WrappedComponent {...props} />
-        {footer && <Footer style={{ margin: 'auto 20px 20px 20px' }} />}
+        {footer && (
+          <Footer
+            style={{ margin: 'auto 20px 20px 20px' }}
+            isBusiness={isBusiness}
+          />
+        )}
       </div>
     </>
   );

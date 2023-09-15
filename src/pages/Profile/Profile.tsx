@@ -13,7 +13,7 @@ import { StatusBar } from '@capacitor/status-bar';
 import { useNavigate } from 'react-router-dom';
 import { FadeFromTop } from '../../animations/FadeFromTop';
 import { withAuth } from '../../wrappers/WithAuth';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { UserService } from '../../services/user.service';
 import { REACT_APP_BASE_URL } from '../../../env';
@@ -21,6 +21,7 @@ import { BusinessService } from '../../services/business.service';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
 import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
 import { ModalAccountChanger } from '../../components/ModalAccountChanger/ModalAccountChanger';
+import { setBusinessList } from '../../redux/businessSlice';
 
 const BasicProfileInfoWidget = ({ phone, email, docId, emailVerified }) => {
   return (
@@ -73,14 +74,16 @@ const ProfileHeader = (props: PropsHeader) => {
   const nav = useNavigate();
   const user = useSelector((state: any) => state.user.user);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [businesses, setBusinesses] = useState<any>([]);
+  const businesses = useSelector((state: any) => state.business.myBusinesses);
   const businessService = new BusinessService(REACT_APP_BASE_URL);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getBusinessByOwnerId = () => {
       businessService.getBusinessesByOwnerId(user.id).then((data) => {
         console.log('business by owner id: ', data);
-        setBusinesses(data);
+        dispatch(setBusinessList(data));
       });
     };
     getBusinessByOwnerId();
@@ -92,7 +95,7 @@ const ProfileHeader = (props: PropsHeader) => {
         <div className={styles.avatarContainer}>
           <Avatar src={props.url} size={80}>
             E
-          </Avatar>{' '}
+          </Avatar>
           {/* 96px */}
         </div>
         <div className={styles.messageButtonContainer}>
