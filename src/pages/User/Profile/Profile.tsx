@@ -23,27 +23,33 @@ import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
 import { ModalAccountChanger } from '../../../components/ModalAccountChanger/ModalAccountChanger';
 import { setBusinessList } from '../../../redux/businessSlice';
 
-const BasicProfileInfoWidget = ({ phone, email, docId, emailVerified }) => {
+interface IconInfo {
+  icon: React.ReactNode;
+  label: string;
+  value: string | boolean;
+  color?: string;
+}
+
+export const BasicProfileInfoWidget = ({ icons }: { icons: IconInfo[] }) => {
   return (
     <div className={styles.container}>
-      <div className={styles.row}>
-        <p>{phone}</p>
-        <PhoneOutlined style={{ color: 'gray' }} />
-      </div>
-      <div className={styles.row}>
-        <p style={{ color: emailVerified ? 'black' : 'red' }}>{email}</p>
-        {emailVerified == false && <Button>Verificar</Button>}
-        <MailOutlined style={{ color: 'gray' }} />
-      </div>
-      <div className={styles.row}>
-        <p>{docId}</p>
-        <ContactsOutlined style={{ color: 'gray' }} />
-      </div>
+      {icons.map((iconInfo, index) => (
+        <div key={index} className={styles.row}>
+          <p style={{ color: iconInfo.color || 'black' }}>
+            {typeof iconInfo.value === 'boolean'
+              ? iconInfo.value
+                ? 'Verificado'
+                : 'No verificado'
+              : iconInfo.value}
+          </p>
+          {iconInfo.icon}
+        </div>
+      ))}
     </div>
   );
 };
 
-const SectionLine = ({ title }) => {
+export const SectionLine = ({ title }) => {
   return (
     <div className={styles.sectionLineContainer}>
       <hr className={styles.sectionLine} />
@@ -142,6 +148,25 @@ export const Profile = withAuth(
     const user = useSelector((state: any) => state.user.user);
     console.log('user: ', user);
 
+    const icons = [
+      {
+        icon: <PhoneOutlined style={{ color: 'gray' }} />,
+        label: 'Teléfono',
+        value: user.phone,
+      },
+      {
+        icon: <MailOutlined style={{ color: 'gray' }} />,
+        label: 'Email',
+        value: user.email,
+        color: user.emailVerified ? 'black' : 'red',
+      },
+      {
+        icon: <ContactsOutlined style={{ color: 'gray' }} />,
+        label: 'Documento',
+        value: user.civilIdDoc,
+      },
+    ];
+
     return (
       <FadeFromTop>
         <ProfileHeader
@@ -153,12 +178,8 @@ export const Profile = withAuth(
           }
         />
         <SectionLine title={'Información'} />
-        <BasicProfileInfoWidget
-          phone={user.phone}
-          email={user.email}
-          docId={user.civilIdDoc}
-          emailVerified={user.emailVerified}
-        />
+
+        <BasicProfileInfoWidget icons={icons} />
         <SectionLine title={'Puntos de Fidelidad'} />
         <LoyaltyPointsWidget />
       </FadeFromTop>

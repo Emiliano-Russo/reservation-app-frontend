@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { ModalAccountChanger } from '../../../components/ModalAccountChanger/ModalAccountChanger';
 import Footer from '../../../components/Footer/Footer';
 import { withPageLayout } from '../../../wrappers/WithPageLayout';
+import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 
 const DayAvailability = ({ day, shifts }) => {
   return (
@@ -57,105 +58,107 @@ export const BusinessProfile = withPageLayout(
       );
 
     return (
-      <div className={styles.businessProfileContainer}>
-        <div
-          style={{
-            backgroundImage: ` url(${business.multimediaURL[0]})`,
-          }}
-          className={styles.banner}
-        >
-          {/* Aquí puedes poner una imagen de fondo para el banner */}
-          <Avatar
+      <GrowsFromLeft>
+        <div className={styles.businessProfileContainer}>
+          <div
             style={{
-              position: 'absolute',
-              top: '30px',
-              left: '50%',
-              transform: 'translate(-50%, 0)',
+              backgroundImage: ` url(${business.multimediaURL[0]})`,
             }}
-            src={business?.logoURL || ''}
-            alt="Foto de perfil"
-            className={styles.avatar}
-            size={100}
-          />
-        </div>
-        <div className={styles.profileContent}>
-          <div className={styles.profileName}>
-            <p>{business.name}</p>
-            <button
-              onClick={() => {
-                setIsModalVisible(true);
+            className={styles.banner}
+          >
+            {/* Aquí puedes poner una imagen de fondo para el banner */}
+            <Avatar
+              style={{
+                position: 'absolute',
+                top: '30px',
+                left: '50%',
+                transform: 'translate(-50%, 0)',
               }}
-            >
-              <DownOutlined style={{ color: 'black' }} />
-            </button>
+              src={business?.logoURL || ''}
+              alt="Foto de perfil"
+              className={styles.avatar}
+              size={100}
+            />
           </div>
-          <p className={styles.description}>
-            <strong>Descripción</strong>
-            <br></br>
-            {business?.description}
-          </p>
-          <p className={styles.businessType}>
-            <strong>Tipo de Negocio</strong>
-            <br></br>
-            {businessTypeList.find((type) => type.id == business.typeId).name}
-          </p>{' '}
-          <p className={styles.location}>
-            <strong>Direccion</strong>
-            <br></br>
-            {business?.address}
-          </p>
-          <div className={styles.availability}>
-            <Button
-              style={{ marginTop: '20px' }}
-              onClick={() => {
-                setAvailabilityModal(true);
-              }}
-            >
-              Ver Disponibilidad
-            </Button>
-            <Modal
-              footer={null}
-              onCancel={() => {
-                setAvailabilityModal(false);
-              }}
-              open={availabilityModal}
-            >
-              <div className={styles.availability}>
-                <p>
-                  <strong>Disponibilidad</strong>
-                </p>
-                <div
-                  style={{
-                    overflowY: 'scroll',
-                    maxHeight: '300px',
-                    padding: '40px',
-                  }}
-                >
-                  {business?.availability.map(
-                    (avail, index) =>
-                      avail.open && (
-                        <DayAvailability
-                          key={index}
-                          day={avail.day}
-                          shifts={avail.shifts}
-                        />
-                      ),
-                  )}
+          <div className={styles.profileContent}>
+            <div className={styles.profileName}>
+              <p>{business.name}</p>
+              <button
+                onClick={() => {
+                  setIsModalVisible(true);
+                }}
+              >
+                <DownOutlined style={{ color: 'black' }} />
+              </button>
+            </div>
+            <p className={styles.description}>
+              <strong>Descripción</strong>
+              <br></br>
+              {business?.description}
+            </p>
+            <p className={styles.businessType}>
+              <strong>Tipo de Negocio</strong>
+              <br></br>
+              {businessTypeList.find((type) => type.id == business.typeId).name}
+            </p>{' '}
+            <p className={styles.location}>
+              <strong>Direccion</strong>
+              <br></br>
+              {business?.address}
+            </p>
+            <div className={styles.availability}>
+              <Button
+                style={{ marginTop: '20px' }}
+                onClick={() => {
+                  setAvailabilityModal(true);
+                }}
+              >
+                Ver Disponibilidad
+              </Button>
+              <Modal
+                footer={null}
+                onCancel={() => {
+                  setAvailabilityModal(false);
+                }}
+                open={availabilityModal}
+              >
+                <div className={styles.availability}>
+                  <p>
+                    <strong>Disponibilidad</strong>
+                  </p>
+                  <div
+                    style={{
+                      overflowY: 'scroll',
+                      maxHeight: '300px',
+                      padding: '40px',
+                    }}
+                  >
+                    {business?.availability.map(
+                      (avail, index) =>
+                        avail.open && (
+                          <DayAvailability
+                            key={index}
+                            day={avail.day}
+                            shifts={avail.shifts}
+                          />
+                        ),
+                    )}
+                  </div>
                 </div>
-              </div>
-            </Modal>
-            {businesses != undefined ? (
-              <ModalAccountChanger
-                showUserAccount={true}
-                nav={nav}
-                isModalVisible={isModalVisible}
-                setIsModalVisible={setIsModalVisible}
-                businesses={businesses}
-              />
-            ) : null}
+              </Modal>
+              {businesses != undefined ? (
+                <ModalAccountChanger
+                  showUserAccount={true}
+                  nav={nav}
+                  isModalVisible={isModalVisible}
+                  setIsModalVisible={setIsModalVisible}
+                  businesses={businesses}
+                />
+              ) : null}
+            </div>
           </div>
         </div>
-      </div>
+      </GrowsFromLeft>
     );
   },
   '0px',

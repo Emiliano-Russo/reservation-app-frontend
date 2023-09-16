@@ -23,48 +23,9 @@ import { UserService } from '../../../services/user.service';
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
 
-// Datos de ejemplo para las reseñas
-const reviews = [
-  {
-    author: 'Juan Pérez',
-    avatar: 'URL_DEL_AVATAR',
-    content: '¡Gran lugar! La comida y el ambiente son increíbles.',
-    datetime: 'Hace 3 días',
-    rating: 4,
-  },
-  {
-    author: 'Saborcito Orgaz',
-    avatar: 'URL_DEL_AVATAR',
-    content: '¡Gran lugar! La comida y el ambiente son increíbles.',
-    datetime: 'Hace 3 días',
-    rating: 4,
-  },
-];
-
 const businessService = new BusinessService(REACT_APP_BASE_URL);
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
 const userService = new UserService(REACT_APP_BASE_URL);
-
-// Las animaciones
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-};
-
-const slideInLeft = {
-  hidden: { x: '-100vw' },
-  visible: { x: 0 },
-};
-
-const slideInUp = {
-  hidden: { y: '100vh' },
-  visible: { y: 0 },
-};
-
-const pulse = {
-  hidden: { scale: 0.95 },
-  visible: { scale: 1 },
-};
 
 export const Business = withPageLayout(
   () => {

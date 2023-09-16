@@ -11,12 +11,14 @@ import { ReservationService } from '../../services/reservation.service';
 
 interface Props {
   id: string;
+  userName: string;
   businessName: string;
   reservationDate: Date;
   status: ReservationStatus;
   extras: any;
   index: number;
   onCancel: any;
+  isBusiness: boolean;
 }
 
 const getStatusColor = (status: ReservationStatus) => {
@@ -95,7 +97,9 @@ export const ReservationCard = (ticket: Props) => {
       delay={ticket.index * 0.1}
     >
       <div className={styles.header}>
-        <span className={styles.name}>{ticket.businessName}</span>
+        <span className={styles.name}>
+          {ticket.isBusiness ? ticket.userName : ticket.businessName}
+        </span>
         <span className={styles.dateTime}>
           <span className={styles.date}>
             {new Date(ticket.reservationDate).toLocaleDateString('es-ES')}
@@ -130,32 +134,54 @@ export const ReservationCard = (ticket: Props) => {
           setIsModalVisible(false);
         }}
         footer={[
-          <Button
-            loading={loading}
-            key="cancel"
-            onClick={(e: any) => {
-              e.stopPropagation();
-              setIsModalVisible(false);
-            }}
-          >
-            Cerrar
-          </Button>,
           (ticket.status === ReservationStatus.Pending ||
             ticket.status === ReservationStatus.Confirmed) && (
-            <Button
-              loading={loading}
-              key="submit"
-              type="primary"
-              danger
-              onClick={handleReservationCancel}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+              }}
             >
-              Cancelar Reserva
-            </Button>
+              <Button
+                loading={loading}
+                key="submit"
+                type="primary"
+                danger
+                onClick={handleReservationCancel}
+              >
+                {ticket.isBusiness ? 'Rechazar' : 'Cancelar Reserva'}
+              </Button>
+              <Button
+                style={{
+                  display:
+                    ticket.status === ReservationStatus.Pending
+                      ? 'inherit'
+                      : 'none',
+                }}
+              >
+                Aceptar Reserva
+              </Button>
+              <Button
+                style={{
+                  background: '#52c41a',
+                  color: 'white',
+                  display:
+                    ticket.status === ReservationStatus.Confirmed
+                      ? 'inherit'
+                      : 'none',
+                }}
+              >
+                Confirmar Asistencia
+              </Button>
+            </div>
           ),
         ]}
       >
         {/* Aquí puedes agregar más detalles del ticket si es necesario */}
-        <p>Reserva para: {ticket.businessName}</p>
+        <p>
+          Reserva para:{' '}
+          {ticket.isBusiness ? ticket.userName : ticket.businessName}
+        </p>
         <p>
           Fecha: {new Date(ticket.reservationDate).toLocaleDateString('es-ES')}
         </p>
