@@ -9,6 +9,7 @@ import { ReservationCard } from '../../../components/ReservationCard/Reservation
 import { Spin } from 'antd';
 import styles from './Reservations.module.css';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
+import { NegotiableCard } from '../../../components/NegotiableCard/NegotiableCard';
 
 export const BusinessReservation = withPageLayout(
   () => {
@@ -49,15 +50,26 @@ export const BusinessReservation = withPageLayout(
         <SearchInput />
         {loading && <Spin style={{ marginTop: '100px' }} />}
         <div className={styles.ticketsContainer}>
-          {sortedTickets.map((reservation: any, index: number) => (
-            <ReservationCard
-              isBusiness
-              key={reservation.id}
-              {...reservation}
-              index={index}
-              onCancel={() => {}}
-            />
-          ))}
+          {sortedTickets.map((reservation: any, index: number) => {
+            if (reservation.negotiable)
+              return (
+                <NegotiableCard
+                  index={index}
+                  isBusiness={true}
+                  reservation={reservation}
+                />
+              );
+            else
+              return (
+                <ReservationCard
+                  isBusiness
+                  key={reservation.id}
+                  {...reservation}
+                  index={index}
+                  onCancel={() => {}}
+                />
+              );
+          })}
         </div>
       </>
     );

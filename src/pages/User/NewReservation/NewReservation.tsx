@@ -1,37 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { withPageLayout } from '../../../wrappers/WithPageLayout';
-import { IonDatetime } from '@ionic/react';
 import { Button, message, DatePicker, Spin } from 'antd';
 import { BackNavigationHeader } from '../../../components/BackNavigationHeader/BackNavigationHeader';
-import styles from './NewReservation.module.css';
 import { BusinessService } from '../../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BusinessTypeService } from '../../../services/businessType.service';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
-import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
-import { FadeFromTop } from '../../../animations/FadeFromTop';
 import { useSelector } from 'react-redux';
 import { ReservationService } from '../../../services/reservation.service';
-import { Controls } from './Controls';
 import { ReservationModal } from './ReservationModal';
 import { ConfirmationModal } from './ConfirmationModal';
 import { useBusinessDetails } from '../../../hooks/useBusinessDetails';
-import { TwoStepReservation } from './TwoStepReservation';
 import { SingleStepReservation } from './SingleStepReservation';
-const { RangePicker } = DatePicker;
+import { ReservationType } from './ReservationType';
+import { IExtra, INegotiable } from '../../../interfaces/reservation.interface';
 
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
-const businessService = new BusinessService(REACT_APP_BASE_URL);
-const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
+
+export interface ControlValue {
+  date?: Date;
+  extras: IExtra[];
+  negotiable?: INegotiable;
+}
 
 export const NewReservation = withPageLayout(
   () => {
-    const [controlValues, setControlValues] = useState<any>(undefined);
+    const [controlValues, setControlValues] = useState<
+      ControlValue | undefined
+    >(undefined);
     const [modalOpen, setModalOpen] = useState(false);
     const [innerHeight, setInnerHeight] = useState<number>(0);
     const [doneModal, setDoneModal] = useState(false);
     const [creatingReservation, setCreatingReservation] = useState(false);
+    const [dayTypeSelection, setTypeDaySelection] = useState(null);
+    const [hourTypeSelection, setHourTypeSelection] = useState(null);
 
     const { id } = useParams<any>();
     const user = useSelector((state: any) => state.user.user);
@@ -66,18 +69,19 @@ export const NewReservation = withPageLayout(
     console.log('businessType: ', businessType);
 
     const createReservation = () => {
+      if (!controlValues) return;
       setCreatingReservation(true);
       const create_dto = {
         date: controlValues.date,
         userId: user.id,
         businessId: business.id,
-        status: 'Pending',
         extras: controlValues.extras,
+        negotiable: controlValues.negotiable,
       };
       reservationService
         .createReservation(create_dto)
         .then((data) => {
-          console.log('listo!');
+          console.log('listo!', data);
           setModalOpen(false);
           setDoneModal(true);
         })
@@ -89,29 +93,29 @@ export const NewReservation = withPageLayout(
 
     console.log('control values: ', controlValues);
 
+    if (!hourTypeSelection || !dayTypeSelection)
+      return (
+        <ReservationType
+          setDayTypeSelection={setTypeDaySelection}
+          setHourTypeSelection={setHourTypeSelection}
+        />
+      );
+
     return (
       <>
         <GrowsFromLeft>
           <BackNavigationHeader title={business ? business.name : 'Reserva'} />
         </GrowsFromLeft>
 
-        {innerHeight < 680 && businessType[0].controls ? (
-          <TwoStepReservation
-            businessType={businessType}
-            controlValues={controlValues}
-            creatingReservation={creatingReservation}
-            setControlValues={setControlValues}
-            setModalOpen={setModalOpen}
-          />
-        ) : (
-          <SingleStepReservation
-            businessType={businessType}
-            controlValues={controlValues}
-            creatingReservation={creatingReservation}
-            setControlValues={setControlValues}
-            setModalOpen={setModalOpen}
-          />
-        )}
+        <SingleStepReservation
+          businessType={businessType}
+          controlValues={controlValues}
+          creatingReservation={creatingReservation}
+          setControlValues={setControlValues}
+          setModalOpen={setModalOpen}
+          hourTypeSelection={hourTypeSelection}
+          dayTypeSelection={dayTypeSelection}
+        />
 
         <ReservationModal
           creatingReservation={creatingReservation}

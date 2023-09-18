@@ -3,7 +3,10 @@ import styles from './NewReservation.module.css';
 
 export const Counter = ({ min, max, label, onChange }) => {
   return (
-    <div className={styles.inputContainer}>
+    <div
+      style={{ width: '200px' }}
+      className={`${styles.inputContainer} ${styles.verticalBox}`}
+    >
       <label>{label}</label>
       <Input
         type="number"

@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { mock_reservation } from '../mocks/reservations';
+import { AcceptStatus } from '../interfaces/reservation.interface';
 
 // Podrías tener un mock para Reservation similar a mock_businessType si lo necesitas.
 // import { mock_reservation } from '../mocks/reservation';
@@ -61,73 +62,22 @@ export class ReservationService {
     return response.data;
   }
 
-  // A continuación, los métodos mock (simulados) para pruebas:
-
-  async mock_getReservations(): Promise<any> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Aquí, utiliza tus datos mock para devolver una lista de reservaciones
-        resolve(mock_reservation); // Asumiendo que tienes un mock_reservation
-      }, 2000);
-    });
+  async businessProposedSchedule(id: string, date: string): Promise<any> {
+    const response: AxiosResponse<any> = await this.api.patch(
+      `/reservation/scheduleProposed/${id}`,
+      { date: date },
+    );
+    return response.data;
   }
 
-  // Y si quieres un método mock (simulado) para obtener reservaciones por userId:
-  async mock_getReservationsByUserId(userId: string): Promise<any> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Filtramos las reservaciones mock por userId
-        const userReservations = mock_reservation.filter(
-          (reservation: any) => reservation.userId === userId,
-        );
-        resolve(userReservations);
-      }, 2000);
-    });
-  }
-
-  async mock_getReservation(reservationId: string): Promise<any> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const reservation = mock_reservation.find(
-          (reservation: any) => reservation.id === reservationId,
-        );
-        resolve(reservation);
-      }, 2000);
-    });
-  }
-
-  async mock_createReservation(createReservationDto: any): Promise<any> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          ...createReservationDto,
-          id: Math.random().toString(36).substring(7),
-        });
-      }, 2000);
-    });
-  }
-
-  async mock_updateReservation(
+  async userResponseProposedSchedule(
     id: string,
-    updateReservationDto: any,
+    value: AcceptStatus,
   ): Promise<any> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          id: id,
-          ...updateReservationDto,
-        });
-      }, 2000);
-    });
-  }
-
-  async mock_removeReservation(id: string): Promise<any> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          message: `Reservation with ID ${id} removed successfully.`,
-        });
-      }, 2000);
-    });
+    const response: AxiosResponse<any> = await this.api.patch(
+      `/reservation/responseSchedulePropose/${id}`,
+      { value: value },
+    );
+    return response.data;
   }
 }

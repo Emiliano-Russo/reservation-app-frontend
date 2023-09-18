@@ -10,6 +10,7 @@ import { FadeFromTop } from '../../../animations/FadeFromTop';
 import { withAuth } from '../../../wrappers/WithAuth';
 import { useSelector } from 'react-redux';
 import { ReservationStatus } from '../../../interfaces/reservation.status';
+import { NegotiableCard } from '../../../components/NegotiableCard/NegotiableCard';
 
 const Reservations = withAuth(
   withPageLayout(() => {
@@ -67,14 +68,25 @@ const Reservations = withAuth(
 
         {sortedTickets.length == 0 && <Spin style={{ marginTop: '100px' }} />}
         <div className={styles.ticketsContainer}>
-          {sortedTickets.map((reservation: any, index: number) => (
-            <ReservationCard
-              key={reservation.id}
-              {...reservation}
-              index={index}
-              onCancel={cancelReservation}
-            />
-          ))}
+          {sortedTickets.map((reservation: any, index: number) => {
+            if (reservation.negotiable)
+              return (
+                <NegotiableCard
+                  index={index}
+                  isBusiness={false}
+                  reservation={reservation}
+                />
+              );
+            else
+              return (
+                <ReservationCard
+                  key={reservation.id}
+                  {...reservation}
+                  index={index}
+                  onCancel={cancelReservation}
+                />
+              );
+          })}
         </div>
       </>
     );
