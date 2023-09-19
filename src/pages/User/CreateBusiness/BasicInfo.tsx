@@ -50,7 +50,7 @@ export const BasicInfo = ({
   useEffect(() => {
     const downloadBusinessType = async () => {
       const res = await businessTypeService.getBusinessTypes();
-      setBusinessTypes(res);
+      setBusinessTypes(res.items);
       console.log('res businessTypes: ', res);
     };
 

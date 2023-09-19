@@ -1,6 +1,7 @@
 .businessContainer {
   overflow-y: scroll;
-  min-height: 100%;
+  height: 65%;
+  padding-bottom: 20px;
 }
 
 .businessCard {

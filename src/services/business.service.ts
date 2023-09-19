@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { mocked_business } from '../mocks/business';
+import { PaginatedResponse } from '../interfaces/response.interface';
 
 export class BusinessService {
   private api: any;
@@ -15,14 +16,10 @@ export class BusinessService {
     bannerImage?: File | null,
   ): Promise<any> {
     const formData = new FormData();
-
-    console.log('BUSINESS: ', business);
     const objnewCoordinates = {
       pointX: business.coordinates.latitude.toString(),
       pointY: business.coordinates.longitude.toString(),
     };
-    console.log('obj coordinates: ', objnewCoordinates);
-
     formData.append('ownerId', business.ownerId);
     formData.append('typeId', business.typeId);
     formData.append('name', business.name);
@@ -40,10 +37,6 @@ export class BusinessService {
     if (bannerImage) {
       formData.append('banner', bannerImage, bannerImage.name);
     }
-
-    console.log('-------------------------------------');
-    console.log('EL FORM DATA');
-    console.log(formData);
 
     return this.api.post('/business', formData, {
       headers: {
@@ -64,7 +57,7 @@ export class BusinessService {
     return response.data;
   }
 
-  async getBusinessesByOwnerId(ownerId: string): Promise<any> {
+  async getBusinessesByOwnerId(ownerId: string): Promise<PaginatedResponse> {
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
       `/business?ownerId=${ownerId}`,
@@ -75,10 +68,16 @@ export class BusinessService {
     return response.data;
   }
 
-  async getBusinessesByTypeId(typeId: string): Promise<any> {
+  async getBusinessesByTypeId(
+    typeId: string,
+    limit?: string,
+    lastKey?: string | null,
+  ): Promise<PaginatedResponse> {
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
-      `/business?typeId=${typeId}`,
+      `/business?typeId=${typeId}&limit=${limit}&lastKey=${
+        lastKey ? lastKey : ''
+      }`,
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       },
@@ -121,48 +120,5 @@ export class BusinessService {
       },
     );
     return response.data;
-  }
-
-  async mock_GetBusiness(businessId: string): Promise<any> {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Encuentra el negocio con el id proporcionado
-    const business = mocked_business.find(
-      (business) => business.id === businessId,
-    );
-
-    if (!business) throw new Error('Business not found');
-
-    return business;
-  }
-
-  async mock_GetBusinessesByTypeId(typeId: string): Promise<any> {
-    // Simular un tiempo de espera como si estuviera haciendo una solicitud HTTP.
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Retornamos una lista mockeada de negocios que concuerden con el typeId proporcionado.
-    // Puedes ajustar la respuesta según tus necesidades.
-    return mocked_business.filter((business) => business.typeId === typeId);
-  }
-
-  async mock_RegisterBusiness(
-    business: any,
-    logoImage?: File | null,
-  ): Promise<any> {
-    // Simular un tiempo de espera de 2 segundos como si estuviera haciendo una solicitud HTTP.
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // Simular la respuesta del servidor después del registro
-    return {
-      data: {
-        message: 'Business registered successfully!',
-        business: {
-          id: 'mocked-id',
-          ...business, // Aquí se devuelven los datos del negocio registrados
-          logoImage: logoImage ? `mocked_url_for/${logoImage.name}` : null,
-        },
-      },
-      status: 201, // Simular un código de estado HTTP 201 para "creado"
-    };
   }
 }

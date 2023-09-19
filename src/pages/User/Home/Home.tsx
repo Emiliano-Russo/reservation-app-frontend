@@ -26,8 +26,9 @@ export const Home = withAuth(
       service
         .getBusinessTypes()
         .then((data) => {
-          dispatch(setBusinessTypes(data));
-          setBusinessTypes(data);
+          console.log('data: ', data);
+          dispatch(setBusinessTypes(data.items));
+          setBusinessTypes(data.items);
         })
         .catch((error) =>
           console.error('Error fetching business types:', error),

@@ -89,7 +89,7 @@ const ProfileHeader = (props: PropsHeader) => {
     const getBusinessByOwnerId = () => {
       businessService.getBusinessesByOwnerId(user.id).then((data) => {
         console.log('business by owner id: ', data);
-        dispatch(setBusinessList(data));
+        dispatch(setBusinessList(data.items));
       });
     };
     getBusinessByOwnerId();
