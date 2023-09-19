@@ -35,41 +35,55 @@ export const ModalAccountChanger = ({
           </Button>
         </div>
       )}
-      {businesses != undefined
-        ? businesses.map((business, index) => {
-            return (
-              <AnimatedFromLeft delay={index * 0.1}>
-                <div
-                  onClick={() => {
-                    console.log('setteamos el current business: ', business);
-                    dispatch(setSelectedPath('/businessPrivateProfile'));
-                    dispatch(setCurrentBusiness(business));
-                    setIsModalVisible(false);
-                    nav(`/businessPrivateProfile`);
-                  }}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 0px 1px',
-                    margin: '20px 0px',
-                    borderRadius: '10px',
-                  }}
-                >
-                  <Avatar src={business.logoURL}></Avatar>
-                  <p>{business.name}</p>
-                  <Avatar
-                    style={{ visibility: 'hidden' }}
-                    src={business.logoURL}
-                  ></Avatar>
-                </div>
-              </AnimatedFromLeft>
-            );
-          })
-        : null}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch',
+          maxHeight: '300px',
+          overflowY: 'scroll',
+        }}
+      >
+        {businesses != undefined
+          ? businesses.map((business, index) => {
+              return (
+                <AnimatedFromLeft delay={index * 0.1}>
+                  <div
+                    onClick={() => {
+                      console.log('setteamos el current business: ', business);
+                      dispatch(setSelectedPath('/businessPrivateProfile'));
+                      dispatch(setCurrentBusiness(business));
+                      setIsModalVisible(false);
+                      nav(`/businessPrivateProfile`);
+                    }}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                      alignItems: 'center',
+                      boxShadow: 'rgba(0, 0, 0, 0.05) 0px 5px 0px 1px',
+                      margin: '10px',
+                      borderRadius: '10px',
+                    }}
+                  >
+                    <Avatar src={business.logoURL}></Avatar>
+                    <p>{business.name}</p>
+                    <Avatar
+                      style={{ visibility: 'hidden' }}
+                      src={business.logoURL}
+                    ></Avatar>
+                  </div>
+                </AnimatedFromLeft>
+              );
+            })
+          : null}
+      </div>
       <Button
-        style={{ display: showUserAccount ? 'inherit' : 'none' }}
+        type="primary"
+        style={{
+          display: showUserAccount ? 'inherit' : 'none',
+          marginTop: '20px',
+        }}
         onClick={() => {
           nav('/profile');
         }}

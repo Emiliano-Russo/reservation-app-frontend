@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Spin } from 'antd';
+import { Spin, message } from 'antd';
 import { ReservationCard } from '../../../components/ReservationCard/ReservationCard';
 import { withPageLayout } from '../../../wrappers/WithPageLayout';
 import SearchInput from '../../../components/SearchInput/SearchInput';
@@ -11,10 +11,12 @@ import { withAuth } from '../../../wrappers/WithAuth';
 import { useSelector } from 'react-redux';
 import { ReservationStatus } from '../../../interfaces/reservation.status';
 import { NegotiableCard } from '../../../components/NegotiableCard/NegotiableCard';
+import { IReservation } from '../../../interfaces/reservation.interface';
 
 const Reservations = withAuth(
   withPageLayout(() => {
-    const [reservations, setReservations] = useState([]); // Estado para las reservaciones
+    const [loading, setLoading] = useState(false);
+    const [reservations, setReservations] = useState<IReservation[]>([]); // Estado para las reservaciones
     const user = useSelector((state: any) => state.user.user);
 
     useEffect(() => {
@@ -22,10 +24,19 @@ const Reservations = withAuth(
 
       // Obtenemos las reservaciones
       async function fetchReservations() {
+        setLoading(true);
         try {
-          const userReservations =
-            await reservationService.getReservationsByUserId(user.id);
-          setReservations(userReservations);
+          reservationService
+            .getReservationsByUserId(user.id)
+            .then((userReservations) => {
+              setReservations(userReservations);
+            })
+            .catch(() => {
+              message.error('Error');
+            })
+            .finally(() => {
+              setLoading(false);
+            });
         } catch (error) {
           console.error('Error al obtener las reservaciones:', error);
         }
@@ -40,7 +51,10 @@ const Reservations = withAuth(
         new Date(a.reservationDate).getTime(),
     );
 
-    const cancelReservation = (reservationId: string) => {
+    const changeStatusReservation = (
+      reservationId: string,
+      status: ReservationStatus,
+    ) => {
       // Encuentra el índice del ticket que ha sido cancelado
       const index = reservations.findIndex(
         (res: any) => res.id === reservationId,
@@ -51,7 +65,7 @@ const Reservations = withAuth(
 
       // Actualiza el estado del ticket cancelado
       if (index !== -1) {
-        updatedReservations[index].status = ReservationStatus.Cancelled;
+        updatedReservations[index].status = status;
         setReservations(updatedReservations);
       }
     };
@@ -66,7 +80,10 @@ const Reservations = withAuth(
         </FadeFromTop>
         <SearchInput />
 
-        {sortedTickets.length == 0 && <Spin style={{ marginTop: '100px' }} />}
+        {loading && <Spin style={{ marginTop: '100px' }} />}
+        {!loading && sortedTickets.length == 0 && (
+          <p style={{ textAlign: 'center' }}>Sin Reservas</p>
+        )}
         <div className={styles.ticketsContainer}>
           {sortedTickets.map((reservation: any, index: number) => {
             if (reservation.negotiable)
@@ -75,6 +92,7 @@ const Reservations = withAuth(
                   index={index}
                   isBusiness={false}
                   reservation={reservation}
+                  setReservations={setReservations}
                 />
               );
             else
@@ -83,7 +101,7 @@ const Reservations = withAuth(
                   key={reservation.id}
                   {...reservation}
                   index={index}
-                  onCancel={cancelReservation}
+                  changeStatusReservation={changeStatusReservation}
                 />
               );
           })}
