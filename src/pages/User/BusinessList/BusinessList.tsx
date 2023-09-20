@@ -46,6 +46,7 @@ export const BusinessList = withPageLayout(
 
       const lastKey = pagHistory.find((val) => val.nro == actualPageNro)
         ?.lastKey;
+
       if (lastKey == undefined && actualPageNro > 0) {
         setLoading(false);
         setShowLastButton(false);

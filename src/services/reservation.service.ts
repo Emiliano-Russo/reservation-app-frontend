@@ -18,9 +18,15 @@ export class ReservationService {
     return response.data;
   }
 
-  async getReservationsByUserId(userId: string): Promise<any> {
+  async getReservationsByUserId(
+    userId: string,
+    limit: string,
+    lastKey: string | undefined,
+  ): Promise<any> {
     const response: AxiosResponse<any> = await this.api.get(
-      `/reservation?userId=${userId}`,
+      `/reservation?userId=${userId}&limit=${limit}&lastKey=${
+        lastKey ? lastKey : ''
+      }`,
     );
     return response.data;
   }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Spin, message } from 'antd';
+import { Button, Spin, message } from 'antd';
 import { ReservationCard } from '../../../components/ReservationCard/ReservationCard';
 import { withPageLayout } from '../../../wrappers/WithPageLayout';
 import SearchInput from '../../../components/SearchInput/SearchInput';
@@ -13,37 +13,92 @@ import { ReservationStatus } from '../../../interfaces/reservation.status';
 import { NegotiableCard } from '../../../components/NegotiableCard/NegotiableCard';
 import { IReservation } from '../../../interfaces/reservation.interface';
 
+const reservationService = new ReservationService(REACT_APP_BASE_URL);
+
+const limitPerPage = '1';
+
+interface PagHistory {
+  nro: number;
+  lastKey: undefined | string;
+}
+
 const Reservations = withAuth(
   withPageLayout(() => {
     const [loading, setLoading] = useState(false);
     const [reservations, setReservations] = useState<IReservation[]>([]); // Estado para las reservaciones
+    const [pagHistory, setPagHistory] = useState<PagHistory[]>([
+      { nro: 0, lastKey: undefined },
+    ]);
+    const [actualPageNro, setActualPageNro] = useState(0);
+    const [showLastButton, setShowLastButton] = useState(true);
+
     const user = useSelector((state: any) => state.user.user);
 
-    useEffect(() => {
-      const reservationService = new ReservationService(REACT_APP_BASE_URL);
+    // Obtenemos las reservaciones
+    async function fetchReservations() {
+      console.log('---------------------------');
+      setLoading(true);
 
-      // Obtenemos las reservaciones
-      async function fetchReservations() {
-        setLoading(true);
-        try {
-          reservationService
-            .getReservationsByUserId(user.id)
-            .then((userReservations) => {
-              setReservations(userReservations);
-            })
-            .catch(() => {
-              message.error('Error');
-            })
-            .finally(() => {
-              setLoading(false);
-            });
-        } catch (error) {
-          console.error('Error al obtener las reservaciones:', error);
-        }
+      const lastKey = pagHistory.find((val) => val.nro == actualPageNro)
+        ?.lastKey;
+
+      if (lastKey == undefined && actualPageNro > 0) {
+        setLoading(false);
+        setShowLastButton(false);
+      } else {
+        setShowLastButton(true);
       }
 
+      console.log('finding with limit', limitPerPage, ' lastkey ', lastKey);
+      reservationService
+        .getReservationsByUserId(user.id, limitPerPage, lastKey)
+        .then((userReservations) => {
+          console.log('data: ', userReservations);
+
+          if (userReservations.lastKey)
+            setPagHistory((prev) => {
+              console.log('###### setting pag history #########');
+              const index = prev.findIndex(
+                (val) => val.lastKey == userReservations.lastKey.id,
+              );
+              console.log('index found ', index == -1 ? 'false' : 'true');
+
+              const list = [
+                {
+                  nro: prev[prev.length - 1].nro + 1,
+                  lastKey: userReservations.lastKey.id,
+                },
+              ];
+              console.log('new list: ', list);
+              if (index == -1) return [...prev, ...list];
+              console.log('sending only prev');
+              return prev;
+            });
+          setReservations(userReservations.items);
+        })
+        .catch(() => {
+          message.error('Error');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+
+    useEffect(() => {
       fetchReservations();
-    }, [user.id]); // El hook se ejecuta cuando el componente se monta y cuando el userId cambie
+    }, [user.id, actualPageNro]);
+
+    const handlePreviousPage = () => {
+      if (actualPageNro > 0) {
+        setReservations([]);
+        setActualPageNro((prev) => prev - 1);
+      }
+    };
+
+    const handleNextPage = () => {
+      setReservations([]);
+      setActualPageNro((prev) => prev + 1);
+    };
 
     const sortedTickets = reservations.sort(
       (a: any, b: any) =>
@@ -105,6 +160,32 @@ const Reservations = withAuth(
                 />
               );
           })}
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            width: '100%',
+            marginTop: 'auto',
+            marginBottom: '10px',
+          }}
+        >
+          <Button
+            loading={loading}
+            style={{ visibility: actualPageNro > 0 ? 'visible' : 'hidden' }}
+            onClick={handlePreviousPage}
+          >
+            Atras
+          </Button>
+          <Button
+            style={{
+              visibility: !showLastButton ? 'hidden' : 'visible',
+            }}
+            loading={loading}
+            onClick={handleNextPage}
+          >
+            Siguiente
+          </Button>
         </div>
       </>
     );
