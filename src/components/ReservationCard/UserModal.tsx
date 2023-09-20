@@ -9,7 +9,6 @@ export const UserModal = ({
   loading,
   handleReservationUpdateState,
 }) => {
-  console.log('rendering user modal');
   return (
     <>
       <Modal

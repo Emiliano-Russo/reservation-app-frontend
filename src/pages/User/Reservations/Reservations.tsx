@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Spin, message } from 'antd';
 import { ReservationCard } from '../../../components/ReservationCard/ReservationCard';
 import { withPageLayout } from '../../../wrappers/WithPageLayout';
@@ -15,96 +15,86 @@ import { IReservation } from '../../../interfaces/reservation.interface';
 
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
 
-const limitPerPage = '1';
+const limitPerPage = '5';
 
-interface PagHistory {
-  nro: number;
-  lastKey: undefined | string;
+interface LastKey {
+  userId: string;
+  id: string;
+  createdAt: number;
 }
 
 const Reservations = withAuth(
   withPageLayout(() => {
+    const user = useSelector((state: any) => state.user.user);
     const [loading, setLoading] = useState(false);
     const [reservations, setReservations] = useState<IReservation[]>([]); // Estado para las reservaciones
-    const [pagHistory, setPagHistory] = useState<PagHistory[]>([
-      { nro: 0, lastKey: undefined },
-    ]);
-    const [actualPageNro, setActualPageNro] = useState(0);
-    const [showLastButton, setShowLastButton] = useState(true);
+    const lastKeyRef = useRef<undefined | LastKey>(undefined);
+    const [isFetching, setIsFetching] = useState(false);
 
-    const user = useSelector((state: any) => state.user.user);
-
-    // Obtenemos las reservaciones
     async function fetchReservations() {
-      console.log('---------------------------');
-      setLoading(true);
+      if (isFetching) return; // Si ya está cargando, no hagas nada
 
-      const lastKey = pagHistory.find((val) => val.nro == actualPageNro)
-        ?.lastKey;
+      setIsFetching(true);
+      console.log('we are about to stringify key: ', lastKeyRef.current);
 
-      if (lastKey == undefined && actualPageNro > 0) {
-        setLoading(false);
-        setShowLastButton(false);
-      } else {
-        setShowLastButton(true);
+      try {
+        const userReservations =
+          await reservationService.getReservationsByUserId(
+            user.id,
+            limitPerPage,
+            JSON.stringify(lastKeyRef.current),
+          );
+
+        console.log('# User Reservations', userReservations);
+
+        if (userReservations.lastKey) {
+          console.log('setting lastKey.....', userReservations.lastKey);
+          lastKeyRef.current = userReservations.lastKey;
+        } else {
+          lastKeyRef.current = undefined;
+        }
+
+        setReservations((prev) => [...prev, ...userReservations.items]);
+      } catch (error) {
+        //message.error('Error');
+        console.error('Error al obtener las reservaciones:', error);
+      } finally {
+        setIsFetching(false);
       }
-
-      console.log('finding with limit', limitPerPage, ' lastkey ', lastKey);
-      reservationService
-        .getReservationsByUserId(user.id, limitPerPage, lastKey)
-        .then((userReservations) => {
-          console.log('data: ', userReservations);
-
-          if (userReservations.lastKey)
-            setPagHistory((prev) => {
-              console.log('###### setting pag history #########');
-              const index = prev.findIndex(
-                (val) => val.lastKey == userReservations.lastKey.id,
-              );
-              console.log('index found ', index == -1 ? 'false' : 'true');
-
-              const list = [
-                {
-                  nro: prev[prev.length - 1].nro + 1,
-                  lastKey: userReservations.lastKey.id,
-                },
-              ];
-              console.log('new list: ', list);
-              if (index == -1) return [...prev, ...list];
-              console.log('sending only prev');
-              return prev;
-            });
-          setReservations(userReservations.items);
-        })
-        .catch(() => {
-          message.error('Error');
-        })
-        .finally(() => {
-          setLoading(false);
-        });
     }
+
+    const containerRef = useRef<any>(null); // Referencia al contenedor
 
     useEffect(() => {
       fetchReservations();
-    }, [user.id, actualPageNro]);
+      console.log('bottom screen');
+      const container = containerRef.current;
+      if (container) {
+        container.addEventListener('scroll', handleScroll);
+      }
+      return () => {
+        if (container) {
+          container.removeEventListener('scroll', handleScroll);
+        }
+      };
+    }, []);
 
-    const handlePreviousPage = () => {
-      if (actualPageNro > 0) {
-        setReservations([]);
-        setActualPageNro((prev) => prev - 1);
+    const handleScroll = (e) => {
+      const container = e.target;
+      if (
+        container.scrollHeight - container.scrollTop ===
+        container.clientHeight
+      ) {
+        // Cargar más datos
+        fetchReservations();
       }
     };
 
-    const handleNextPage = () => {
-      setReservations([]);
-      setActualPageNro((prev) => prev + 1);
-    };
-
-    const sortedTickets = reservations.sort(
-      (a: any, b: any) =>
-        new Date(b.reservationDate).getTime() -
-        new Date(a.reservationDate).getTime(),
-    );
+    // const sortedTickets = reservations.sort(
+    //   (a: any, b: any) =>
+    //     new Date(b.reservationDate).getTime() -
+    //     new Date(a.reservationDate).getTime(),
+    // );
 
     const changeStatusReservation = (
       reservationId: string,
@@ -136,11 +126,11 @@ const Reservations = withAuth(
         <SearchInput />
 
         {loading && <Spin style={{ marginTop: '100px' }} />}
-        {!loading && sortedTickets.length == 0 && (
+        {!loading && reservations.length == 0 && (
           <p style={{ textAlign: 'center' }}>Sin Reservas</p>
         )}
-        <div className={styles.ticketsContainer}>
-          {sortedTickets.map((reservation: any, index: number) => {
+        <div className={styles.ticketsContainer} ref={containerRef}>
+          {reservations.map((reservation: any, index: number) => {
             if (reservation.negotiable)
               return (
                 <NegotiableCard
@@ -153,39 +143,12 @@ const Reservations = withAuth(
             else
               return (
                 <ReservationCard
-                  key={reservation.id}
                   {...reservation}
                   index={index}
                   changeStatusReservation={changeStatusReservation}
                 />
               );
           })}
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-around',
-            width: '100%',
-            marginTop: 'auto',
-            marginBottom: '10px',
-          }}
-        >
-          <Button
-            loading={loading}
-            style={{ visibility: actualPageNro > 0 ? 'visible' : 'hidden' }}
-            onClick={handlePreviousPage}
-          >
-            Atras
-          </Button>
-          <Button
-            style={{
-              visibility: !showLastButton ? 'hidden' : 'visible',
-            }}
-            loading={loading}
-            onClick={handleNextPage}
-          >
-            Siguiente
-          </Button>
         </div>
       </>
     );

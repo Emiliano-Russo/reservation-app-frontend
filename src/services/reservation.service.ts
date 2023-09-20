@@ -23,6 +23,12 @@ export class ReservationService {
     limit: string,
     lastKey: string | undefined,
   ): Promise<any> {
+    console.log(
+      'SENDING GET RESERVATIONS BY USERID limit lastkey:',
+      limit,
+      lastKey,
+    );
+
     const response: AxiosResponse<any> = await this.api.get(
       `/reservation?userId=${userId}&limit=${limit}&lastKey=${
         lastKey ? lastKey : ''
