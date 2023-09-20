@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { ReservationStatus } from '../../../interfaces/reservation.status';
 import { NegotiableCard } from '../../../components/NegotiableCard/NegotiableCard';
 import { IReservation } from '../../../interfaces/reservation.interface';
+import { useDynamoLazyLoading } from '../../../hooks/useDynamoLazyLoading';
 
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
 
@@ -26,48 +27,25 @@ interface LastKey {
 const Reservations = withAuth(
   withPageLayout(() => {
     const user = useSelector((state: any) => state.user.user);
-    const [loading, setLoading] = useState(false);
-    const [reservations, setReservations] = useState<IReservation[]>([]); // Estado para las reservaciones
-    const lastKeyRef = useRef<undefined | LastKey>(undefined);
-    const [isFetching, setIsFetching] = useState(false);
-
-    async function fetchReservations() {
-      if (isFetching) return; // Si ya está cargando, no hagas nada
-
-      setIsFetching(true);
-      console.log('we are about to stringify key: ', lastKeyRef.current);
-
-      try {
-        const userReservations =
-          await reservationService.getReservationsByUserId(
-            user.id,
-            limitPerPage,
-            JSON.stringify(lastKeyRef.current),
-          );
-
-        console.log('# User Reservations', userReservations);
-
-        if (userReservations.lastKey) {
-          console.log('setting lastKey.....', userReservations.lastKey);
-          lastKeyRef.current = userReservations.lastKey;
-        } else {
-          lastKeyRef.current = undefined;
-        }
-
-        setReservations((prev) => [...prev, ...userReservations.items]);
-      } catch (error) {
-        //message.error('Error');
-        console.error('Error al obtener las reservaciones:', error);
-      } finally {
-        setIsFetching(false);
-      }
-    }
+    const {
+      data: reservations,
+      loading,
+      loadMoreData,
+      updateData,
+    } = useDynamoLazyLoading<IReservation>({
+      initialData: [],
+      fetchData: async (lastKey) => {
+        return reservationService.getReservationsByUserId(
+          user.id,
+          limitPerPage,
+          JSON.stringify(lastKey),
+        );
+      },
+    });
 
     const containerRef = useRef<any>(null); // Referencia al contenedor
 
     useEffect(() => {
-      fetchReservations();
-      console.log('bottom screen');
       const container = containerRef.current;
       if (container) {
         container.addEventListener('scroll', handleScroll);
@@ -86,15 +64,9 @@ const Reservations = withAuth(
         container.clientHeight
       ) {
         // Cargar más datos
-        fetchReservations();
+        loadMoreData();
       }
     };
-
-    // const sortedTickets = reservations.sort(
-    //   (a: any, b: any) =>
-    //     new Date(b.reservationDate).getTime() -
-    //     new Date(a.reservationDate).getTime(),
-    // );
 
     const changeStatusReservation = (
       reservationId: string,
@@ -111,7 +83,17 @@ const Reservations = withAuth(
       // Actualiza el estado del ticket cancelado
       if (index !== -1) {
         updatedReservations[index].status = status;
-        setReservations(updatedReservations);
+        updateData(updatedReservations); // Usamos updateData en lugar de setReservations
+      }
+    };
+
+    const wrappedUpdateData = (
+      action: React.SetStateAction<IReservation[]>,
+    ) => {
+      if (typeof action === 'function') {
+        updateData(action(reservations));
+      } else {
+        updateData(action);
       }
     };
 
@@ -137,7 +119,7 @@ const Reservations = withAuth(
                   index={index}
                   isBusiness={false}
                   reservation={reservation}
-                  setReservations={setReservations}
+                  setReservations={wrappedUpdateData}
                 />
               );
             else
