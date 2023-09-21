@@ -111,6 +111,7 @@ export const BusinessReservation = withPageLayout(
                   status={reservation.status}
                   userName={reservation.userName}
                   index={index}
+                  createdAt={reservation.createdAt!}
                   changeStatusReservation={changeStatusReservation}
                 />
               );

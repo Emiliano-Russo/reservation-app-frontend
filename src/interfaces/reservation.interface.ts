@@ -51,5 +51,5 @@ export interface IReservation {
   status: ReservationStatus;
   extras?: IExtra[];
   negotiable?: INegotiable;
-  createdAt?: Date;
+  createdAt?: number;
 }

@@ -104,7 +104,7 @@ export const SingleStepReservation = ({
       <div>
         <FadeFromTop>
           <Controls
-            controls={businessType[0].controls}
+            controls={businessType.controls}
             setControlValues={setControlValues}
           />
         </FadeFromTop>

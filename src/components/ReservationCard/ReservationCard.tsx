@@ -21,6 +21,7 @@ interface Props {
   status: ReservationStatus;
   extras: any;
   index: number;
+  createdAt: number;
   changeStatusReservation: (
     reservationId: string,
     status: ReservationStatus,
@@ -47,7 +48,7 @@ export const ReservationCard = (ticket: Props) => {
     console.log('handleReservationUpdateState!', status);
     setLoading(true);
     reservationService
-      .updateReservation(ticket.id, { status: status })
+      .updateReservation(ticket.id, ticket.createdAt, { status: status })
       .then(() => {
         console.log('## Change status reservation...', status);
         ticket.changeStatusReservation(ticket.id, status);

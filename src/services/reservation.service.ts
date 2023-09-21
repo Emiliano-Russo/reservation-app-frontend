@@ -59,9 +59,14 @@ export class ReservationService {
     return response.data;
   }
 
-  async updateReservation(id: string, updateReservationDto: any): Promise<any> {
+  async updateReservation(
+    id: string,
+    createdAt: number,
+    updateReservationDto: any,
+  ): Promise<any> {
+    console.log('@@@updating reservation...');
     const response: AxiosResponse<any> = await this.api.patch(
-      `/reservation/${id}`,
+      `/reservation/${id}/${createdAt}`,
       updateReservationDto,
     );
     return response.data;
