@@ -23,12 +23,6 @@ export class ReservationService {
     limit: string,
     lastKey: string | undefined,
   ): Promise<any> {
-    console.log(
-      'SENDING GET RESERVATIONS BY USERID limit lastkey:',
-      limit,
-      lastKey,
-    );
-
     const response: AxiosResponse<any> = await this.api.get(
       `/reservation?userId=${userId}&limit=${limit}&lastKey=${
         lastKey ? lastKey : ''
@@ -37,9 +31,15 @@ export class ReservationService {
     return response.data;
   }
 
-  async getReservationsByBusinessId(businessId: string): Promise<any> {
+  async getReservationsByBusinessId(
+    businessId: string,
+    limit: string,
+    lastKey: string | undefined,
+  ): Promise<any> {
     const response: AxiosResponse<any> = await this.api.get(
-      `/reservation?businessId=${businessId}`,
+      `/reservation?businessId=${businessId}&limit=${limit}&lastKey=${
+        lastKey ? lastKey : ''
+      }`,
     );
     return response.data;
   }

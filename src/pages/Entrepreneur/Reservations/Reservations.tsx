@@ -3,7 +3,7 @@ import { REACT_APP_BASE_URL } from '../../../../env';
 import Footer from '../../../components/Footer/Footer';
 import { ReservationService } from '../../../services/reservation.service';
 import { withPageLayout } from '../../../wrappers/WithPageLayout';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import SearchInput from '../../../components/SearchInput/SearchInput';
 import { ReservationCard } from '../../../components/ReservationCard/ReservationCard';
 import { Spin } from 'antd';
@@ -12,53 +12,72 @@ import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 import { NegotiableCard } from '../../../components/NegotiableCard/NegotiableCard';
 import { IReservation } from '../../../interfaces/reservation.interface';
 import { ReservationStatus } from '../../../interfaces/reservation.status';
+import { useDynamoLazyLoading } from '../../../hooks/useDynamoLazyLoading';
+
+const reservationService = new ReservationService(REACT_APP_BASE_URL);
 
 export const BusinessReservation = withPageLayout(
   () => {
-    const [loading, setLoading] = useState(true);
-    const [reservations, setReservations] = useState<IReservation[]>([]);
-
     const currentBusiness = useSelector(
       (state: any) => state.business.currentBusiness,
     );
 
-    const reservationService = new ReservationService(REACT_APP_BASE_URL);
+    const {
+      data: reservations,
+      loading,
+      loadMoreData,
+      updateData,
+    } = useDynamoLazyLoading<IReservation>({
+      initialData: [],
+      fetchData: async (lastKey) => {
+        return reservationService.getReservationsByBusinessId(
+          currentBusiness.id,
+          '5',
+          JSON.stringify(lastKey),
+        );
+      },
+    });
+
+    const containerRef = useRef<any>(null); // Referencia al contenedor
+
+    const handleScroll = (e) => {
+      const container = e.target;
+      if (
+        container.scrollHeight - container.scrollTop ===
+        container.clientHeight
+      ) {
+        // Cargar más datos
+        loadMoreData();
+      }
+    };
 
     useEffect(() => {
-      reservationService
-        .getReservationsByBusinessId(currentBusiness.id)
-        .then((data) => {
-          console.log('data reservation: ', data);
-          setReservations(data);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      const container = containerRef.current;
+      if (container) {
+        container.addEventListener('scroll', handleScroll);
+      }
+      return () => {
+        if (container) {
+          container.removeEventListener('scroll', handleScroll);
+        }
+      };
     }, []);
 
     const changeStatusReservation = (
       reservationId: string,
       status: ReservationStatus,
     ) => {
-      console.log('changeStatusReservation function', status);
-      setReservations((prev: IReservation[]) => {
-        console.log('setting reservations...');
-        const clonedPrev = [...prev];
-        const indexRes = clonedPrev.findIndex((val) => val.id == reservationId);
-        const item = clonedPrev[indexRes];
-
-        item.status = status;
-        clonedPrev[indexRes] = item;
-        console.log('new item: ', item);
-        return clonedPrev;
+      updateData((prevReservations) => {
+        const updatedReservations = [...prevReservations];
+        const reservationIndex = updatedReservations.findIndex(
+          (res) => res.id === reservationId,
+        );
+        if (reservationIndex !== -1) {
+          updatedReservations[reservationIndex].status = status;
+        }
+        return updatedReservations;
       });
     };
-
-    const sortedTickets = reservations.sort(
-      (a: any, b: any) =>
-        new Date(b.reservationDate).getTime() -
-        new Date(a.reservationDate).getTime(),
-    );
 
     return (
       <>
@@ -69,27 +88,33 @@ export const BusinessReservation = withPageLayout(
         </GrowsFromLeft>
         <SearchInput />
         {loading && <Spin style={{ marginTop: '100px' }} />}
-        <div className={styles.ticketsContainer}>
-          {sortedTickets.map((reservation: any, index: number) => {
-            if (reservation.negotiable)
+        <div className={styles.ticketsContainer} ref={containerRef}>
+          {reservations.map((reservation, index) => {
+            if (reservation.negotiable) {
               return (
                 <NegotiableCard
-                  setReservations={setReservations}
+                  setReservations={updateData}
                   index={index}
                   isBusiness={true}
                   reservation={reservation}
                 />
               );
-            else
+            } else {
               return (
                 <ReservationCard
                   isBusiness
                   key={reservation.id}
-                  {...reservation}
+                  businessName={reservation.businessName}
+                  extras={reservation.extras}
+                  id={reservation.id}
+                  reservationDate={reservation.reservationDate!}
+                  status={reservation.status}
+                  userName={reservation.userName}
                   index={index}
                   changeStatusReservation={changeStatusReservation}
                 />
               );
+            }
           })}
         </div>
       </>

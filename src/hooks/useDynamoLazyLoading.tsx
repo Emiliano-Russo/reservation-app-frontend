@@ -79,9 +79,12 @@ export function useDynamoLazyLoading<T>(options: DynamoLazyLoadingOptions<T>) {
     data,
     loading,
     loadMoreData,
-    updateData: (updatedData: T[]) => {
-      dataRef.current = updatedData; // No olvides actualizar dataRef aquí también
-      setData(updatedData);
+    updateData: (updatedData: React.SetStateAction<T[]>) => {
+      if (typeof updatedData === 'function') {
+        setData((prev) => updatedData(prev as T[]));
+      } else {
+        setData(updatedData);
+      }
     },
   };
 }
