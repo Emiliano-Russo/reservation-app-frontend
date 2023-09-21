@@ -43,7 +43,11 @@ export const BusinessFooter = (props: Props) => {
     dateToSend.setMinutes(startTime.getMinutes());
     console.log('about to send');
     reservationService
-      .businessProposedSchedule(props.reservation.id, dateToSend.toString())
+      .businessProposedSchedule(
+        props.reservation.id,
+        props.reservation.createdAt!,
+        dateToSend.toString(),
+      )
       .then(() => {
         message.success('Propuesta Enviada');
         console.log('Propuesta Enviada!');
@@ -79,7 +83,7 @@ export const BusinessFooter = (props: Props) => {
   const reject = () => {
     setLoading(true);
     reservationService
-      .updateReservation(props.reservation.id, {
+      .updateReservation(props.reservation.id, props.reservation.createdAt!, {
         status: ReservationStatus.Rejected,
         negotiable: undefined,
       })

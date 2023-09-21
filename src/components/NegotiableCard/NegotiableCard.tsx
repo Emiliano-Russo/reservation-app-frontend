@@ -30,7 +30,11 @@ export const NegotiableCard = (props: Props) => {
   const responseBusinessProposal = (status: AcceptStatus) => {
     setIsLoading(true);
     reservationService
-      .userResponseProposedSchedule(props.reservation.id, status)
+      .userResponseProposedSchedule(
+        props.reservation.id,
+        props.reservation.createdAt!,
+        status,
+      )
       .then((data) => {
         if (status === AcceptStatus.Accepted) {
           message.success('Reserva Confirmada!');

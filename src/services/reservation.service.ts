@@ -79,9 +79,13 @@ export class ReservationService {
     return response.data;
   }
 
-  async businessProposedSchedule(id: string, date: string): Promise<any> {
+  async businessProposedSchedule(
+    id: string,
+    createdAt: number,
+    date: string,
+  ): Promise<any> {
     const response: AxiosResponse<any> = await this.api.patch(
-      `/reservation/scheduleProposed/${id}`,
+      `/reservation/scheduleProposed/${id}/${createdAt}`,
       { date: date },
     );
     return response.data;
@@ -89,10 +93,11 @@ export class ReservationService {
 
   async userResponseProposedSchedule(
     id: string,
+    createdAt: number,
     value: AcceptStatus,
   ): Promise<any> {
     const response: AxiosResponse<any> = await this.api.patch(
-      `/reservation/responseSchedulePropose/${id}`,
+      `/reservation/responseSchedulePropose/${id}/${createdAt}`,
       { value: value },
     );
     return response.data;
