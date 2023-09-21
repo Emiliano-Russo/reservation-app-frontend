@@ -73,6 +73,7 @@ export class BusinessService {
     limit?: string,
     lastKey?: string | null,
   ): Promise<PaginatedResponse> {
+    console.log('@@@@ GETTING BUSINESS BYTYPE ID WITH :', limit, lastKey);
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
       `/business?typeId=${typeId}&limit=${limit}&lastKey=${
