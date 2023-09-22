@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
-import { mock_businessType } from '../mocks/businessType';
-import { PaginatedResponse } from '../interfaces/response.interface';
+import { formatQueryParams } from '../utils/formatQuery';
+import { PaginatedResponse, PaginationDto } from '../interfaces/pagination.dto';
 
 export class BusinessTypeService {
   private api: any;
@@ -10,8 +10,10 @@ export class BusinessTypeService {
     });
   }
 
-  async getBusinessTypes(): Promise<PaginatedResponse> {
-    const response: AxiosResponse<any> = await this.api.get('/businessType');
+  async getBusinessTypes(paginated: PaginationDto): Promise<PaginatedResponse> {
+    const response: AxiosResponse<any> = await this.api.get(
+      `/businessType?limit=${paginated.limit}&page=${paginated.page}`,
+    );
     return response.data;
   }
 

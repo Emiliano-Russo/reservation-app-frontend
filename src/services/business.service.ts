@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
-import { mocked_business } from '../mocks/business';
-import { PaginatedResponse } from '../interfaces/response.interface';
+import { PaginatedResponse, PaginationDto } from '../interfaces/pagination.dto';
+import { formatQueryParams } from '../utils/formatQuery';
 
 export class BusinessService {
   private api: any;
@@ -57,10 +57,13 @@ export class BusinessService {
     return response.data;
   }
 
-  async getBusinessesByOwnerId(ownerId: string): Promise<PaginatedResponse> {
+  async getBusinessesByOwnerId(
+    ownerId: string,
+    paginated: PaginationDto,
+  ): Promise<PaginatedResponse> {
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
-      `/business?ownerId=${ownerId}`,
+      `/business?ownerId=${ownerId}&${formatQueryParams(paginated)}`,
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       },
@@ -70,15 +73,11 @@ export class BusinessService {
 
   async getBusinessesByTypeId(
     typeId: string,
-    limit?: string,
-    lastKey?: string | null,
+    paginated: PaginationDto,
   ): Promise<PaginatedResponse> {
-    console.log('@@@@ GETTING BUSINESS BYTYPE ID WITH :', limit, lastKey);
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
-      `/business?typeId=${typeId}&limit=${limit}&lastKey=${
-        lastKey ? lastKey : ''
-      }`,
+      `/business?typeId=${typeId}&${formatQueryParams(paginated)}`,
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       },

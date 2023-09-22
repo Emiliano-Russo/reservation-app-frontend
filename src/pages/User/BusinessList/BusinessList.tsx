@@ -10,7 +10,6 @@ import { BusinessService } from '../../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
 import { BusinessTypeService } from '../../../services/businessType.service';
-import { useDynamoLazyLoading } from '../../../hooks/useDynamoLazyLoading';
 
 const { Title } = Typography;
 const Search = Input.Search;
@@ -18,7 +17,7 @@ const Search = Input.Search;
 const businessService = new BusinessService(REACT_APP_BASE_URL);
 const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
 
-const limitPerPage = '10';
+const limitPerPage = 10;
 
 export const BusinessList = withPageLayout(
   () => {
@@ -26,24 +25,13 @@ export const BusinessList = withPageLayout(
     if (!type) return <h1>Error</h1>;
 
     const [businessTypeName, setBusinessTypeName] = useState('');
+    const [businesses, setBusinesses] = useState<any>([]);
+    const [page, setPage] = useState(1);
+    const [hasMoreData, setHasMoreData] = useState(true);
+    const [loading, setLoading] = useState(true);
+
     const containerRef = useRef<any>(null);
     const nav = useNavigate();
-
-    const {
-      data: businesses,
-      loading,
-      loadMoreData,
-    } = useDynamoLazyLoading({
-      initialData: [],
-      fetchData: async (lastKey) => {
-        const result = await businessService.getBusinessesByTypeId(
-          type,
-          limitPerPage,
-          lastKey?.id,
-        );
-        return result;
-      },
-    });
 
     useEffect(() => {
       async function fetchBusinessTypeName() {
@@ -51,8 +39,30 @@ export const BusinessList = withPageLayout(
         const businessType = await businessTypeService.getBusinessType(type);
         setBusinessTypeName(businessType.name);
       }
+
       fetchBusinessTypeName();
     }, [type]);
+
+    useEffect(() => {
+      async function fetchBusinesses() {
+        setLoading(true);
+        console.log('fetch business');
+        if (!type) return;
+        const res = await businessService.getBusinessesByTypeId(type, {
+          limit: limitPerPage,
+          page: page,
+        });
+        console.log('res: ', res);
+        setLoading(false);
+        if (res.items.length == 0) {
+          setHasMoreData(false);
+          return;
+        }
+        console.log('setting Business');
+        setBusinesses((prev) => [...prev, ...res.items]);
+      }
+      fetchBusinesses();
+    }, [page]);
 
     useEffect(() => {
       const container = containerRef.current;
@@ -72,7 +82,7 @@ export const BusinessList = withPageLayout(
         container.scrollHeight - container.scrollTop ===
         container.clientHeight
       ) {
-        loadMoreData();
+        if (hasMoreData) setPage((prev) => prev + 1);
       }
     };
 

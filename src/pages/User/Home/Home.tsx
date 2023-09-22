@@ -24,7 +24,7 @@ export const Home = withAuth(
     useEffect(() => {
       const service = new BusinessTypeService(REACT_APP_BASE_URL);
       service
-        .getBusinessTypes()
+        .getBusinessTypes({ limit: 20, page: 1 })
         .then((data) => {
           console.log('data: ', data);
           dispatch(setBusinessTypes(data.items));

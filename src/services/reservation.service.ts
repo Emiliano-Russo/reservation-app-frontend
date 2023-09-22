@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
-import { mock_reservation } from '../mocks/reservations';
+import { formatQueryParams } from '../utils/formatQuery';
 import { AcceptStatus } from '../interfaces/reservation.interface';
+import { PaginationDto } from '../interfaces/pagination.dto';
 
 // Podrías tener un mock para Reservation similar a mock_businessType si lo necesitas.
 // import { mock_reservation } from '../mocks/reservation';
@@ -13,33 +14,29 @@ export class ReservationService {
     });
   }
 
-  async getReservations(): Promise<any> {
-    const response: AxiosResponse<any> = await this.api.get('/reservation');
+  async getReservations(paginated: PaginationDto): Promise<any> {
+    const response: AxiosResponse<any> = await this.api.get(
+      `/reservation${formatQueryParams(paginated)}`,
+    );
     return response.data;
   }
 
   async getReservationsByUserId(
     userId: string,
-    limit: string,
-    lastKey: string | undefined,
+    paginated: PaginationDto,
   ): Promise<any> {
     const response: AxiosResponse<any> = await this.api.get(
-      `/reservation?userId=${userId}&limit=${limit}&lastKey=${
-        lastKey ? lastKey : ''
-      }`,
+      `/reservation?userId=${userId}&${formatQueryParams(paginated)}`,
     );
     return response.data;
   }
 
   async getReservationsByBusinessId(
     businessId: string,
-    limit: string,
-    lastKey: string | undefined,
+    paginated: PaginationDto,
   ): Promise<any> {
     const response: AxiosResponse<any> = await this.api.get(
-      `/reservation?businessId=${businessId}&limit=${limit}&lastKey=${
-        lastKey ? lastKey : ''
-      }`,
+      `/reservation?businessId=${businessId}&${formatQueryParams(paginated)}`,
     );
     return response.data;
   }
@@ -64,7 +61,6 @@ export class ReservationService {
     createdAt: number,
     updateReservationDto: any,
   ): Promise<any> {
-    console.log('@@@updating reservation...');
     const response: AxiosResponse<any> = await this.api.patch(
       `/reservation/${id}/${createdAt}`,
       updateReservationDto,
@@ -79,13 +75,9 @@ export class ReservationService {
     return response.data;
   }
 
-  async businessProposedSchedule(
-    id: string,
-    createdAt: number,
-    date: string,
-  ): Promise<any> {
+  async businessProposedSchedule(id: string, date: string): Promise<any> {
     const response: AxiosResponse<any> = await this.api.patch(
-      `/reservation/scheduleProposed/${id}/${createdAt}`,
+      `/reservation/scheduleProposed/${id}`,
       { date: date },
     );
     return response.data;
@@ -93,11 +85,10 @@ export class ReservationService {
 
   async userResponseProposedSchedule(
     id: string,
-    createdAt: number,
     value: AcceptStatus,
   ): Promise<any> {
     const response: AxiosResponse<any> = await this.api.patch(
-      `/reservation/responseSchedulePropose/${id}/${createdAt}`,
+      `/reservation/responseSchedulePropose/${id}`,
       { value: value },
     );
     return response.data;
