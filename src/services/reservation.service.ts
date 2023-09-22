@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
 import { formatQueryParams } from '../utils/formatQuery';
 import { AcceptStatus } from '../interfaces/reservation.interface';
-import { PaginationDto } from '../interfaces/pagination.dto';
+import { PaginatedResponse, PaginationDto } from '../interfaces/pagination.dto';
+import { Reservation } from '../interfaces/reservation/reservation.interface';
 
 // Podrías tener un mock para Reservation similar a mock_businessType si lo necesitas.
 // import { mock_reservation } from '../mocks/reservation';
@@ -14,7 +15,9 @@ export class ReservationService {
     });
   }
 
-  async getReservations(paginated: PaginationDto): Promise<any> {
+  async getReservations(
+    paginated: PaginationDto,
+  ): Promise<PaginatedResponse<Reservation>> {
     const response: AxiosResponse<any> = await this.api.get(
       `/reservation${formatQueryParams(paginated)}`,
     );
@@ -24,7 +27,7 @@ export class ReservationService {
   async getReservationsByUserId(
     userId: string,
     paginated: PaginationDto,
-  ): Promise<any> {
+  ): Promise<PaginatedResponse<Reservation>> {
     const response: AxiosResponse<any> = await this.api.get(
       `/reservation?userId=${userId}&${formatQueryParams(paginated)}`,
     );
@@ -34,7 +37,7 @@ export class ReservationService {
   async getReservationsByBusinessId(
     businessId: string,
     paginated: PaginationDto,
-  ): Promise<any> {
+  ): Promise<PaginatedResponse<Reservation>> {
     const response: AxiosResponse<any> = await this.api.get(
       `/reservation?businessId=${businessId}&${formatQueryParams(paginated)}`,
     );
@@ -49,6 +52,7 @@ export class ReservationService {
   }
 
   async createReservation(createReservationDto: any): Promise<any> {
+    console.log('########### creating reservation: ', createReservationDto);
     const response: AxiosResponse<any> = await this.api.post(
       '/reservation',
       createReservationDto,

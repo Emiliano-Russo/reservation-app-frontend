@@ -3,7 +3,6 @@ import { AcceptStatus } from '../../interfaces/reservation.interface';
 import { formatDate } from '../../utils/dateFormat';
 
 export const UserFooter = ({ props, loading, responseBusinessProposal }) => {
-  console.log('@ REndering user footer @');
   return (
     <>
       {props.reservation.negotiable.businessProposedSchedule &&

@@ -18,7 +18,6 @@ interface IUserState {
 
 const getUserFromLocalStorage = (): IUser | null => {
   const user = localStorage.getItem('user');
-  console.log('obtuvimos user de localstorage? ', user);
   return user ? JSON.parse(user) : null;
 };
 

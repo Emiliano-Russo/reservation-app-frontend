@@ -59,7 +59,6 @@ const Specific = ({ business, controlValues }) => {
       <p>Fecha</p>
       <span>{formatDate(controlValues?.date)}</span>
       {controlValues?.extras?.map((val) => {
-        console.log('extra: ', val);
         return (
           <>
             <p>{val.label}</p>

@@ -30,11 +30,7 @@ export const NegotiableCard = (props: Props) => {
   const responseBusinessProposal = (status: AcceptStatus) => {
     setIsLoading(true);
     reservationService
-      .userResponseProposedSchedule(
-        props.reservation.id,
-        props.reservation.createdAt!,
-        status,
-      )
+      .userResponseProposedSchedule(props.reservation.id, status)
       .then((data) => {
         if (status === AcceptStatus.Accepted) {
           message.success('Reserva Confirmada!');
@@ -76,8 +72,6 @@ export const NegotiableCard = (props: Props) => {
       });
   };
 
-  console.log('RESERVATION CARD SET RESERVATIONS: ', props.setReservations);
-
   if (!props.reservation.negotiable) return <div>Error</div>;
 
   return (
@@ -108,12 +102,10 @@ export const NegotiableCard = (props: Props) => {
         footer={null}
         open={isModalVisible}
         onOk={(e) => {
-          console.log('okok');
           e.stopPropagation();
           setIsModalVisible(false);
         }}
         onCancel={(e) => {
-          console.log('cancel');
           e.stopPropagation();
           setIsModalVisible(false);
         }}

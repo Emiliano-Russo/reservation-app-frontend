@@ -42,7 +42,6 @@ export const NewReservation = withPageLayout(
     const { business, businessType, loading, error } = useBusinessDetails(id);
 
     useEffect(() => {
-      console.log('setting inner height');
       setInnerHeight(window.innerHeight);
     }, []);
 
@@ -65,9 +64,6 @@ export const NewReservation = withPageLayout(
       return <div>Error: {error.message}</div>;
     }
 
-    console.log('business: ', business);
-    console.log('businessType: ', businessType);
-
     const createReservation = () => {
       if (!controlValues) return;
       setCreatingReservation(true);
@@ -81,17 +77,14 @@ export const NewReservation = withPageLayout(
       reservationService
         .createReservation(create_dto)
         .then((data) => {
-          console.log('listo!', data);
           setModalOpen(false);
           setDoneModal(true);
         })
-        .catch(() => {
+        .catch((err) => {
           setModalOpen(false);
-          message.error('Error!');
+          console.error('$$$$$$$$$$ Error!', err);
         });
     };
-
-    console.log('control values: ', controlValues);
 
     if (!hourTypeSelection || !dayTypeSelection)
       return (

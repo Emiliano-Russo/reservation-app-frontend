@@ -7,11 +7,8 @@ export function withGuest<P extends object>(Component: React.ComponentType<P>) {
 
     // Si hay un usuario autenticado, no mostramos el componente
     if (user !== null) {
-      console.log('retornamos null', user);
       return null;
     }
-
-    console.log('retornamos componente');
 
     return <Component {...props} />;
   };

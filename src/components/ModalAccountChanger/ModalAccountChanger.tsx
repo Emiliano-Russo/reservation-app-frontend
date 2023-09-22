@@ -50,7 +50,6 @@ export const ModalAccountChanger = ({
                 <AnimatedFromLeft delay={index * 0.1}>
                   <div
                     onClick={() => {
-                      console.log('setteamos el current business: ', business);
                       dispatch(setSelectedPath('/businessPrivateProfile'));
                       dispatch(setCurrentBusiness(business));
                       setIsModalVisible(false);

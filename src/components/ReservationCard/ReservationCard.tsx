@@ -45,12 +45,10 @@ export const ReservationCard = (ticket: Props) => {
   const statusStyle = getStatusColor(ticket.status);
 
   const handleReservationUpdateState = (status: ReservationStatus) => {
-    console.log('handleReservationUpdateState!', status);
     setLoading(true);
     reservationService
       .updateReservation(ticket.id, ticket.createdAt, { status: status })
       .then(() => {
-        console.log('## Change status reservation...', status);
         ticket.changeStatusReservation(ticket.id, status);
       })
       .catch((err) => {

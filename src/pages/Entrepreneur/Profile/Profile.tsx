@@ -32,11 +32,9 @@ export const BusinessProfile = withPageLayout(
       (state: any) => state.business.currentBusiness,
     );
     const businesses = useSelector((state: any) => state.business.myBusinesses);
-    console.log('## my business: ', business);
     const [loading, setLoading] = useState(false);
     const [availabilityModal, setAvailabilityModal] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    console.log('business: ', business);
     const nav = useNavigate();
     const businessTypeList = useSelector(
       (state: any) => state.business.businessTypes,

@@ -64,8 +64,6 @@ export const CreateBusiness = withPageLayout(
             [key]: value,
           },
         };
-        console.log('Prev data:', prevData);
-        console.log('Updated data:', updatedData);
         return updatedData;
       });
     };
@@ -97,7 +95,6 @@ export const CreateBusiness = withPageLayout(
     };
 
     const handleBusinessTypeChange = (value) => {
-      console.log('value businessType: ', value);
       setBusinessData((prevData) => ({ ...prevData, businessType: value }));
     };
 
@@ -109,12 +106,10 @@ export const CreateBusiness = withPageLayout(
     };
 
     const handleLogoFileListChange = (list) => {
-      console.log('on logo file list: ', list);
       setBusinessData((prevData) => ({ ...prevData, logoFileList: list }));
     };
 
     const handleBannerFileListChange = (list) => {
-      console.log('on banner file list: ', list);
       setBusinessData((prevData) => ({ ...prevData, bannerFileList: list }));
     };
 
@@ -123,7 +118,6 @@ export const CreateBusiness = withPageLayout(
     };
 
     const createBusiness = () => {
-      console.log('creating business: ', businessData);
       const availabilityTransformed = transformToAvailability(
         businessData.reservationDetails,
       );
@@ -138,9 +132,6 @@ export const CreateBusiness = withPageLayout(
         coordinates: businessData.locationInfo.selectedLocation,
         availability: availabilityTransformed,
       };
-      console.log('final obj: ', obj);
-      console.log('logo: ', businessData.logoFileList);
-      console.log('banner: ', businessData.bannerFileList);
       businessServices
         .registerBusiness(
           obj,

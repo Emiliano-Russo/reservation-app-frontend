@@ -24,8 +24,6 @@ export const BusinessFooter = (props: Props) => {
   const [startTime, setStartTime] = useState(new Date());
   const [startDate, setStartDate] = useState(new Date());
 
-  console.log('SET RESERVATIONS: ', props.setReservations);
-
   const reservationService = new ReservationService(REACT_APP_BASE_URL);
 
   if (!props.reservation.negotiable) return null;
@@ -37,35 +35,23 @@ export const BusinessFooter = (props: Props) => {
 
   const sendProposal = () => {
     setLoading(true);
-    console.log('sending proposal...');
     const dateToSend = startDate;
     dateToSend.setHours(startTime.getHours());
     dateToSend.setMinutes(startTime.getMinutes());
-    console.log('about to send');
     reservationService
-      .businessProposedSchedule(
-        props.reservation.id,
-        props.reservation.createdAt!,
-        dateToSend.toString(),
-      )
+      .businessProposedSchedule(props.reservation.id, dateToSend.toString())
       .then(() => {
         message.success('Propuesta Enviada');
-        console.log('Propuesta Enviada!');
-        console.log('setReservations: ', props.setReservations);
         props.setReservations((prev: IReservation[]) => {
-          console.log('com');
           const clonedPrev = [...prev];
           const indexRes = clonedPrev.findIndex(
             (val) => val.id == props.reservation.id,
           );
-          console.log('indexREs:', indexRes);
           const item = clonedPrev[indexRes];
-          console.log('item: ', item);
           if (item.negotiable) {
             item.negotiable.acceptedBusinessProposed = AcceptStatus.Unanswered;
             item.negotiable.businessProposedSchedule = dateToSend.toString();
           }
-          console.log('item after tweaks on negotiable: ', item);
           clonedPrev[indexRes] = item;
           return clonedPrev;
         });

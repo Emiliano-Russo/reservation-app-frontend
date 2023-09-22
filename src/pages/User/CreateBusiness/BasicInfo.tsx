@@ -29,18 +29,15 @@ export const BasicInfo = ({
   const [businessTypes, setBusinessTypes] = useState<any>([]);
 
   const handleUploadChange = (e, type) => {
-    console.log('type: ', type);
     const fileName = e.nativeEvent.target.files[0].name;
     if (e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
       // Hacer lo que necesites con el archivo seleccionado.
       // Si solo deseas almacenar una referencia al archivo para subirlo más tarde, puedes simplemente almacenarlo en el estado.
       if (type === 'logo') {
-        console.log('logooo');
         setLogoFileName(fileName);
         onLogoFileListChange([selectedFile]);
       } else if (type === 'banner') {
-        console.log('banner!');
         setBannerFileName(fileName);
         onBannerFileListChange([selectedFile]);
       }
@@ -49,9 +46,11 @@ export const BasicInfo = ({
 
   useEffect(() => {
     const downloadBusinessType = async () => {
-      const res = await businessTypeService.getBusinessTypes();
+      const res = await businessTypeService.getBusinessTypes({
+        limit: 20,
+        page: 1,
+      });
       setBusinessTypes(res.items);
-      console.log('res businessTypes: ', res);
     };
 
     downloadBusinessType();

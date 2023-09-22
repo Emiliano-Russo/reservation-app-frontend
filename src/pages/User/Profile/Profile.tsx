@@ -87,10 +87,11 @@ const ProfileHeader = (props: PropsHeader) => {
 
   useEffect(() => {
     const getBusinessByOwnerId = () => {
-      businessService.getBusinessesByOwnerId(user.id).then((data) => {
-        console.log('business by owner id: ', data);
-        dispatch(setBusinessList(data.items));
-      });
+      businessService
+        .getBusinessesByOwnerId(user.id, { limit: 20, page: 1 })
+        .then((data) => {
+          dispatch(setBusinessList(data.items));
+        });
     };
     getBusinessByOwnerId();
   }, []);
@@ -146,7 +147,6 @@ export const Profile = withAuth(
     StatusBar.setBackgroundColor({ color: '#fd6f8e' });
 
     const user = useSelector((state: any) => state.user.user);
-    console.log('user: ', user);
 
     const icons = [
       {

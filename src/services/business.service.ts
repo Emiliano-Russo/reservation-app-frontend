@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { PaginatedResponse, PaginationDto } from '../interfaces/pagination.dto';
 import { formatQueryParams } from '../utils/formatQuery';
+import { Business } from '../interfaces/business/business.interface';
 
 export class BusinessService {
   private api: any;
@@ -60,7 +61,7 @@ export class BusinessService {
   async getBusinessesByOwnerId(
     ownerId: string,
     paginated: PaginationDto,
-  ): Promise<PaginatedResponse> {
+  ): Promise<PaginatedResponse<Business>> {
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
       `/business?ownerId=${ownerId}&${formatQueryParams(paginated)}`,
@@ -74,7 +75,7 @@ export class BusinessService {
   async getBusinessesByTypeId(
     typeId: string,
     paginated: PaginationDto,
-  ): Promise<PaginatedResponse> {
+  ): Promise<PaginatedResponse<Business>> {
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
       `/business?typeId=${typeId}&${formatQueryParams(paginated)}`,

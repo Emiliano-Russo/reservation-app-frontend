@@ -46,19 +46,16 @@ export const BusinessList = withPageLayout(
     useEffect(() => {
       async function fetchBusinesses() {
         setLoading(true);
-        console.log('fetch business');
         if (!type) return;
         const res = await businessService.getBusinessesByTypeId(type, {
           limit: limitPerPage,
           page: page,
         });
-        console.log('res: ', res);
         setLoading(false);
         if (res.items.length == 0) {
           setHasMoreData(false);
           return;
         }
-        console.log('setting Business');
         setBusinesses((prev) => [...prev, ...res.items]);
       }
       fetchBusinesses();

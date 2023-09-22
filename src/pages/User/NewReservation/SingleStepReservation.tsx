@@ -118,7 +118,6 @@ export const SingleStepReservation = ({
           type="primary"
           onClick={() => {
             if (startDate && startTime) {
-              console.log('setting controls');
               let newControlValues: any = {};
 
               const sd = new Date(

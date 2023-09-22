@@ -19,6 +19,7 @@ import { FadeFromTop } from '../../../animations/FadeFromTop';
 import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
 import { ReservationService } from '../../../services/reservation.service';
 import { UserService } from '../../../services/user.service';
+import { IBusiness } from '../../../interfaces/business/business.interface';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -31,7 +32,7 @@ export const Business = withPageLayout(
   () => {
     const { id } = useParams<any>(); // Obtener el id desde la URL
     const nav = useNavigate();
-    const [business, setBusiness] = useState<any>(null);
+    const [business, setBusiness] = useState<IBusiness | null>(null);
     const [reservations, setReservations] = useState<any>(null);
     const [detailedReviews, setDetailedReviews] = useState<any[]>([]);
 
@@ -41,13 +42,12 @@ export const Business = withPageLayout(
           if (id) {
             const businessData = await businessService.getBusiness(id);
             setBusiness(businessData);
-            console.log('businessData ', businessData);
             const reservationData =
               await reservationService.getReservationsByBusinessId(
                 businessData.id,
+                { limit: 5, page: 1 },
               );
-            setReservations(reservationData);
-            console.log('all the reservations: ', reservationData);
+            setReservations(reservationData.items);
           }
         } catch (error) {
           console.error('Error fetching business data:', error);
@@ -127,7 +127,7 @@ export const Business = withPageLayout(
           <Image
             width="100%"
             height="40vh"
-            src={business.multimediaURL[0]}
+            src={business.banner}
             alt="Business Banner"
             style={{ objectFit: 'cover' }}
           />

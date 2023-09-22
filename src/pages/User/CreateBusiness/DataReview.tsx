@@ -7,8 +7,6 @@ export const DataReview = ({ businessData }) => {
   const logoURL = logoFile ? URL.createObjectURL(logoFile) : null;
   const bannerURL = bannerFile ? URL.createObjectURL(bannerFile) : null;
 
-  console.log('logoURl: ', logoURL);
-
   return (
     <div style={{ padding: '20px', overflowY: 'scroll' }}>
       <div style={{ marginBottom: '20px' }}>

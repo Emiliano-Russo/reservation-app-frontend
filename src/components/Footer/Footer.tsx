@@ -80,8 +80,6 @@ const Footer = ({ isBusiness = false, style = {} }) => {
     width: '27px',
   };
 
-  console.log('selected path: ', selectedPath);
-
   return (
     <div style={footerStyle}>
       {currentButtonsConfig.map((button) => (
