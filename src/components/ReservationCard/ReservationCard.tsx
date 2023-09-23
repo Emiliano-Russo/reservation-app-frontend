@@ -103,7 +103,11 @@ export const ReservationCard = (ticket: Props) => {
           loading={loading}
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
-          ticket={ticket}
+          data={{
+            userName: ticket.reservation.user.name,
+            reservationDate: ticket.reservation.reservationDate?.toString(),
+            status: ticket.reservation.status,
+          }}
           handleReservationUpdateState={handleReservationUpdateState}
         />
       ) : (

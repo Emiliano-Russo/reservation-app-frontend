@@ -3,10 +3,10 @@ import { REACT_APP_BASE_URL } from '../../../../env';
 import Footer from '../../../components/Footer/Footer';
 import { ReservationService } from '../../../services/reservation.service';
 import { withPageLayout } from '../../../wrappers/WithPageLayout';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SearchInput from '../../../components/SearchInput/SearchInput';
 import { ReservationCard } from '../../../components/ReservationCard/ReservationCard';
-import { Spin } from 'antd';
+import { Spin, message } from 'antd';
 import styles from './Reservations.module.css';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 import { NegotiableCard } from '../../../components/NegotiableCard/NegotiableCard';
@@ -18,38 +18,38 @@ const reservationService = new ReservationService(REACT_APP_BASE_URL);
 
 export const BusinessReservation = withPageLayout(
   () => {
-    const currentBusiness = useSelector(
-      (state: any) => state.business.currentBusiness,
+    const currentBusinessID: string = useSelector(
+      (state: any) => state.business.currentBusiness.id,
     );
-
-    const {
-      data: reservations,
-      loading,
-      loadMoreData,
-      updateData,
-    } = useDynamoLazyLoading<IReservation>({
-      initialData: [],
-      fetchData: async (lastKey) => {
-        return reservationService.getReservationsByBusinessId(
-          currentBusiness.id,
-          '5',
-          JSON.stringify(lastKey),
-        );
-      },
-    });
+    const [reservations, setReservations] = useState<IReservation[]>([]);
+    const [page, setPage] = useState(1);
+    const [hasMoreData, setHasMoreData] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     const containerRef = useRef<any>(null); // Referencia al contenedor
 
-    const handleScroll = (e) => {
-      const container = e.target;
-      if (
-        container.scrollHeight - container.scrollTop ===
-        container.clientHeight
-      ) {
-        // Cargar más datos
-        loadMoreData();
-      }
-    };
+    useEffect(() => {
+      const getReservations = async () => {
+        setLoading(true);
+        reservationService
+          .getReservationsByBusinessId(currentBusinessID, {
+            limit: 10,
+            page: page,
+          })
+          .then((res) => {
+            if (res.items.length > 0)
+              setReservations((prev: any) => [...prev, ...res.items]);
+            else setHasMoreData(false);
+          })
+          .catch((err) => {
+            message.error('Error');
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      };
+      getReservations();
+    }, [page]);
 
     useEffect(() => {
       const container = containerRef.current;
@@ -63,20 +63,34 @@ export const BusinessReservation = withPageLayout(
       };
     }, []);
 
+    const handleScroll = (e) => {
+      const container = e.target;
+      if (
+        container.scrollHeight - container.scrollTop ===
+        container.clientHeight
+      ) {
+        // Cargar más datos
+        if (hasMoreData) setPage((prev) => prev + 1);
+        else setLoading(false);
+      }
+    };
+
     const changeStatusReservation = (
       reservationId: string,
       status: ReservationStatus,
     ) => {
-      updateData((prevReservations) => {
-        const updatedReservations = [...prevReservations];
-        const reservationIndex = updatedReservations.findIndex(
-          (res) => res.id === reservationId,
-        );
-        if (reservationIndex !== -1) {
-          updatedReservations[reservationIndex].status = status;
-        }
-        return updatedReservations;
-      });
+      // Encuentra el índice del ticket que ha sido cancelado
+      const index = reservations.findIndex(
+        (res: any) => res.id === reservationId,
+      );
+
+      // Crea una copia del array de reservaciones
+      const updatedReservations: any = [...reservations];
+
+      // Actualiza el estado del ticket cancelado
+      if (index !== -1) {
+        updatedReservations[index].status = status;
+      }
     };
 
     return (
@@ -93,7 +107,7 @@ export const BusinessReservation = withPageLayout(
             if (reservation.negotiable) {
               return (
                 <NegotiableCard
-                  setReservations={updateData}
+                  setReservations={setReservations}
                   index={index}
                   isBusiness={true}
                   reservation={reservation}
@@ -104,14 +118,8 @@ export const BusinessReservation = withPageLayout(
                 <ReservationCard
                   isBusiness
                   key={reservation.id}
-                  businessName={reservation.businessName}
-                  extras={reservation.extras}
-                  id={reservation.id}
-                  reservationDate={reservation.reservationDate!}
-                  status={reservation.status}
-                  userName={reservation.userName}
+                  reservation={reservation}
                   index={index}
-                  createdAt={reservation.createdAt!}
                   changeStatusReservation={changeStatusReservation}
                 />
               );
