@@ -18,8 +18,9 @@ const DayAvailability = ({ day, shifts }) => {
       <strong>{day + ' '}</strong>
       {shifts.map((shift, index) => (
         <div key={index}>
-          <p>{new Date(shift.openingTime).toLocaleString()}</p>
-          <p>{new Date(shift.closingTime).toLocaleString()}</p>
+          <p>
+            {shift.openingTime}-{shift.closingTime}
+          </p>
         </div>
       ))}
     </div>
@@ -31,7 +32,9 @@ export const BusinessProfile = withPageLayout(
     const business = useSelector(
       (state: any) => state.business.currentBusiness,
     );
+    console.log('business: ', business);
     const businesses = useSelector((state: any) => state.business.myBusinesses);
+    console.log('businesses list: ', businesses);
     const [loading, setLoading] = useState(false);
     const [availabilityModal, setAvailabilityModal] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -60,7 +63,7 @@ export const BusinessProfile = withPageLayout(
         <div className={styles.businessProfileContainer}>
           <div
             style={{
-              backgroundImage: ` url(${business.multimediaURL[0]})`,
+              backgroundImage: ` url(${business.banner})`,
             }}
             className={styles.banner}
           >
