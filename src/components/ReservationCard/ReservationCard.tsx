@@ -107,6 +107,7 @@ export const ReservationCard = (ticket: Props) => {
             userName: ticket.reservation.user.name,
             reservationDate: ticket.reservation.reservationDate?.toString(),
             status: ticket.reservation.status,
+            civilIdDoc: ticket.reservation.user.civilIdDoc,
           }}
           handleReservationUpdateState={handleReservationUpdateState}
         />

@@ -86,8 +86,8 @@ export const NegotiableCard = (props: Props) => {
       <div style={{ background: '#efdbff' }} className={styles.header}>
         <span className={styles.name}>
           {props.isBusiness
-            ? props.reservation.userName
-            : props.reservation.businessName}
+            ? props.reservation.user.name
+            : props.reservation.business.name}
         </span>
         <span className={styles.dateTime}>Flexible</span>
       </div>

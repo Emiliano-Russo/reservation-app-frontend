@@ -1,6 +1,6 @@
 import { IBusiness } from './business/business.interface';
 import { ReservationStatus } from './reservation.status';
-import { IUser } from './user.interface';
+import { IUser } from './user/user.interface';
 
 export function translateForUserAcceptStatus(
   status: AcceptStatus | undefined,

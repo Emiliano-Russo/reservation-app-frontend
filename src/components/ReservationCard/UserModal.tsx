@@ -58,7 +58,7 @@ export const UserModal = (props: Props) => {
           ),
         ]}
       >
-        <p>Reserva para: {props.data.businessName}</p>
+        <h5>{props.data.businessName}</h5>
         {props.data.reservationDate ? (
           <>
             <p>

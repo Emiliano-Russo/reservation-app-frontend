@@ -69,7 +69,7 @@ export const BusinessFooter = (props: Props) => {
   const reject = () => {
     setLoading(true);
     reservationService
-      .updateReservation(props.reservation.id, props.reservation.createdAt!, {
+      .updateReservation(props.reservation.id, {
         status: ReservationStatus.Rejected,
         negotiable: undefined,
       })

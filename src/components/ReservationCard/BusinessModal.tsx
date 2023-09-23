@@ -7,6 +7,7 @@ interface Data {
   status: ReservationStatus;
   userName: string;
   reservationDate: string | undefined | null;
+  civilIdDoc: string;
   extras?: any;
 }
 
@@ -32,6 +33,12 @@ export const BusinessModal = (props: Props) => {
         props.setIsModalVisible(false);
       }}
     >
+      <p>
+        Reserva para: <strong>{props.data.userName}</strong>
+      </p>
+      <p>
+        CI: <strong>{props.data.civilIdDoc}</strong>
+      </p>
       {props.data.reservationDate ? (
         <>
           <p>
@@ -84,38 +91,41 @@ export const BusinessModal = (props: Props) => {
           </>
         )}
         {props.data.status === ReservationStatus.Confirmed && (
-          <>
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+          >
             <Button
               loading={props.loading}
               type="primary"
-              style={{ margin: '10px' }}
-              onClick={() => {
-                props.handleReservationUpdateState(ReservationStatus.Realized);
-              }}
+              onClick={() =>
+                props.handleReservationUpdateState(ReservationStatus.Realized)
+              }
             >
-              Confirmar Asistencia
+              Confimar Asistencia
             </Button>
+
+            <Button
+              loading={props.loading}
+              onClick={() =>
+                props.handleReservationUpdateState(
+                  ReservationStatus.NotAttended,
+                )
+              }
+            >
+              No Asistió
+            </Button>
+
             <Button
               loading={props.loading}
               type="primary"
               danger
-              onClick={() => {
-                props.handleReservationUpdateState(ReservationStatus.Rejected);
-              }}
+              onClick={() =>
+                props.handleReservationUpdateState(ReservationStatus.Rejected)
+              }
             >
-              Rechazar
+              Rechazar Reserva
             </Button>
-            <Button
-              loading={props.loading}
-              onClick={() => {
-                props.handleReservationUpdateState(
-                  ReservationStatus.NotAttended,
-                );
-              }}
-            >
-              No Asistió
-            </Button>
-          </>
+          </div>
         )}
       </div>
     </Modal>

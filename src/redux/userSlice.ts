@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUser } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user/user.interface';
 
 interface UpdateStringPropertyAction {
   property: 'name' | 'username' | 'email' | 'bio' | 'token'; // Added 'token' here
