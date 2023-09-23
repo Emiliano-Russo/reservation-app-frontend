@@ -1,4 +1,6 @@
+import { IBusiness } from './business/business.interface';
 import { ReservationStatus } from './reservation.status';
+import { IUser } from './user.interface';
 
 export function translateForUserAcceptStatus(
   status: AcceptStatus | undefined,
@@ -41,15 +43,12 @@ export interface IExtra {
 
 export interface IReservation {
   id: string;
-  userId: string;
-  businessId: string;
-  businessName: string;
-  userName: string;
-  rating: number;
-  comment: string;
-  reservationDate?: Date;
-  status: ReservationStatus;
-  extras?: IExtra[];
-  negotiable?: INegotiable;
-  createdAt?: number;
+  user: IUser; // Asumiendo que tienes una interfaz IUser para el modelo User
+  business: IBusiness; // Asumiendo que tienes una interfaz IBusiness para el modelo Business
+  reservationDate?: Date | null;
+  rating?: number;
+  comment?: string;
+  status: ReservationStatus; // Asumiendo que tienes un enum o tipo ReservationStatus
+  negotiable?: INegotiable | null; // Asumiendo que tienes una interfaz INegotiable para el modelo Negotiable
+  createdAt: Date;
 }

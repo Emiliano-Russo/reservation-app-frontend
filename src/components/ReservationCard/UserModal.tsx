@@ -1,30 +1,40 @@
 import { Button, Modal } from 'antd';
 import { ReservationStatus } from '../../interfaces/reservation.status';
 import { renderExtra } from './ReservationCard';
+import { Dispatch, SetStateAction } from 'react';
 
-export const UserModal = ({
-  ticket,
-  setIsModalVisible,
-  isModalVisible,
-  loading,
-  handleReservationUpdateState,
-}) => {
+interface Data {
+  status: ReservationStatus;
+  businessName: string;
+  reservationDate: string | undefined | null;
+  extras?: any;
+}
+
+interface Props {
+  data: Data;
+  setIsModalVisible: Dispatch<SetStateAction<boolean>>;
+  isModalVisible: boolean;
+  loading: boolean;
+  handleReservationUpdateState: (status: ReservationStatus) => void;
+}
+
+export const UserModal = (props: Props) => {
   return (
     <>
       <Modal
         title="Detalles de la Reserva"
-        open={isModalVisible}
+        open={props.isModalVisible}
         onOk={(e: any) => {
           e.stopPropagation();
-          setIsModalVisible(false);
+          props.setIsModalVisible(false);
         }}
         onCancel={(e: any) => {
           e.stopPropagation();
-          setIsModalVisible(false);
+          props.setIsModalVisible(false);
         }}
         footer={[
-          (ticket.status === ReservationStatus.Pending ||
-            ticket.status === ReservationStatus.Confirmed) && (
+          (props.data.status === ReservationStatus.Pending ||
+            props.data.status === ReservationStatus.Confirmed) && (
             <div
               style={{
                 display: 'flex',
@@ -32,12 +42,14 @@ export const UserModal = ({
               }}
             >
               <Button
-                loading={loading}
+                loading={props.loading}
                 key="submit"
                 type="primary"
                 danger
                 onClick={() =>
-                  handleReservationUpdateState(ReservationStatus.Cancelled)
+                  props.handleReservationUpdateState(
+                    ReservationStatus.Cancelled,
+                  )
                 }
               >
                 Cancelar Reserva
@@ -46,19 +58,30 @@ export const UserModal = ({
           ),
         ]}
       >
-        <p>Reserva para: {ticket.businessName}</p>
-        <p>
-          Fecha: {new Date(ticket.reservationDate).toLocaleDateString('es-ES')}
-        </p>
-        <p>
-          Hora:{' '}
-          {new Date(ticket.reservationDate).toLocaleTimeString('es-ES', {
-            hour: '2-digit',
-            minute: '2-digit',
-          })}
-        </p>
-        {ticket.extras &&
-          ticket.extras.map((extra) => (
+        <p>Reserva para: {props.data.businessName}</p>
+        {props.data.reservationDate ? (
+          <>
+            <p>
+              Fecha:{' '}
+              {new Date(props.data.reservationDate).toLocaleDateString('es-ES')}
+            </p>
+            <p>
+              Hora:{' '}
+              {new Date(props.data.reservationDate).toLocaleTimeString(
+                'es-ES',
+                {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                },
+              )}
+            </p>
+          </>
+        ) : (
+          <h1>No hay fecha de reserva ERROR</h1>
+        )}
+
+        {props.data.extras &&
+          props.data.extras.map((extra) => (
             <p key={extra.label}>{renderExtra(extra)}</p>
           ))}
       </Modal>

@@ -11,7 +11,7 @@ export enum ReservationStatus {
   NotAttended = 'NotAttended',
 }
 
-export interface Reservation {
+export interface IReservation {
   id: string;
   user: IUser;
   business: IBusiness;

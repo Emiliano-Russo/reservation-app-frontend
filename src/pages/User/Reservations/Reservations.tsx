@@ -12,38 +12,38 @@ import { useSelector } from 'react-redux';
 import { ReservationStatus } from '../../../interfaces/reservation.status';
 import { NegotiableCard } from '../../../components/NegotiableCard/NegotiableCard';
 import { IReservation } from '../../../interfaces/reservation.interface';
-import { useDynamoLazyLoading } from '../../../hooks/useDynamoLazyLoading';
 
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
 
-const limitPerPage = '5';
-
-interface LastKey {
-  userId: string;
-  id: string;
-  createdAt: number;
-}
+const limitPerPage = 7;
 
 const Reservations = withAuth(
   withPageLayout(() => {
     const user = useSelector((state: any) => state.user.user);
-    const {
-      data: reservations,
-      loading,
-      loadMoreData,
-      updateData,
-    } = useDynamoLazyLoading<IReservation>({
-      initialData: [],
-      fetchData: async (lastKey) => {
-        return reservationService.getReservationsByUserId(
-          user.id,
-          limitPerPage,
-          JSON.stringify(lastKey),
-        );
-      },
-    });
+    const [reservations, setReservations] = useState<IReservation[]>([]);
+    const [page, setPage] = useState(1);
+    const [hasMoreData, setHasMoreData] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     const containerRef = useRef<any>(null); // Referencia al contenedor
+
+    useEffect(() => {
+      const getReservations = async () => {
+        if (hasMoreData == false) return;
+        const reservations = await reservationService.getReservationsByUserId(
+          user.id,
+          {
+            limit: limitPerPage,
+            page: page,
+          },
+        );
+        setLoading(false);
+        if (reservations.items.length > 0)
+          setReservations((prev: any) => [...prev, ...reservations.items]);
+        else setHasMoreData(false);
+      };
+      getReservations();
+    }, [page]);
 
     useEffect(() => {
       const container = containerRef.current;
@@ -64,7 +64,8 @@ const Reservations = withAuth(
         container.clientHeight
       ) {
         // Cargar más datos
-        loadMoreData();
+        if (hasMoreData) setPage((prev) => prev + 1);
+        else setLoading(false);
       }
     };
 
@@ -83,17 +84,6 @@ const Reservations = withAuth(
       // Actualiza el estado del ticket cancelado
       if (index !== -1) {
         updatedReservations[index].status = status;
-        updateData(updatedReservations); // Usamos updateData en lugar de setReservations
-      }
-    };
-
-    const wrappedUpdateData = (
-      action: React.SetStateAction<IReservation[]>,
-    ) => {
-      if (typeof action === 'function') {
-        updateData(action(reservations));
-      } else {
-        updateData(action);
       }
     };
 
@@ -119,15 +109,16 @@ const Reservations = withAuth(
                   index={index}
                   isBusiness={false}
                   reservation={reservation}
-                  setReservations={wrappedUpdateData}
+                  setReservations={setReservations}
                 />
               );
             else
               return (
                 <ReservationCard
-                  {...reservation}
+                  reservation={reservation}
                   index={index}
                   changeStatusReservation={changeStatusReservation}
+                  isBusiness={false}
                 />
               );
           })}

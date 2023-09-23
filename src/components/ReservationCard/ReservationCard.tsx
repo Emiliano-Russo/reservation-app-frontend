@@ -14,14 +14,8 @@ import { IReservation } from '../../interfaces/reservation.interface';
 import { message } from 'antd';
 
 interface Props {
-  id: string;
-  userName: string;
-  businessName: string;
-  reservationDate: Date;
-  status: ReservationStatus;
-  extras: any;
+  reservation: IReservation;
   index: number;
-  createdAt: number;
   changeStatusReservation: (
     reservationId: string,
     status: ReservationStatus,
@@ -40,16 +34,17 @@ export const renderExtra = (extra) => {
 };
 
 export const ReservationCard = (ticket: Props) => {
+  console.log('ticket props: ', ticket);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const statusStyle = getStatusColor(ticket.status);
+  const statusStyle = getStatusColor(ticket.reservation.status);
 
   const handleReservationUpdateState = (status: ReservationStatus) => {
     setLoading(true);
     reservationService
-      .updateReservation(ticket.id, ticket.createdAt, { status: status })
+      .updateReservation(ticket.reservation.id, { status: status })
       .then(() => {
-        ticket.changeStatusReservation(ticket.id, status);
+        ticket.changeStatusReservation(ticket.reservation.id, status);
       })
       .catch((err) => {
         message.error('Error');
@@ -63,7 +58,7 @@ export const ReservationCard = (ticket: Props) => {
 
   return (
     <AnimatedFromLeft
-      key={ticket.id}
+      key={ticket.reservation.id}
       className={styles.card}
       onClick={() => {
         setIsModalVisible(true);
@@ -72,28 +67,35 @@ export const ReservationCard = (ticket: Props) => {
     >
       <div className={styles.header}>
         <span className={styles.name}>
-          {ticket.isBusiness ? ticket.userName : ticket.businessName}
+          {ticket.isBusiness
+            ? ticket.reservation.user.name
+            : ticket.reservation.business.name}
         </span>
         <span className={styles.dateTime}>
           <span className={styles.date}>
-            {new Date(ticket.reservationDate).toLocaleDateString('es-ES')}
+            {new Date(ticket.reservation.reservationDate!).toLocaleDateString(
+              'es-ES',
+            )}
           </span>
           <span className={styles.time}>
-            {new Date(ticket.reservationDate).toLocaleTimeString('es-ES', {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
+            {new Date(ticket.reservation.reservationDate!).toLocaleTimeString(
+              'es-ES',
+              {
+                hour: '2-digit',
+                minute: '2-digit',
+              },
+            )}
           </span>
         </span>
       </div>
       <div className={styles.content}>
         <span className={styles.details}>
-          {ticket.extras && ticket.extras.length > 0
+          {/* {ticket.reservation.extras && ticket.extras.length > 0
             ? renderExtra(ticket.extras[0])
-            : null}
+            : null} */}
         </span>
         <span className={styles.status} style={statusStyle}>
-          {translateStatus(ticket.status)}
+          {translateStatus(ticket.reservation.status)}
         </span>
       </div>
       {ticket.isBusiness ? (
@@ -110,7 +112,11 @@ export const ReservationCard = (ticket: Props) => {
           isModalVisible={isModalVisible}
           loading={loading}
           setIsModalVisible={setIsModalVisible}
-          ticket={ticket}
+          data={{
+            businessName: ticket.reservation.business.name,
+            reservationDate: ticket.reservation.reservationDate?.toString(),
+            status: ticket.reservation.status,
+          }}
         />
       )}
     </AnimatedFromLeft>

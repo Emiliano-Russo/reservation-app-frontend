@@ -1,14 +1,14 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosInstance } from 'axios';
 import { formatQueryParams } from '../utils/formatQuery';
 import { AcceptStatus } from '../interfaces/reservation.interface';
 import { PaginatedResponse, PaginationDto } from '../interfaces/pagination.dto';
-import { Reservation } from '../interfaces/reservation/reservation.interface';
+import { IReservation } from '../interfaces/reservation/reservation.interface';
 
 // Podrías tener un mock para Reservation similar a mock_businessType si lo necesitas.
 // import { mock_reservation } from '../mocks/reservation';
 
 export class ReservationService {
-  private api: any;
+  private api: AxiosInstance;
   constructor(private baseUrl: string) {
     this.api = axios.create({
       baseURL: `${baseUrl}`,
@@ -17,7 +17,7 @@ export class ReservationService {
 
   async getReservations(
     paginated: PaginationDto,
-  ): Promise<PaginatedResponse<Reservation>> {
+  ): Promise<PaginatedResponse<IReservation>> {
     const response: AxiosResponse<any> = await this.api.get(
       `/reservation${formatQueryParams(paginated)}`,
     );
@@ -27,7 +27,7 @@ export class ReservationService {
   async getReservationsByUserId(
     userId: string,
     paginated: PaginationDto,
-  ): Promise<PaginatedResponse<Reservation>> {
+  ): Promise<PaginatedResponse<IReservation>> {
     const response: AxiosResponse<any> = await this.api.get(
       `/reservation?userId=${userId}&${formatQueryParams(paginated)}`,
     );
@@ -37,7 +37,7 @@ export class ReservationService {
   async getReservationsByBusinessId(
     businessId: string,
     paginated: PaginationDto,
-  ): Promise<PaginatedResponse<Reservation>> {
+  ): Promise<PaginatedResponse<IReservation>> {
     const response: AxiosResponse<any> = await this.api.get(
       `/reservation?businessId=${businessId}&${formatQueryParams(paginated)}`,
     );
@@ -60,13 +60,9 @@ export class ReservationService {
     return response.data;
   }
 
-  async updateReservation(
-    id: string,
-    createdAt: number,
-    updateReservationDto: any,
-  ): Promise<any> {
+  async updateReservation(id: string, updateReservationDto: any): Promise<any> {
     const response: AxiosResponse<any> = await this.api.patch(
-      `/reservation/${id}/${createdAt}`,
+      `/reservation/${id}`,
       updateReservationDto,
     );
     return response.data;
