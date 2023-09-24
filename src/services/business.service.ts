@@ -75,10 +75,13 @@ export class BusinessService {
   async getBusinessesByTypeId(
     typeId: string,
     paginated: PaginationDto,
+    search: string = '',
   ): Promise<PaginatedResponse<IBusiness>> {
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
-      `/business?typeId=${typeId}&${formatQueryParams(paginated)}`,
+      `/business?typeId=${typeId}&${formatQueryParams(
+        paginated,
+      )}&search=${search}`,
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       },
