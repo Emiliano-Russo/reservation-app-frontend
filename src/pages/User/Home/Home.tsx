@@ -12,7 +12,6 @@ import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
 import { withAuth } from '../../../wrappers/WithAuth';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBusinessTypes } from '../../../redux/businessSlice';
-
 export const Home = withAuth(
   withPageLayout(() => {
     const userState = useSelector((state: any) => state.user.user);
@@ -21,6 +20,8 @@ export const Home = withAuth(
     );
     const dispatch = useDispatch();
 
+    const [searchValue, setSearchValue] = useState(''); // 1. Estado local para el valor de búsqueda
+
     useEffect(() => {
       const service = new BusinessTypeService(REACT_APP_BASE_URL);
       service
@@ -28,12 +29,15 @@ export const Home = withAuth(
         .then((data) => {
           console.log('data: ', data);
           dispatch(setBusinessTypes(data.items));
-          setBusinessTypes(data.items);
         })
         .catch((error) =>
           console.error('Error fetching business types:', error),
         );
     }, []);
+
+    const filteredBusinessTypes = businessTypeList.filter((type: any) => {
+      return type.name.toLowerCase().includes(searchValue.toLowerCase()); // 2. Filtrar la lista basada en el valor de búsqueda
+    });
 
     return (
       <>
@@ -49,14 +53,22 @@ export const Home = withAuth(
             <p className={styles.greetingText}>Hola, {userState.name}!</p>
           </div>
         </FadeFromTop>
-        <SearchInput />
+        <SearchInput
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)} // Actualizar el estado local con el valor del input
+        />
         {businessTypeList.length == 0 && (
           <Spin style={{ marginTop: '100px' }} />
         )}
         <div className={styles.businessTypeContainer}>
-          {businessTypeList.map((val: any, index: number) => (
-            <BusinessTypeCard {...val} index={index} />
-          ))}
+          {filteredBusinessTypes.map(
+            (
+              val: any,
+              index: number, // 3. Renderizar solo los elementos filtrados
+            ) => (
+              <BusinessTypeCard {...val} index={index} />
+            ),
+          )}
         </div>
       </>
     );

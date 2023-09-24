@@ -21,8 +21,15 @@ export const BusinessTypeCard = (val: Props) => {
         nav('/business/' + val.id);
       }}
     >
-      <img className={styles.cardImage} src={val.icon} alt={val.name} />
-      <p className={styles.cardText}>{val.name}</p>
+      <div
+        style={{
+          maxWidth: '200px',
+          height: '100px',
+        }}
+      >
+        <img className={styles.cardImage} src={val.icon} alt={val.name} />
+        <p className={styles.cardText}>{val.name}</p>
+      </div>
     </AnimatedFromLeft>
   );
 };
