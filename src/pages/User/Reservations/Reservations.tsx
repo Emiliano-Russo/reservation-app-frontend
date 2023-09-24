@@ -24,25 +24,12 @@ const Reservations = withAuth(
     const [page, setPage] = useState(1);
     const [hasMoreData, setHasMoreData] = useState(true);
     const [loading, setLoading] = useState(true);
+    const [searchValue, setSearchValue] = useState('');
 
     const containerRef = useRef<any>(null); // Referencia al contenedor
 
     useEffect(() => {
-      const getReservations = async () => {
-        if (hasMoreData == false) return;
-        const reservations = await reservationService.getReservationsByUserId(
-          user.id,
-          {
-            limit: limitPerPage,
-            page: page,
-          },
-        );
-        setLoading(false);
-        if (reservations.items.length > 0)
-          setReservations((prev: any) => [...prev, ...reservations.items]);
-        else setHasMoreData(false);
-      };
-      getReservations();
+      getReservations(searchValue);
     }, [page]);
 
     useEffect(() => {
@@ -56,6 +43,28 @@ const Reservations = withAuth(
         }
       };
     }, []);
+
+    useEffect(() => {
+      setPage(1);
+      setReservations([]);
+      getReservations(searchValue);
+    }, [searchValue]);
+
+    const getReservations = async (searchTerm = '') => {
+      if (hasMoreData == false) return;
+      const reservations = await reservationService.getReservationsByUserId(
+        user.id,
+        {
+          limit: limitPerPage,
+          page: page,
+        },
+        searchTerm,
+      );
+      setLoading(false);
+      if (reservations.items.length > 0)
+        setReservations((prev: any) => [...prev, ...reservations.items]);
+      else setHasMoreData(false);
+    };
 
     const handleScroll = (e) => {
       const container = e.target;
@@ -95,8 +104,11 @@ const Reservations = withAuth(
             <button>Filtros</button>
           </div>
         </FadeFromTop>
-        <SearchInput />
-
+        <SearchInput
+          placeholder="Buscar reservas..."
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
         {loading && <Spin style={{ marginTop: '100px' }} />}
         {!loading && reservations.length == 0 && (
           <p style={{ textAlign: 'center' }}>Sin Reservas</p>

@@ -27,9 +27,12 @@ export class ReservationService {
   async getReservationsByUserId(
     userId: string,
     paginated: PaginationDto,
+    search: string = '',
   ): Promise<PaginatedResponse<IReservation>> {
     const response: AxiosResponse<any> = await this.api.get(
-      `/reservation?userId=${userId}&${formatQueryParams(paginated)}`,
+      `/reservation?userId=${userId}&${formatQueryParams(
+        paginated,
+      )}&search=${search}`,
     );
     return response.data;
   }
@@ -37,9 +40,12 @@ export class ReservationService {
   async getReservationsByBusinessId(
     businessId: string,
     paginated: PaginationDto,
+    search: string = '',
   ): Promise<PaginatedResponse<IReservation>> {
     const response: AxiosResponse<any> = await this.api.get(
-      `/reservation?businessId=${businessId}&${formatQueryParams(paginated)}`,
+      `/reservation?businessId=${businessId}&${formatQueryParams(
+        paginated,
+      )}&search=${search}`,
     );
     return response.data;
   }

@@ -32,12 +32,6 @@ export const BusinessList = withPageLayout(
     const nav = useNavigate();
 
     useEffect(() => {
-      async function fetchBusinessTypeName() {
-        if (!type) return;
-        const businessType = await businessTypeService.getBusinessType(type);
-        setBusinessTypeName(businessType.name);
-      }
-
       fetchBusinessTypeName();
     }, [type]);
 
@@ -80,6 +74,12 @@ export const BusinessList = withPageLayout(
         return;
       }
       setBusinesses((prev) => [...prev, ...res.items]);
+    }
+
+    async function fetchBusinessTypeName() {
+      if (!type) return;
+      const businessType = await businessTypeService.getBusinessType(type);
+      setBusinessTypeName(businessType.name);
     }
 
     const handleScroll = (e) => {

@@ -15,7 +15,6 @@ import { ReservationStatus } from '../../../interfaces/reservation.status';
 import { useDynamoLazyLoading } from '../../../hooks/useDynamoLazyLoading';
 
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
-
 export const BusinessReservation = withPageLayout(
   () => {
     const currentBusinessID: string = useSelector(
@@ -25,30 +24,12 @@ export const BusinessReservation = withPageLayout(
     const [page, setPage] = useState(1);
     const [hasMoreData, setHasMoreData] = useState(true);
     const [loading, setLoading] = useState(true);
+    const [searchValue, setSearchValue] = useState(''); // Añadir estado para el valor de búsqueda
 
     const containerRef = useRef<any>(null); // Referencia al contenedor
 
     useEffect(() => {
-      const getReservations = async () => {
-        setLoading(true);
-        reservationService
-          .getReservationsByBusinessId(currentBusinessID, {
-            limit: 10,
-            page: page,
-          })
-          .then((res) => {
-            if (res.items.length > 0)
-              setReservations((prev: any) => [...prev, ...res.items]);
-            else setHasMoreData(false);
-          })
-          .catch((err) => {
-            message.error('Error');
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      };
-      getReservations();
+      getReservations(searchValue); // Pasar el valor de búsqueda
     }, [page]);
 
     useEffect(() => {
@@ -62,6 +43,36 @@ export const BusinessReservation = withPageLayout(
         }
       };
     }, []);
+
+    useEffect(() => {
+      setPage(1);
+      setReservations([]);
+      getReservations(searchValue); // Actualizar las reservas cuando cambia el valor de búsqueda
+    }, [searchValue]);
+
+    const getReservations = async (searchTerm = '') => {
+      setLoading(true);
+      reservationService
+        .getReservationsByBusinessId(
+          currentBusinessID,
+          {
+            limit: 10,
+            page: page,
+          },
+          searchTerm,
+        ) // Pasar el término de búsqueda al servicio
+        .then((res) => {
+          if (res.items.length > 0)
+            setReservations((prev: any) => [...prev, ...res.items]);
+          else setHasMoreData(false);
+        })
+        .catch((err) => {
+          message.error('Error');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
 
     const handleScroll = (e) => {
       const container = e.target;
@@ -100,7 +111,11 @@ export const BusinessReservation = withPageLayout(
             <h4>Reservas Solicitadas</h4>
           </div>
         </GrowsFromLeft>
-        <SearchInput />
+        <SearchInput
+          placeholder="Buscar reservas..."
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
         {loading && <Spin style={{ marginTop: '100px' }} />}
         <div className={styles.ticketsContainer} ref={containerRef}>
           {reservations.map((reservation, index) => {
