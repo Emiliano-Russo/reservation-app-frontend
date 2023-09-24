@@ -1,6 +1,6 @@
 import { Button } from 'antd';
-import { AcceptStatus } from '../../interfaces/reservation.interface';
 import { formatDate } from '../../utils/dateFormat';
+import { AcceptStatus } from '../../interfaces/reservation/negotiable.interace';
 
 export const UserFooter = ({ props, loading, responseBusinessProposal }) => {
   return (

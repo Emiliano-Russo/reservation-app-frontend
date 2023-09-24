@@ -24,6 +24,7 @@ import {
   IBusiness,
 } from '../../../interfaces/business/business.interface';
 import { weekDayToSpanish } from '../../../utils/dateFormat';
+import { IReservation } from '../../../interfaces/reservation/reservation.interface';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -35,61 +36,19 @@ const userService = new UserService(REACT_APP_BASE_URL);
 export const Business = withPageLayout(
   () => {
     const { id } = useParams<any>(); // Obtener el id desde la URL
+    if (id === undefined) return <h1>No Business Found</h1>;
     const nav = useNavigate();
     const [business, setBusiness] = useState<IBusiness | null>(null);
-    const [reservations, setReservations] = useState<any>(null);
-    const [detailedReviews, setDetailedReviews] = useState<any[]>([]);
+    const [reservations, setReservations] = useState<IReservation[]>([]);
+    const [reservationWithReview, setReservationWithReview] = useState<
+      IReservation[]
+    >([]);
+    // console.log('reservationWithReview ', reservationWithReview);
+    console.log('RESERVATIONS: ', reservations);
 
     useEffect(() => {
-      async function fetchBusinessDetails() {
-        try {
-          if (id) {
-            const businessData = await businessService.getBusiness(id);
-            setBusiness(businessData);
-            const reservationData =
-              await reservationService.getReservationsByBusinessId(
-                businessData.id,
-                { limit: 5, page: 1 },
-              );
-            setReservations(reservationData.items);
-          }
-        } catch (error) {
-          console.error('Error fetching business data:', error);
-        }
-      }
-
       fetchBusinessDetails();
     }, [id]);
-
-    useEffect(() => {
-      if (reservations && reservations.length > 0) {
-        const fetchUserDetailsForReviews = async () => {
-          try {
-            const userPromises = reservations.map(
-              (reservation: any) => userService.getUser(reservation.userId), // Asumo que en 'review' hay un 'userId' que representa el autor de la reseña.
-            );
-
-            const userDetailsArray = await Promise.all(userPromises);
-            console.log('tenemos todos los user: ', userDetailsArray);
-            const mergedDetails = reservations.map(
-              (review: any, index: number) => {
-                return {
-                  ...review,
-                  author: userDetailsArray[index].name,
-                  avatar: userDetailsArray[index].profileImage, // Asumo que la respuesta de 'getUser' contiene 'name' y 'profileImage'. Ajusta los nombres de acuerdo a tu API real.
-                };
-              },
-            );
-
-            setDetailedReviews(mergedDetails);
-          } catch (error) {
-            console.error('Error fetching user details for reviews:', error);
-          }
-        };
-
-        fetchUserDetailsForReviews();
-      }
-    }, [reservations]);
 
     if (business == null) {
       return (
@@ -97,6 +56,26 @@ export const Business = withPageLayout(
           <Spin style={{ marginTop: '100px' }} />
         </>
       );
+    }
+
+    async function fetchBusinessDetails() {
+      try {
+        if (id) {
+          const businessData = await businessService.getBusiness(id);
+          setBusiness(businessData);
+          const reservationData =
+            await reservationService.getReservationsByBusinessId(
+              businessData.id,
+              { limit: 5, page: 1 },
+            );
+          const items = reservationData.items;
+          setReservations(items);
+          const listReview = items.filter((val) => val.rating != null);
+          setReservationWithReview(listReview);
+        }
+      } catch (error) {
+        console.error('Error fetching business data:', error);
+      }
     }
 
     function formatDateToSpanish(dateString) {
@@ -194,12 +173,12 @@ export const Business = withPageLayout(
 
               <TabPane tab="Reseñas" key="2">
                 <List
-                  dataSource={detailedReviews}
-                  renderItem={(item: any) => (
+                  dataSource={reservationWithReview}
+                  renderItem={(item: IReservation) => (
                     <div className={styles.review}>
                       <div className={styles.reviewHeader}>
-                        <Avatar src={item.avatar} />
-                        <span className={styles.author}>{item.author}</span>
+                        <Avatar src={item.user.profileImage} />
+                        <span className={styles.author}>{item.user.name}</span>
                         <Rate disabled defaultValue={item.rating} />
                       </div>
                       <p>{item.comment}</p>

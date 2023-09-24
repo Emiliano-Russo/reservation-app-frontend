@@ -1,15 +1,15 @@
 import { message, TimePicker, Button } from 'antd';
 import { useState } from 'react';
 import { REACT_APP_BASE_URL } from '../../../env';
-import {
-  IReservation,
-  AcceptStatus,
-} from '../../interfaces/reservation.interface';
 import { ReservationStatus } from '../../interfaces/reservation.status';
 import { ReservationService } from '../../services/reservation.service';
 import { convertToJSDate, formatDate } from '../../utils/dateFormat';
 import DatePicker from 'react-datepicker';
 import { es } from 'date-fns/locale';
+import {
+  AcceptStatus,
+  IReservation,
+} from '../../interfaces/reservation/reservation.interface';
 
 interface Props {
   reservation: IReservation;

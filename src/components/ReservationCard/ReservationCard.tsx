@@ -10,8 +10,8 @@ import { REACT_APP_BASE_URL } from '../../../env';
 import { ReservationService } from '../../services/reservation.service';
 import { BusinessModal } from './BusinessModal';
 import { UserModal } from './UserModal';
-import { IReservation } from '../../interfaces/reservation.interface';
 import { message } from 'antd';
+import { IReservation } from '../../interfaces/reservation/reservation.interface';
 
 interface Props {
   reservation: IReservation;

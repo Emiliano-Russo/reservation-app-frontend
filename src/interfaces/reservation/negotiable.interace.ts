@@ -8,8 +8,8 @@ export enum AcceptStatus {
 
 export interface INegotiable {
   id: string;
-  dateRange: Range;
-  timeRange: Range;
+  dateRange: IRange;
+  timeRange: IRange;
   businessProposedSchedule: string;
   acceptedBusinessProposed: AcceptStatus;
 }

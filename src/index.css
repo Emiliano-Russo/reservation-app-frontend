@@ -74,3 +74,15 @@ div::-webkit-scrollbar {
   padding: 5px;
   max-width: 190px;
 }
+
+.ant-tabs-content-holder {
+  overflow-y: scroll;
+  max-height: 25vh;
+}
+
+@media (max-height: 670px) {
+  .ant-tabs-content-holder {
+    overflow-y: scroll;
+    max-height: 15vh;
+  }
+}

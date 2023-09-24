@@ -10,9 +10,9 @@ import { Spin, message } from 'antd';
 import styles from './Reservations.module.css';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 import { NegotiableCard } from '../../../components/NegotiableCard/NegotiableCard';
-import { IReservation } from '../../../interfaces/reservation.interface';
 import { ReservationStatus } from '../../../interfaces/reservation.status';
 import { useDynamoLazyLoading } from '../../../hooks/useDynamoLazyLoading';
+import { IReservation } from '../../../interfaces/reservation/reservation.interface';
 
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
 export const BusinessReservation = withPageLayout(

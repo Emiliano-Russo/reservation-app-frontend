@@ -1,8 +1,10 @@
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
 import { formatQueryParams } from '../utils/formatQuery';
-import { AcceptStatus } from '../interfaces/reservation.interface';
 import { PaginatedResponse, PaginationDto } from '../interfaces/pagination.dto';
-import { IReservation } from '../interfaces/reservation/reservation.interface';
+import {
+  AcceptStatus,
+  IReservation,
+} from '../interfaces/reservation/reservation.interface';
 
 // Podrías tener un mock para Reservation similar a mock_businessType si lo necesitas.
 // import { mock_reservation } from '../mocks/reservation';

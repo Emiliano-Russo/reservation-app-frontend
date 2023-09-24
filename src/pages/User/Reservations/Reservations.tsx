@@ -11,7 +11,7 @@ import { withAuth } from '../../../wrappers/WithAuth';
 import { useSelector } from 'react-redux';
 import { ReservationStatus } from '../../../interfaces/reservation.status';
 import { NegotiableCard } from '../../../components/NegotiableCard/NegotiableCard';
-import { IReservation } from '../../../interfaces/reservation.interface';
+import { IReservation } from '../../../interfaces/reservation/reservation.interface';
 
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
 

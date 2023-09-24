@@ -1,4 +1,4 @@
-import { translateForUserAcceptStatus } from '../../interfaces/reservation.interface';
+import { translateForUserAcceptStatus } from '../../interfaces/reservation/reservation.interface';
 import { formatOnlyDate, formatTime } from '../../utils/dateFormat';
 
 export const BasicInfo = ({ props }) => {

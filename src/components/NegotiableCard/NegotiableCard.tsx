@@ -1,10 +1,5 @@
 import { useState } from 'react';
 import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
-import {
-  AcceptStatus,
-  IReservation,
-  translateForUserAcceptStatus,
-} from '../../interfaces/reservation.interface';
 import styles from '../ReservationCard/ReservationCard.module.css';
 import { Modal, message } from 'antd';
 import { ReservationService } from '../../services/reservation.service';
@@ -13,6 +8,11 @@ import { UserFooter } from './UserFooter';
 import { BusinessFooter } from './BusinessFooter';
 import { BasicInfo } from './BasicInfo';
 import { ReservationStatus } from '../../interfaces/reservation.status';
+import { AcceptStatus } from '../../interfaces/reservation/negotiable.interace';
+import {
+  IReservation,
+  translateForUserAcceptStatus,
+} from '../../interfaces/reservation/reservation.interface';
 
 interface Props {
   reservation: IReservation;
