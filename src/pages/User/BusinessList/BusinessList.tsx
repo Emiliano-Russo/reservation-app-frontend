@@ -110,6 +110,16 @@ export const BusinessList = withPageLayout(
 
         {loading && <Spin style={{ marginTop: '100px' }} />}
         <div className={styles.businessContainer} ref={containerRef}>
+          {filteredBusinesses.length == 0 &&
+            searchValue.length == 0 &&
+            !loading && (
+              <p style={{ textAlign: 'center' }}>
+                Estamos en búsqueda de los mejores negocios para esta categoría.
+                <br />
+                ¡Mantente atento!
+              </p>
+            )}
+
           {filteredBusinesses.map((business: any, index) => (
             <AnimatedFromLeft delay={index * 0.1} key={index}>
               <div

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { withGuest } from '../../wrappers/WithGuest';
 import { UserService } from '../../services/user.service';
 import { REACT_APP_BASE_URL } from '../../../env';
-import { Input, Select, Button, message } from 'antd';
+import { Input, Select, Button, message, Modal } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,6 +24,8 @@ export const SignUp = withGuest(() => {
     country: '',
   });
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [userToken, setUserToken] = useState<any>();
 
   useEffect(() => {
     if (userState) {
@@ -43,7 +45,9 @@ export const SignUp = withGuest(() => {
       const tokenRes = res.data.token;
 
       if (res.status === 201) {
-        dispatch(addUserAndToken({ user: userRes, token: tokenRes }));
+        setIsModalVisible(true); // Muestra el modal
+        setUserToken({ user: userRes, token: tokenRes });
+        //dispatch(addUserAndToken({ user: userRes, token: tokenRes }));
       } else {
         message.error('Hubo un error en el registro');
       }
@@ -208,6 +212,34 @@ export const SignUp = withGuest(() => {
           </Button>
         </div>
       </div>
+      <Modal
+        title="¿Qué tipo de usuario eres?"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+        closable={false}
+      >
+        <Button
+          block
+          type="primary"
+          onClick={() => {
+            nav('/business');
+            dispatch(addUserAndToken(userToken));
+          }}
+        >
+          Usuario Corriente
+        </Button>
+        <Button
+          block
+          style={{ marginTop: '10px' }}
+          onClick={() => {
+            dispatch(addUserAndToken(userToken));
+            nav('/create-business');
+          }}
+        >
+          Negocio
+        </Button>
+      </Modal>
     </GrowsFromLeft>
   );
 });
