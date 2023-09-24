@@ -19,7 +19,11 @@ import { FadeFromTop } from '../../../animations/FadeFromTop';
 import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
 import { ReservationService } from '../../../services/reservation.service';
 import { UserService } from '../../../services/user.service';
-import { IBusiness } from '../../../interfaces/business/business.interface';
+import {
+  IAvailability,
+  IBusiness,
+} from '../../../interfaces/business/business.interface';
+import { weekDayToSpanish } from '../../../utils/dateFormat';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -121,6 +125,25 @@ export const Business = withPageLayout(
       return `${day} ${month} ${year} ${hours}:${minutes}`;
     }
 
+    function mapAvailabilityToString(availability: IAvailability[]): string[] {
+      return availability.map((dayAvailability) => {
+        if (!dayAvailability.open || dayAvailability.shifts.length === 0) {
+          return `${weekDayToSpanish(dayAvailability.day)}: Cerrado`;
+        }
+
+        const shifts = dayAvailability.shifts
+          .map((shift) => {
+            return `${shift.openingTime} - ${shift.closingTime}`;
+          })
+          .join(', ');
+
+        return `${weekDayToSpanish(dayAvailability.day)}: ${shifts}`;
+      });
+    }
+
+    // Uso de la función en el componente:
+    const availabilityStrings = mapAvailabilityToString(business.availability);
+
     return (
       <>
         <FadeFromTop>
@@ -186,6 +209,13 @@ export const Business = withPageLayout(
                     </div>
                   )}
                 />
+              </TabPane>
+
+              <TabPane tab="Horarios" key="3">
+                <h4>Horarios</h4>
+                {availabilityStrings.map((dayString, index) => (
+                  <p key={index}>{dayString}</p>
+                ))}
               </TabPane>
             </Tabs>
           </AnimatedFromLeft>

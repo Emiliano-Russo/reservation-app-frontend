@@ -1,3 +1,5 @@
+import { WeekDays } from '../interfaces/weekday.enum';
+
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const hours = date.getHours().toString().padStart(2, '0');
@@ -40,3 +42,45 @@ export const convertToJSDate = (timeStr: string) => {
   date.setHours(hours, minutes, 0, 0);
   return date;
 };
+
+export function weekDayToSpanish(day: WeekDays): string {
+  switch (day) {
+    case WeekDays.Sunday:
+      return 'Domingo';
+    case WeekDays.Monday:
+      return 'Lunes';
+    case WeekDays.Tuesday:
+      return 'Martes';
+    case WeekDays.Wednesday:
+      return 'Miércoles';
+    case WeekDays.Thursday:
+      return 'Jueves';
+    case WeekDays.Friday:
+      return 'Viernes';
+    case WeekDays.Saturday:
+      return 'Sábado';
+    default:
+      return ''; // O puedes lanzar un error si prefieres
+  }
+}
+
+export function mapDayToEnglish(dayInSpanish: string): WeekDays {
+  switch (dayInSpanish) {
+    case 'Domingo':
+      return WeekDays.Sunday;
+    case 'Lunes':
+      return WeekDays.Monday;
+    case 'Martes':
+      return WeekDays.Tuesday;
+    case 'Miércoles':
+      return WeekDays.Wednesday;
+    case 'Jueves':
+      return WeekDays.Thursday;
+    case 'Viernes':
+      return WeekDays.Friday;
+    case 'Sábado':
+      return WeekDays.Saturday;
+    default:
+      throw new Error(`Day ${dayInSpanish} not recognized`);
+  }
+}

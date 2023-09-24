@@ -12,14 +12,13 @@ import { BusinessService } from '../../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import { FadeFromTop } from '../../../animations/FadeFromTop';
 import { useSelector } from 'react-redux';
+import { CheckCircleOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import {
   IAvailability,
   IShift,
-  WeekDays,
-  mapDayToEnglish,
-} from '../../../interfaces/interfaces';
-import { CheckCircleOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+} from '../../../interfaces/business/business.interface';
+import { mapDayToEnglish } from '../../../utils/dateFormat';
 
 export const CreateBusiness = withPageLayout(
   () => {
@@ -152,6 +151,7 @@ export const CreateBusiness = withPageLayout(
     function transformToAvailability(reservationDetails: any): IAvailability[] {
       const shifts: IShift[] = [
         {
+          id: 'none',
           openingTime: reservationDetails.openingTime,
           closingTime: reservationDetails.closingTime,
         },

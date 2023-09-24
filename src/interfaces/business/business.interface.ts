@@ -1,4 +1,4 @@
-import { IShift, WeekDays } from '../interfaces';
+import { WeekDays } from '../weekday.enum';
 
 export enum BusinessStatus {
   Pending = 'Pending',
@@ -12,7 +12,7 @@ export interface IMap {
   pointY: string;
 }
 
-export interface iShift {
+export interface IShift {
   id: string;
   openingTime: string;
   closingTime: string;
