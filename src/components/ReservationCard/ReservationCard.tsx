@@ -35,7 +35,6 @@ export const renderExtra = (extra) => {
 };
 
 export const ReservationCard = (ticket: Props) => {
-  console.log('ticket props: ', ticket);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const statusStyle = getStatusColor(ticket.reservation.status);

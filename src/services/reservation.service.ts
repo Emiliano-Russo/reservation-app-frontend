@@ -5,6 +5,7 @@ import {
   AcceptStatus,
   IReservation,
 } from '../interfaces/reservation/reservation.interface';
+import { ReservationStatus } from '../interfaces/reservation.status';
 
 // Podrías tener un mock para Reservation similar a mock_businessType si lo necesitas.
 // import { mock_reservation } from '../mocks/reservation';
@@ -30,11 +31,14 @@ export class ReservationService {
     userId: string,
     paginated: PaginationDto,
     search: string = '',
+    start: string = '',
+    end: string = '',
+    status: string = '',
   ): Promise<PaginatedResponse<IReservation>> {
     const response: AxiosResponse<any> = await this.api.get(
       `/reservation?userId=${userId}&${formatQueryParams(
         paginated,
-      )}&search=${search}`,
+      )}&search=${search}&startDate=${start}&endDate=${end}&status=${status}`,
     );
     return response.data;
   }
@@ -43,11 +47,19 @@ export class ReservationService {
     businessId: string,
     paginated: PaginationDto,
     search: string = '',
+    start: string = '',
+    end: string = '',
+    status: string = '',
   ): Promise<PaginatedResponse<IReservation>> {
+    console.log(
+      `/reservation?businessId=${businessId}&${formatQueryParams(
+        paginated,
+      )}&search=${search}&startDate=${start}&endDate=${end}&status=${status}`,
+    );
     const response: AxiosResponse<any> = await this.api.get(
       `/reservation?businessId=${businessId}&${formatQueryParams(
         paginated,
-      )}&search=${search}`,
+      )}&search=${search}&startDate=${start}&endDate=${end}&status=${status}`,
     );
     return response.data;
   }

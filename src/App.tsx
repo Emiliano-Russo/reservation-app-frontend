@@ -25,7 +25,7 @@ import { SignUp } from './pages/SignUp/SignUp';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import { Home } from './pages/User/Home/Home';
-import Reservations from './pages/User/Reservations/Reservations';
+import { UserReservations } from './pages/User/Reservations/Reservations';
 import { Profile } from './pages/User/Profile/Profile';
 import { Settings } from './pages/User/Settings/Settings';
 import { Business } from './pages/User/Business/Business';
@@ -34,7 +34,7 @@ import { NewReservation } from './pages/User/NewReservation/NewReservation';
 import { CreateBusiness } from './pages/User/CreateBusiness/_index';
 import { BusinessProfile } from './pages/Entrepreneur/Profile/Profile';
 import { BusinessHome } from './pages/Entrepreneur/Home/Home';
-import { BusinessReservation } from './pages/Entrepreneur/Reservations/Reservations';
+import { BusinessReservations } from './pages/Entrepreneur/Reservations/Reservations';
 
 setupIonicReact();
 
@@ -47,22 +47,25 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/reservations" element={<Reservations />} />
+            <Route path="/reservations" element={<UserReservations />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/business/:type/:id" element={<Business />} />
+            <Route path="/new-reservation/:id" element={<NewReservation />} />
             <Route path="/business/:type" element={<BusinessList />} />
+            {/* business */}
             <Route
               path="/businessPrivateProfile"
               element={<BusinessProfile />}
             />
             <Route
               path="/businessReservation"
-              element={<BusinessReservation />}
+              element={<BusinessReservations />}
             />
             <Route path="/businessHome" element={<BusinessHome />} />
-            <Route path="/new-reservation/:id" element={<NewReservation />} />
+
             <Route path="/create-business" element={<CreateBusiness />} />
+            {/* end business */}
             <Route path="*" element={<Home />} />
           </Routes>
         </BrowserRouter>

@@ -1,177 +1,45 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Spin, message } from 'antd';
-import { ReservationCard } from '../../../components/ReservationCard/ReservationCard';
-import { withPageLayout } from '../../../wrappers/WithPageLayout';
-import SearchInput from '../../../components/SearchInput/SearchInput';
-import styles from './Reservations.module.css';
 import { ReservationService } from '../../../services/reservation.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
-import { FadeFromTop } from '../../../animations/FadeFromTop';
-import { withAuth } from '../../../wrappers/WithAuth';
 import { useSelector } from 'react-redux';
-import { ReservationStatus } from '../../../interfaces/reservation.status';
-import { NegotiableCard } from '../../../components/NegotiableCard/NegotiableCard';
-import { IReservation } from '../../../interfaces/reservation/reservation.interface';
+import { ReservationList } from '../../../components/ReservationList/ReservationList';
+import { withPageLayout } from '../../../wrappers/WithPageLayout';
 
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
 
-const limitPerPage = 7;
+export const UserReservations = withPageLayout(
+  () => {
+    const userId = useSelector((state: any) => state.user.user.id);
 
-const Reservations = withAuth(
-  withPageLayout(() => {
-    const user = useSelector((state: any) => state.user.user);
-    const [reservations, setReservations] = useState<IReservation[]>([]);
-    const [page, setPage] = useState(1);
-    const [hasMoreData, setHasMoreData] = useState(true);
-    const [loading, setLoading] = useState(true);
-    const [searchValue, setSearchValue] = useState('');
-
-    const containerRef = useRef<any>(null); // Referencia al contenedor
-
-    useEffect(() => {
-      getReservations(searchValue);
-    }, [page]);
-
-    useEffect(() => {
-      const container = containerRef.current;
-      if (container) {
-        container.addEventListener('scroll', handleScroll);
-      }
-      return () => {
-        if (container) {
-          container.removeEventListener('scroll', handleScroll);
-        }
-      };
-    }, []);
-
-    useEffect(() => {
-      setPage(1);
-      setReservations([]);
-      getReservations(searchValue);
-    }, [searchValue]);
-
-    const getReservations = async (searchTerm = '') => {
-      if (hasMoreData == false) return;
-      const reservations = await reservationService.getReservationsByUserId(
-        user.id,
-        {
-          limit: limitPerPage,
-          page: page,
-        },
+    const getReservationsByUserId = (
+      id,
+      options,
+      searchTerm,
+      start,
+      end,
+      status,
+    ) => {
+      return reservationService.getReservationsByUserId(
+        id,
+        options,
         searchTerm,
+        start,
+        end,
+        status,
       );
-      setLoading(false);
-      console.log('reservations: ', reservations);
-      if (reservations.items.length > 0) {
-        setReservations((prev: any) => {
-          const combined = [...prev, ...reservations.items];
-          return combined.filter(
-            (reservation, index, self) =>
-              index === self.findIndex((r) => r.id === reservation.id),
-          );
-        });
-      } else {
-        setHasMoreData(false);
-      }
-    };
-
-    const handleScroll = (e) => {
-      const container = e.target;
-      if (
-        container.scrollHeight - container.scrollTop ===
-        container.clientHeight
-      ) {
-        // Cargar más datos
-        if (hasMoreData) setPage((prev) => prev + 1);
-        else setLoading(false);
-      }
-    };
-
-    const changeStatusReservation = (
-      reservationId: string,
-      status: ReservationStatus,
-    ) => {
-      // Encuentra el índice del ticket que ha sido cancelado
-      const index = reservations.findIndex(
-        (res: any) => res.id === reservationId,
-      );
-
-      // Crea una copia del array de reservaciones
-      const updatedReservations: any = [...reservations];
-
-      // Actualiza el estado del ticket cancelado
-      if (index !== -1) {
-        updatedReservations[index].status = status;
-      }
-
-      // Actualiza el estado con el nuevo array
-      setReservations(updatedReservations);
-    };
-
-    const addRateReservation = (
-      id: string,
-      rating: number,
-      comment: string,
-    ) => {
-      // Encuentra el índice del ticket que ha sido cancelado
-      const index = reservations.findIndex((res: any) => res.id === id);
-
-      // Crea una copia del array de reservaciones
-      const updatedReservations = [...reservations];
-
-      // Actualiza el estado del ticket cancelado
-      if (index !== -1) {
-        updatedReservations[index].rating = rating;
-        updatedReservations[index].comment = comment;
-      }
-
-      // Actualiza el estado con el nuevo array
-      setReservations(updatedReservations);
     };
 
     return (
       <>
-        <FadeFromTop>
-          <div className={styles.header}>
-            <p className={styles.headerText}>Reservas Solicitadas</p>
-            <button>Filtros</button>
-          </div>
-        </FadeFromTop>
-        <SearchInput
-          placeholder="Buscar reservas..."
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+        <ReservationList
+          id={userId}
+          isBusiness={false}
+          getReservationsBy={getReservationsByUserId}
         />
-        {loading && <Spin style={{ marginTop: '100px' }} />}
-        {!loading && reservations.length == 0 && (
-          <p style={{ textAlign: 'center' }}>Sin Reservas</p>
-        )}
-        <div className={styles.ticketsContainer} ref={containerRef}>
-          {reservations.map((reservation: any, index: number) => {
-            if (reservation.negotiable)
-              return (
-                <NegotiableCard
-                  index={index}
-                  isBusiness={false}
-                  reservation={reservation}
-                  setReservations={setReservations}
-                />
-              );
-            else
-              return (
-                <ReservationCard
-                  reservation={reservation}
-                  index={index}
-                  changeStatusReservation={changeStatusReservation}
-                  isBusiness={false}
-                  addRateReservation={addRateReservation}
-                />
-              );
-          })}
-        </div>
       </>
     );
-  }, '0px'),
+  },
+  '0px',
+  true,
+  false,
 );
-
-export default Reservations;
