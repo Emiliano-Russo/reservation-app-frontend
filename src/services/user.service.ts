@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { UpdateUserDto } from '../interfaces/user/user.interface';
 
 //This users services is made for http request and nothing more...
 export class UserService {
@@ -41,6 +42,34 @@ export class UserService {
         headers: { Authorization: `Bearer ${jwtToken}` },
       },
     );
+    return response.data;
+  }
+
+  // user.service.ts
+  public async updateUser(
+    userId: string,
+    userData: UpdateUserDto,
+  ): Promise<any> {
+    const formData = new FormData();
+
+    if (userData.name) formData.append('name', userData.name);
+    if (userData.email) formData.append('email', userData.email);
+    if (userData.phone) formData.append('phone', userData.phone);
+    if (userData.civilIdDoc) formData.append('civilIdDoc', userData.civilIdDoc);
+
+    if (userData.userImage) {
+      formData.append(
+        'profileImage',
+        userData.userImage,
+        userData.userImage.name,
+      );
+    }
+
+    const response = await this.api.patch(`/user/${userId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   }
 }

@@ -14,13 +14,13 @@ import { ConfirmationModal } from './ConfirmationModal';
 import { useBusinessDetails } from '../../../hooks/useBusinessDetails';
 import { SingleStepReservation } from './SingleStepReservation';
 import { ReservationType } from './ReservationType';
-import { IExtra, INegotiable } from '../../../interfaces/reservation.interface';
+import { INegotiable } from '../../../interfaces/reservation/negotiable.interace';
 
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
 
 export interface ControlValue {
   date?: Date;
-  extras: IExtra[];
+  extras: any[];
   negotiable?: INegotiable;
 }
 

@@ -12,3 +12,12 @@ export interface IUser {
   emailVerified: boolean;
   lastLogin: Date;
 }
+
+// updateUser.dto.ts
+export interface UpdateUserDto {
+  name?: string;
+  email?: string;
+  phone?: string;
+  civilIdDoc?: string;
+  userImage?: File;
+}

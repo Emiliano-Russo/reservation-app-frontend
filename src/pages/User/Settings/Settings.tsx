@@ -21,7 +21,14 @@ export const Settings = withAuth(
             <BackNavigationHeader title={'Ajustes'} />
           </FadeFromTop>
           <FadeFromTop>
-            <Button className={styles.button}>Editar Datos</Button>
+            <Button
+              className={styles.button}
+              onClick={() => {
+                nav('/edit-user-data');
+              }}
+            >
+              Editar Datos
+            </Button>
             <Button
               className={styles.button}
               onClick={() => {

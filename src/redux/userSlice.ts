@@ -2,13 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '../interfaces/user/user.interface';
 
 interface UpdateStringPropertyAction {
-  property: 'name' | 'username' | 'email' | 'bio' | 'token'; // Added 'token' here
+  property:
+    | 'name'
+    | 'email'
+    | 'token'
+    | 'phone'
+    | 'civilIdDoc'
+    | 'profileImage';
   value: string;
-}
-
-interface UpdateArrayPropertyAction {
-  property: 'followers' | 'following' | 'posts' | 'chats';
-  value: string[];
 }
 
 interface IUserState {
@@ -80,29 +81,9 @@ const userSlice = createSlice({
         };
       }
     },
-    updateArrayProperty(
-      state,
-      action: PayloadAction<UpdateArrayPropertyAction>,
-    ) {
-      if (state.user) {
-        const newUser = {
-          ...state.user,
-          [action.payload.property]: action.payload.value,
-        };
-        localStorage.setItem('user', JSON.stringify(newUser));
-        return {
-          ...state,
-          user: newUser,
-        };
-      }
-    },
   },
 });
 
-export const {
-  addUserAndToken,
-  removeUserAndToken,
-  updateStringProperty,
-  updateArrayProperty,
-} = userSlice.actions;
+export const { addUserAndToken, removeUserAndToken, updateStringProperty } =
+  userSlice.actions;
 export default userSlice.reducer;

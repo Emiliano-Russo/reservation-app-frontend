@@ -23,6 +23,7 @@ import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
 import { ModalAccountChanger } from '../../../components/ModalAccountChanger/ModalAccountChanger';
 import { setBusinessList } from '../../../redux/businessSlice';
 import { IBusiness } from '../../../interfaces/business/business.interface';
+import { RootState } from '../../../redux/store';
 
 interface IconInfo {
   icon: React.ReactNode;
