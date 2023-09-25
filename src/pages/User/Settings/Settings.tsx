@@ -30,14 +30,14 @@ export const Settings = withAuth(
             >
               Abrir mi Negocio
             </Button>
-            <Button className={styles.button}>Notificaciones</Button>
-            <Button className={styles.button}>Idioma y Región</Button>
-            <Button className={styles.button}>Preferencias de Reserva</Button>
-            <Button className={styles.button}>Métodos de Pago</Button>
-            <Button className={styles.button}>Seguridad y Acceso</Button>
+            {/* <Button className={styles.button}>Notificaciones</Button> */}
+            <Button className={styles.button}>Región</Button>
+            {/* <Button className={styles.button}>Preferencias de Reserva</Button> */}
+            {/* <Button className={styles.button}>Métodos de Pago</Button> */}
+            {/* <Button className={styles.button}>Seguridad y Acceso</Button> */}
             <Button className={styles.button}>Ayuda y Soporte</Button>
             <Button className={styles.button}>Acerca De</Button>
-            <Button className={styles.button}>Personalización</Button>
+            {/* <Button className={styles.button}>Personalización</Button> */}
             <Button
               danger
               className={styles.button}

@@ -166,7 +166,11 @@ export const Business = withPageLayout(
             </div>
           </FadeFromTop>
           <AnimatedFromLeft>
-            <Tabs defaultActiveKey="1" className={styles.businessTabs}>
+            <Tabs
+              id="BusinessTabs"
+              defaultActiveKey="1"
+              className={styles.businessTabs}
+            >
               <TabPane tab="Detalles" key="1">
                 <Paragraph>{business.description}</Paragraph>
               </TabPane>

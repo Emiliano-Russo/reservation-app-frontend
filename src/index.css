@@ -75,13 +75,13 @@ div::-webkit-scrollbar {
   max-width: 190px;
 }
 
-.ant-tabs-content-holder {
+#BusinessTabs .ant-tabs-content-holder {
   overflow-y: scroll;
   max-height: 25vh;
 }
 
 @media (max-height: 670px) {
-  .ant-tabs-content-holder {
+  #BusinessTabs .ant-tabs-content-holder {
     overflow-y: scroll;
     max-height: 15vh;
   }
