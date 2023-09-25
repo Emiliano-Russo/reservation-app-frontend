@@ -61,9 +61,18 @@ const Reservations = withAuth(
         searchTerm,
       );
       setLoading(false);
-      if (reservations.items.length > 0)
-        setReservations((prev: any) => [...prev, ...reservations.items]);
-      else setHasMoreData(false);
+      console.log('reservations: ', reservations);
+      if (reservations.items.length > 0) {
+        setReservations((prev: any) => {
+          const combined = [...prev, ...reservations.items];
+          return combined.filter(
+            (reservation, index, self) =>
+              index === self.findIndex((r) => r.id === reservation.id),
+          );
+        });
+      } else {
+        setHasMoreData(false);
+      }
     };
 
     const handleScroll = (e) => {
@@ -94,6 +103,30 @@ const Reservations = withAuth(
       if (index !== -1) {
         updatedReservations[index].status = status;
       }
+
+      // Actualiza el estado con el nuevo array
+      setReservations(updatedReservations);
+    };
+
+    const addRateReservation = (
+      id: string,
+      rating: number,
+      comment: string,
+    ) => {
+      // Encuentra el índice del ticket que ha sido cancelado
+      const index = reservations.findIndex((res: any) => res.id === id);
+
+      // Crea una copia del array de reservaciones
+      const updatedReservations = [...reservations];
+
+      // Actualiza el estado del ticket cancelado
+      if (index !== -1) {
+        updatedReservations[index].rating = rating;
+        updatedReservations[index].comment = comment;
+      }
+
+      // Actualiza el estado con el nuevo array
+      setReservations(updatedReservations);
     };
 
     return (
@@ -131,6 +164,7 @@ const Reservations = withAuth(
                   index={index}
                   changeStatusReservation={changeStatusReservation}
                   isBusiness={false}
+                  addRateReservation={addRateReservation}
                 />
               );
           })}

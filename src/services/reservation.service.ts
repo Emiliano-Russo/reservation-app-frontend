@@ -101,4 +101,15 @@ export class ReservationService {
     );
     return response.data;
   }
+
+  async rateReservation(
+    id: string,
+    ratingDto: { rating: number; comment: string },
+  ): Promise<any> {
+    const response: AxiosResponse<any> = await this.api.patch(
+      `/reservation/rate/${id}`,
+      ratingDto,
+    );
+    return response.data;
+  }
 }

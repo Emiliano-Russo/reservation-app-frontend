@@ -62,9 +62,17 @@ export const BusinessReservation = withPageLayout(
           searchTerm,
         ) // Pasar el término de búsqueda al servicio
         .then((res) => {
-          if (res.items.length > 0)
-            setReservations((prev: any) => [...prev, ...res.items]);
-          else setHasMoreData(false);
+          if (res.items.length > 0) {
+            setReservations((prev: any) => {
+              const combined = [...prev, ...res.items];
+              return combined.filter(
+                (reservation, index, self) =>
+                  index === self.findIndex((r) => r.id === reservation.id),
+              );
+            });
+          } else {
+            setHasMoreData(false);
+          }
         })
         .catch((err) => {
           message.error('Error');

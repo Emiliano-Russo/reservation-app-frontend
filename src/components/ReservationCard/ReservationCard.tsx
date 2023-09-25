@@ -21,6 +21,7 @@ interface Props {
     status: ReservationStatus,
   ) => void;
   isBusiness: boolean;
+  addRateReservation: (id: string, rating: number, comment: string) => void;
 }
 
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
@@ -121,6 +122,30 @@ export const ReservationCard = (ticket: Props) => {
             businessName: ticket.reservation.business.name,
             reservationDate: ticket.reservation.reservationDate?.toString(),
             status: ticket.reservation.status,
+            alreadyRated: ticket.reservation.rating != undefined,
+          }}
+          onSendStars={(amount, comment) => {
+            setLoading(true);
+            console.log('amount: ', amount);
+            reservationService
+              .rateReservation(ticket.reservation.id, {
+                rating: amount,
+                comment,
+              })
+              .then((val) => {
+                message.success('Reserva Calificada!');
+                ticket.addRateReservation(
+                  ticket.reservation.id,
+                  amount,
+                  comment,
+                );
+              })
+              .catch((err) => {
+                message.error('Error al Calificar');
+              })
+              .finally(() => {
+                setLoading(false);
+              });
           }}
         />
       )}
