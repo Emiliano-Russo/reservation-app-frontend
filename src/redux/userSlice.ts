@@ -8,7 +8,9 @@ interface UpdateStringPropertyAction {
     | 'token'
     | 'phone'
     | 'civilIdDoc'
-    | 'profileImage';
+    | 'profileImage'
+    | 'country'
+    | 'department';
   value: string;
 }
 

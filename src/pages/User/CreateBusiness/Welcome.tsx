@@ -1,14 +1,11 @@
 import React from 'react';
 import { Card, Row, Col, Button } from 'antd';
 import styles from './CreateBusiness.module.css';
-import { mock_businessType } from '../../../mocks/businessType';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 
 const { Meta } = Card;
 
 export const Welcome = ({ onNext }) => {
-  const businessTypes = mock_businessType;
-
   return (
     <GrowsFromLeft>
       <div className={styles.background}>

@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import { Select, Input } from 'antd';
 import { useTranslation } from 'react-i18next';
 import styles from './CreateBusiness.module.css';
-import { mockCountries, mockDepartments } from '../../../mocks/Countries';
 import MyMap from '../../../components/Map/Map';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 import { BusinessTypeService } from '../../../services/businessType.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
+import { countries } from '../../../utils/countries';
+import { country_departments } from '../../../utils/country-departments';
 
 const { Option } = Select;
 
@@ -62,7 +63,7 @@ export const LocationInfo = ({
           onChange={onCountryChange}
           className={styles.select}
         >
-          {mockCountries.map((country) => (
+          {countries.map((country) => (
             <Option key={country} value={country}>
               {country}
             </Option>
@@ -76,7 +77,7 @@ export const LocationInfo = ({
             onChange={onDepartmentChange}
             className={styles.select}
           >
-            {mockDepartments[country].map((dept) => (
+            {country_departments[country].map((dept) => (
               <Option key={dept} value={dept}>
                 {dept}
               </Option>

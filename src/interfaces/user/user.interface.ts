@@ -6,6 +6,8 @@ export interface IUser {
   name: string;
   email: string;
   phone: string;
+  country: string;
+  department: string;
   civilIdDoc: string;
   password: string;
   profileImage: string;
@@ -20,4 +22,6 @@ export interface UpdateUserDto {
   phone?: string;
   civilIdDoc?: string;
   userImage?: File;
+  country?: string;
+  department?: string;
 }

@@ -10,16 +10,18 @@ export class UserService {
     });
   }
 
-  public registerUser(user: any) {
+  public registerUser(user: any, profileImage: any) {
     const formData = new FormData();
     formData.append('name', user.name);
     formData.append('email', user.email);
     formData.append('password', user.password);
     formData.append('phone', user.phone);
     formData.append('civilIdDoc', user.civilIdDoc);
+    formData.append('country', user.country);
+    formData.append('department', user.department);
 
-    if (user.userImage) {
-      formData.append('userImage', user.userImage, user.userImage.name);
+    if (profileImage) {
+      formData.append('profileImage', profileImage, profileImage.name);
     }
 
     return this.api.post('/user', formData, {
@@ -56,6 +58,8 @@ export class UserService {
     if (userData.email) formData.append('email', userData.email);
     if (userData.phone) formData.append('phone', userData.phone);
     if (userData.civilIdDoc) formData.append('civilIdDoc', userData.civilIdDoc);
+    if (userData.country) formData.append('country', userData.country);
+    if (userData.department) formData.append('department', userData.department);
 
     if (userData.userImage) {
       formData.append(

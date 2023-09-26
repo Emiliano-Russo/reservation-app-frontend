@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Avatar, Button, message } from 'antd';
+import { Input, Avatar, Button, message, Select } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { FadeFromTop } from '../../../animations/FadeFromTop';
 import { BackNavigationHeader } from '../../../components/BackNavigationHeader/BackNavigationHeader';
@@ -11,8 +11,12 @@ import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 import { UserService } from '../../../services/user.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import { IUser, UpdateUserDto } from '../../../interfaces/user/user.interface';
+import { countries } from '../../../utils/countries';
+import { country_departments } from '../../../utils/country-departments';
 
 const userService = new UserService(REACT_APP_BASE_URL);
+
+const { Option } = Select;
 
 export const EditUserData = () => {
   const [loading, setLoading] = useState(false);
@@ -43,6 +47,8 @@ export const EditUserData = () => {
       phone: user?.phone,
       civilIdDoc: user?.civilIdDoc,
       userImage: file,
+      country: user?.country,
+      department: user?.department,
     };
     if (user)
       userService
@@ -61,7 +67,9 @@ export const EditUserData = () => {
                     | 'email'
                     | 'phone'
                     | 'civilIdDoc'
-                    | 'profileImage',
+                    | 'profileImage'
+                    | 'country'
+                    | 'department',
                   value: userRes[property],
                 }),
               );
@@ -147,6 +155,52 @@ export const EditUserData = () => {
             }
             style={{ marginBottom: '15px' }}
           />
+
+          <label style={{ display: 'block', marginBottom: '5px' }}>País</label>
+          <Select
+            placeholder="Selecciona tu país"
+            value={user?.country}
+            onChange={(val) =>
+              dispatch(
+                updateStringProperty({
+                  property: 'country',
+                  value: val,
+                }),
+              )
+            }
+            style={{ marginBottom: '20px', width: '100%' }}
+          >
+            {countries.map((country) => (
+              <Option key={country} value={country}>
+                {country}
+              </Option>
+            ))}
+          </Select>
+
+          {user?.country != '' && (
+            <Select
+              placeholder="Selecciona un departamento"
+              value={user?.department}
+              style={{ width: '100%' }}
+              onChange={(department) =>
+                dispatch(
+                  updateStringProperty({
+                    property: 'department',
+                    value: department,
+                  }),
+                )
+              }
+            >
+              {user &&
+                country_departments[user.country].map((dept) => (
+                  <Option key={dept} value={dept}>
+                    {dept}
+                  </Option>
+                ))}
+            </Select>
+          )}
+
+          <hr></hr>
 
           <div style={{ marginTop: '30px' }}>
             <Avatar

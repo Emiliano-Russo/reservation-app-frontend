@@ -44,12 +44,14 @@ export const Home = withAuth(
         <FadeFromTop>
           <div className={styles.greetingContainer}>
             <Avatar
-              src={userState.profileImage}
+              src={
+                userState.profileImage
+                  ? userState.profileImage
+                  : 'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'
+              }
               size={64}
               className={styles.avatarStyle}
-            >
-              D
-            </Avatar>
+            ></Avatar>
             <p className={styles.greetingText}>Hola, {userState.name}!</p>
           </div>
         </FadeFromTop>

@@ -36,6 +36,8 @@ import { BusinessProfile } from './pages/Entrepreneur/Profile/Profile';
 import { BusinessHome } from './pages/Entrepreneur/Home/Home';
 import { BusinessReservations } from './pages/Entrepreneur/Reservations/Reservations';
 import { EditUserData } from './pages/User/EditUserData/EditUserData';
+import { Help } from './pages/User/Help/Help';
+import { About } from './pages/About/About';
 
 setupIonicReact();
 
@@ -55,6 +57,8 @@ const App: React.FC = () => {
             <Route path="/new-reservation/:id" element={<NewReservation />} />
             <Route path="/business/:type" element={<BusinessList />} />
             <Route path="/edit-user-data" element={<EditUserData />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/about" element={<About />} />
             {/* business */}
             <Route
               path="/businessPrivateProfile"

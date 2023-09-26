@@ -3,7 +3,6 @@ import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 import { Input, Select, Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import styles from './CreateBusiness.module.css';
-import { mock_businessType } from '../../../mocks/businessType';
 import { BusinessTypeService } from '../../../services/businessType.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 
