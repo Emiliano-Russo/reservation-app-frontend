@@ -22,6 +22,7 @@ export interface ControlValue {
   date?: Date;
   extras: any[];
   negotiable?: INegotiable;
+  bookingInstructions?: string;
 }
 
 export const NewReservation = withPageLayout(
@@ -73,6 +74,7 @@ export const NewReservation = withPageLayout(
         businessId: business.id,
         extras: controlValues.extras,
         negotiable: controlValues.negotiable,
+        bookingInstructions: controlValues.bookingInstructions,
       };
       reservationService
         .createReservation(create_dto)

@@ -108,6 +108,7 @@ export const ReservationCard = (ticket: Props) => {
             reservationDate: ticket.reservation.reservationDate?.toString(),
             status: ticket.reservation.status,
             civilIdDoc: ticket.reservation.user.civilIdDoc,
+            bookingInstructions: ticket.reservation.bookingInstructions,
           }}
           handleReservationUpdateState={handleReservationUpdateState}
         />
@@ -122,6 +123,7 @@ export const ReservationCard = (ticket: Props) => {
             reservationDate: ticket.reservation.reservationDate?.toString(),
             status: ticket.reservation.status,
             alreadyRated: ticket.reservation.rating != undefined,
+            bookingInstructions: ticket.reservation.bookingInstructions,
           }}
           onSendStars={(amount, comment) => {
             setLoading(true);

@@ -16,6 +16,7 @@ export interface IReservation {
   user: IUser;
   business: IBusiness;
   reservationDate: Date | null;
+  bookingInstructions: string | undefined;
   rating: number;
   comment: string;
   status: ReservationStatus;

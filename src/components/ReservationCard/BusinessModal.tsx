@@ -9,6 +9,7 @@ interface Data {
   reservationDate: string | undefined | null;
   civilIdDoc: string;
   extras?: any;
+  bookingInstructions: string | undefined;
 }
 
 interface Props {
@@ -56,6 +57,7 @@ export const BusinessModal = (props: Props) => {
       ) : (
         <h1>No hay fecha de reserva ERROR</h1>
       )}
+      <p>{props.data.bookingInstructions}</p>
       <br></br>
       <div
         style={{

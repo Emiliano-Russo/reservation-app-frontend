@@ -10,6 +10,8 @@ import { BusinessService } from '../../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
 import { BusinessTypeService } from '../../../services/businessType.service';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 const businessService = new BusinessService(REACT_APP_BASE_URL);
 const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
@@ -29,6 +31,7 @@ export const BusinessList = withPageLayout(
     const [searchValue, setSearchValue] = useState('');
 
     const containerRef = useRef<any>(null);
+    const user = useSelector((state: RootState) => state.user.user);
     const nav = useNavigate();
 
     useEffect(() => {
@@ -67,6 +70,8 @@ export const BusinessList = withPageLayout(
           page: page,
         },
         searchTerm,
+        user?.country,
+        user?.department,
       );
       setLoading(false);
       if (res.items.length == 0) {

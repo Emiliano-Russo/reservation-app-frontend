@@ -9,6 +9,7 @@ interface Data {
   reservationDate: string | undefined | null;
   extras?: any;
   alreadyRated: boolean;
+  bookingInstructions: string | undefined;
 }
 
 interface Props {
@@ -83,7 +84,8 @@ export const UserModal = (props: Props) => {
           </>
         ) : (
           <h1>No hay fecha de reserva ERROR</h1>
-        )}
+        )}{' '}
+        <p>{props.data.bookingInstructions}</p>
         <br></br>
         {props.data.status == ReservationStatus.Realized &&
           !props.data.alreadyRated && (

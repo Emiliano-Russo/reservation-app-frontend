@@ -112,7 +112,6 @@ export const NegotiableCard = (props: Props) => {
       >
         <BasicInfo props={props} />
         {/* SEPARAMOS LA LOGICA empezamos suponiendo que es usuario*/}
-        <br></br>
         {props.isBusiness ? (
           <BusinessFooter
             {...props}

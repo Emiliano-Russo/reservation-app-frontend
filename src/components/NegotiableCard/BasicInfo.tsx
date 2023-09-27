@@ -33,6 +33,8 @@ export const BasicInfo = ({ props }) => {
             formatTime(new Date(props.reservation.negotiable.timeRange.end))
           : null}
       </p>
+      <strong>Nota</strong>
+      <p>{props.reservation.bookingInstructions}</p>
     </>
   );
 };
