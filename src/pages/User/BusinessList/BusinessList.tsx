@@ -73,7 +73,14 @@ export const BusinessList = withPageLayout(
         setHasMoreData(false);
         return;
       }
-      setBusinesses((prev) => [...prev, ...res.items]);
+      setBusinesses((prev) => {
+        // Filtrar los nuevos negocios para asegurarse de que no estén ya en la lista previa
+        const newItems = res.items.filter(
+          (newBusiness) =>
+            !prev.some((prevBusiness) => prevBusiness.id === newBusiness.id),
+        );
+        return [...prev, ...newItems];
+      });
     }
 
     async function fetchBusinessTypeName() {

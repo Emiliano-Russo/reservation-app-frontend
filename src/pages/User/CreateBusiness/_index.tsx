@@ -291,7 +291,7 @@ export const CreateBusiness = withPageLayout(
             type="primary"
             style={{
               display: step == 5 ? 'block' : 'none',
-              background: '#a0d911',
+              background: '#389e0d',
               color: 'white',
             }}
             onClick={() => {
