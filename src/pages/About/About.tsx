@@ -9,7 +9,7 @@ const { Title, Paragraph } = Typography;
 
 export const About = () => {
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
       <FadeFromTop>
         <BackNavigationHeader title={'Acerca De'} />
       </FadeFromTop>

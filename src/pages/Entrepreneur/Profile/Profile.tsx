@@ -5,7 +5,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { BusinessService } from '../../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import { BusinessTypeService } from '../../../services/businessType.service';
-import { DownOutlined } from '@ant-design/icons';
+import {
+  ClockCircleOutlined,
+  DownOutlined,
+  EditOutlined,
+} from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { ModalAccountChanger } from '../../../components/ModalAccountChanger/ModalAccountChanger';
 import Footer from '../../../components/Footer/Footer';
@@ -109,12 +113,22 @@ export const BusinessProfile = withPageLayout(
             </p>
             <div className={styles.availability}>
               <Button
+                icon={<ClockCircleOutlined />}
                 style={{ marginTop: '20px' }}
                 onClick={() => {
                   setAvailabilityModal(true);
                 }}
               >
-                Ver Disponibilidad
+                Horarios
+              </Button>
+              <Button
+                style={{ marginTop: '10px' }}
+                icon={<EditOutlined />}
+                onClick={() => {
+                  nav('/edit-business-profile');
+                }}
+              >
+                Editar
               </Button>
               <Modal
                 footer={null}

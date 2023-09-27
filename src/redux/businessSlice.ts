@@ -21,6 +21,11 @@ const businessSlice = createSlice({
     setCurrentBusiness(state, action: PayloadAction<IBusiness>) {
       state.currentBusiness = action.payload;
     },
+    updateCurrentBusiness(state, action: PayloadAction<Partial<IBusiness>>) {
+      if (state.currentBusiness) {
+        state.currentBusiness = { ...state.currentBusiness, ...action.payload };
+      }
+    },
     clearCurrentBusiness(state) {
       state.currentBusiness = null;
     },
@@ -43,6 +48,7 @@ const businessSlice = createSlice({
 
 export const {
   setCurrentBusiness,
+  updateCurrentBusiness,
   clearCurrentBusiness,
   addBusinessToList,
   removeBusinessFromList,

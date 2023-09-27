@@ -93,12 +93,15 @@ export class BusinessService {
 
   async editBusiness(
     businessParam: any,
-    logoImage?: File | null,
+    logoImage?: File,
+    bannerImage?: File,
   ): Promise<any> {
     const formData = new FormData();
     formData.append('name', businessParam.name);
     formData.append('address', businessParam.address);
     formData.append('description', businessParam.description);
+    formData.append('country', businessParam.country);
+    formData.append('department', businessParam.department);
 
     if (businessParam.coordinates) {
       formData.append('coordinates[pointX]', businessParam.coordinates.pointX);
@@ -106,15 +109,24 @@ export class BusinessService {
     }
 
     if (logoImage) {
-      formData.append('logoImage', logoImage, logoImage.name);
+      formData.append('logo', logoImage, logoImage.name);
     }
 
-    return this.api.put(`/businesses/${businessParam.id}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+    if (bannerImage) {
+      formData.append('banner', bannerImage, bannerImage.name);
+    }
+
+    const res = await this.api.patch(
+      `/business/${businessParam.id}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+        },
       },
-    });
+    );
+    return res.data;
   }
 
   async searchByBusinessName(businessName: string): Promise<any> {
