@@ -124,4 +124,11 @@ export class ReservationService {
     );
     return response.data;
   }
+
+  async getLastReviewByBusinessId(businessId: string): Promise<IReservation> {
+    const response: AxiosResponse<IReservation> = await this.api.get(
+      `/reservation/latest/${businessId}`,
+    );
+    return response.data;
+  }
 }

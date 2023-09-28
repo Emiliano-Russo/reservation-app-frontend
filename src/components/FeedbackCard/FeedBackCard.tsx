@@ -32,7 +32,7 @@ export const FeedbackCard = (item: Props) => {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'left',
-            width: '50%',
+            width: '80%',
           }}
         >
           <Avatar src={item.avatarUrl} />
