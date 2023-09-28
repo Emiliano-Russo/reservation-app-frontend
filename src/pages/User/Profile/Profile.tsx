@@ -1,4 +1,4 @@
-import { Avatar, Button, Progress, Modal, Menu } from 'antd';
+import { Avatar, Button, Progress, Modal, Menu, message } from 'antd';
 import { withPageLayout } from '../../../wrappers/WithPageLayout';
 import {
   ContactsOutlined,
@@ -24,6 +24,8 @@ import { ModalAccountChanger } from '../../../components/ModalAccountChanger/Mod
 import { setBusinessList } from '../../../redux/businessSlice';
 import { IBusiness } from '../../../interfaces/business/business.interface';
 import { RootState } from '../../../redux/store';
+import { addUser } from '../../../redux/userSlice';
+import { iconLoyaltyPoints } from '../../../utils/config';
 
 interface IconInfo {
   icon: React.ReactNode;
@@ -61,14 +63,19 @@ export const SectionLine = ({ title }) => {
   );
 };
 
-const LoyaltyPointsWidget = () => {
+interface PropsLoyalty {
+  points: number;
+}
+
+const LoyaltyPointsWidget = (props: PropsLoyalty) => {
   return (
-    <div className={styles.container}>
-      <main>
-        <p className={styles.loyaltyText}>90 de 200</p>
-        <p className={styles.loyaltySubtext}>Nivel 2</p>
-      </main>
-      <Progress percent={30} />
+    <div className={styles.containerLoyalty}>
+      <img
+        src={iconLoyaltyPoints}
+        alt="Loyalty Points Icon"
+        className={styles.iconLoyalty}
+      />
+      <p className={styles.pointsLoyalty}>{props.points}</p>
     </div>
   );
 };
@@ -144,11 +151,30 @@ const ProfileHeader = (props: PropsHeader) => {
   );
 };
 
+const userService = new UserService(REACT_APP_BASE_URL);
+
 export const Profile = withAuth(
   withPageLayout(() => {
     StatusBar.setBackgroundColor({ color: '#fd6f8e' });
+    const dispatch = useDispatch();
+    const user = useSelector((state: RootState) => state.user.user);
 
-    const user = useSelector((state: any) => state.user.user);
+    useEffect(() => {
+      fetchUser();
+    }, []);
+
+    if (!user) return <h1>No user</h1>;
+
+    const fetchUser = async () => {
+      userService
+        .getUser(user.id)
+        .then((user) => {
+          dispatch(addUser(user));
+        })
+        .catch((err) => {
+          message.error('Error al obtener datos del usuario');
+        });
+    };
 
     const icons = [
       {
@@ -183,7 +209,7 @@ export const Profile = withAuth(
 
         <BasicProfileInfoWidget icons={icons} />
         <SectionLine title={'Puntos de Fidelidad'} />
-        <LoyaltyPointsWidget />
+        <LoyaltyPointsWidget points={user.loyaltyPoints} />
       </FadeFromTop>
     );
   }, '0px'),

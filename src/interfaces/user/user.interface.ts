@@ -9,6 +9,7 @@ export interface IUser {
   country: string;
   department: string;
   civilIdDoc: string;
+  loyaltyPoints: number;
   password: string;
   profileImage: string;
   emailVerified: boolean;

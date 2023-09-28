@@ -2,6 +2,8 @@ import { Button, Input, Modal, Rate } from 'antd';
 import { ReservationStatus } from '../../interfaces/reservation.status';
 import { renderExtra } from './ReservationCard';
 import { Dispatch, SetStateAction, useState } from 'react';
+import LoyaltyPointsBadge from '../LoyaltyPointsBadge/LoyaltyPointsBadge';
+import { FadeFromTop } from '../../animations/FadeFromTop';
 
 interface Data {
   status: ReservationStatus;
@@ -90,7 +92,14 @@ export const UserModal = (props: Props) => {
         {props.data.status == ReservationStatus.Realized &&
           !props.data.alreadyRated && (
             <>
-              <p>Califica tu Experiencia</p>
+              <FadeFromTop>
+                <div style={{ display: 'flex' }}>
+                  <p>Califica tu Experiencia</p>
+
+                  <LoyaltyPointsBadge points={5} />
+                </div>
+              </FadeFromTop>
+
               <Rate
                 onChange={(amount) => {
                   console.log('Stars: ', amount);

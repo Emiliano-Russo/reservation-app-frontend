@@ -35,7 +35,6 @@ const initialStateUser = (): IUserState => {
     token: getTokenFromLocalStorage(),
   };
 };
-
 const userSlice = createSlice({
   name: 'user',
   initialState: initialStateUser(),
@@ -50,6 +49,14 @@ const userSlice = createSlice({
         ...state,
         user: action.payload.user,
         token: action.payload.token,
+      };
+    },
+    addUser(state, action: PayloadAction<IUser>) {
+      // Nueva función aquí
+      localStorage.setItem('user', JSON.stringify(action.payload));
+      return {
+        ...state,
+        user: action.payload,
       };
     },
     removeUserAndToken(state) {
@@ -86,6 +93,10 @@ const userSlice = createSlice({
   },
 });
 
-export const { addUserAndToken, removeUserAndToken, updateStringProperty } =
-  userSlice.actions;
+export const {
+  addUserAndToken,
+  removeUserAndToken,
+  updateStringProperty,
+  addUser,
+} = userSlice.actions;
 export default userSlice.reducer;
