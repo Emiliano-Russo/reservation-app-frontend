@@ -31,7 +31,7 @@ import { Settings } from './pages/User/Settings/Settings';
 import { Business } from './pages/User/Business/Business';
 import { BusinessList } from './pages/User/BusinessList/BusinessList';
 import { NewReservation } from './pages/User/NewReservation/NewReservation';
-import { CreateBusiness } from './pages/User/CreateBusiness/_index';
+import { CreateBusiness } from './pages/User/CreateBusiness';
 import { BusinessProfile } from './pages/Entrepreneur/Profile/Profile';
 import { BusinessHome } from './pages/Entrepreneur/Home/Home';
 import { BusinessReservations } from './pages/Entrepreneur/Reservations/Reservations';

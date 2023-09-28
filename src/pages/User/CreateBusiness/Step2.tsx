@@ -1,29 +1,18 @@
 import React, { useEffect } from 'react';
 import { Select, Input } from 'antd';
 import { useTranslation } from 'react-i18next';
-import styles from './CreateBusiness.module.css';
+import styles from './styles/CreateBusiness.module.css';
 import MyMap from '../../../components/Map/Map';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 import { BusinessTypeService } from '../../../services/businessType.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import { countries } from '../../../utils/countries';
 import { country_departments } from '../../../utils/country-departments';
+import { PropsStep } from '.';
 
 const { Option } = Select;
 
-const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
-
-export const LocationInfo = ({
-  country,
-  department,
-  email,
-  address,
-  onCountryChange,
-  onDepartmentChange,
-  onEmailChange,
-  onAddressChange,
-  onMarkerPlace,
-}) => {
+export const Step2 = (props: PropsStep) => {
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -59,8 +48,12 @@ export const LocationInfo = ({
       <div className={styles.locationContainer}>
         <Select
           placeholder="Selecciona un país"
-          value={country}
-          onChange={onCountryChange}
+          value={props.businessData.country}
+          onChange={(val) => {
+            props.setBusinessData((prev) => {
+              return { ...prev, country: val };
+            });
+          }}
           className={styles.select}
         >
           {countries.map((country) => (
@@ -70,14 +63,18 @@ export const LocationInfo = ({
           ))}
         </Select>
 
-        {country && (
+        {props.businessData.country && props.businessData.country != '' && (
           <Select
             placeholder="Selecciona un departamento"
-            value={department}
-            onChange={onDepartmentChange}
+            value={props.businessData.department}
+            onChange={(dep) => {
+              props.setBusinessData((prev) => {
+                return { ...prev, department: dep };
+              });
+            }}
             className={styles.select}
           >
-            {country_departments[country].map((dept) => (
+            {country_departments[props.businessData.country].map((dept) => (
               <Option key={dept} value={dept}>
                 {dept}
               </Option>
@@ -87,8 +84,12 @@ export const LocationInfo = ({
 
         <Input
           placeholder="Dirección"
-          value={address}
-          onChange={(e) => onAddressChange(e.target.value)}
+          value={props.businessData.address}
+          onChange={(e) =>
+            props.setBusinessData((prev) => {
+              return { ...prev, address: e.target.value };
+            })
+          }
           className={styles.input}
         />
 
@@ -96,7 +97,20 @@ export const LocationInfo = ({
           style={{ margin: '0 auto', width: '100%', background: 'transparent' }}
         >
           <p>{t('Selecciona la ubicacion')}</p>
-          <MyMap onMarkerPlace={onMarkerPlace} />
+          <MyMap
+            onMarkerPlace={(event) => {
+              props.setBusinessData((prev) => {
+                const coordinatesJSON = {
+                  pointX: event.latitude,
+                  pointY: event.longitude,
+                };
+                return {
+                  ...prev,
+                  coordinatesStringify: JSON.stringify(coordinatesJSON),
+                };
+              });
+            }}
+          />
         </div>
       </div>
     </GrowsFromLeft>

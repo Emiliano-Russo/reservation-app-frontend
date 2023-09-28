@@ -15,26 +15,20 @@ import { ModalAccountChanger } from '../../../components/ModalAccountChanger/Mod
 import Footer from '../../../components/Footer/Footer';
 import { withPageLayout } from '../../../wrappers/WithPageLayout';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
+import { RootState } from '../../../redux/store';
+import { WeekDays } from '../../../interfaces/weekday.enum';
+import { weekDayToSpanish } from '../../../utils/dateFormat';
+import { IAvailability } from '../../../interfaces/business/business.interface';
+import { DayAvailability } from '../../../components/DayAvailability/DayAvailability';
 
-const DayAvailability = ({ day, shifts }) => {
-  return (
-    <div className={styles.dayAvailability}>
-      <strong>{day + ' '}</strong>
-      {shifts.map((shift, index) => (
-        <div key={index}>
-          <p>
-            {shift.openingTime}-{shift.closingTime}
-          </p>
-        </div>
-      ))}
-    </div>
-  );
-};
+interface Props {
+  availability: IAvailability;
+}
 
 export const BusinessProfile = withPageLayout(
   () => {
     const business = useSelector(
-      (state: any) => state.business.currentBusiness,
+      (state: RootState) => state.business.currentBusiness,
     );
     console.log('business: ', business);
     const businesses = useSelector((state: any) => state.business.myBusinesses);
@@ -61,6 +55,8 @@ export const BusinessProfile = withPageLayout(
           <Spin style={{ marginTop: '100px' }} />
         </div>
       );
+
+    if (!business) return <h1>No Business</h1>;
 
     return (
       <GrowsFromLeft>
@@ -148,16 +144,9 @@ export const BusinessProfile = withPageLayout(
                       padding: '40px',
                     }}
                   >
-                    {business?.availability.map(
-                      (avail, index) =>
-                        avail.open && (
-                          <DayAvailability
-                            key={index}
-                            day={avail.day}
-                            shifts={avail.shifts}
-                          />
-                        ),
-                    )}
+                    {business?.availability.map((avail, index) => (
+                      <DayAvailability key={index} availability={avail} />
+                    ))}
                   </div>
                 </div>
               </Modal>

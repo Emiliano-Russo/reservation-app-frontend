@@ -1,93 +1,86 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 import { Input, Select, Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import styles from './CreateBusiness.module.css';
+import styles from './styles/CreateBusiness.module.css';
 import { BusinessTypeService } from '../../../services/businessType.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
+import { BusinessCreateState, PropsStep } from '.';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
+import { IBusinessType } from '../../../interfaces/businessType/businessType.interface';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
-
-export const BasicInfo = ({
-  businessName,
-  businessType,
-  businessDescription,
-  logoFileList,
-  bannerFileList,
-  onBusinessNameChange,
-  onBusinessTypeChange,
-  onBusinessDescriptionChange,
-  onLogoFileListChange,
-  onBannerFileListChange,
-}) => {
+export const Step1 = (props: PropsStep) => {
   const [logoFileName, setLogoFileName] = useState('');
   const [bannerFileName, setBannerFileName] = useState('');
-  const [businessTypes, setBusinessTypes] = useState<any>([]);
+
+  const businessTypeList = useSelector(
+    (state: RootState) => state.business.businessTypes,
+  );
 
   const handleUploadChange = (e, type) => {
     const fileName = e.nativeEvent.target.files[0].name;
     if (e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
-      // Hacer lo que necesites con el archivo seleccionado.
-      // Si solo deseas almacenar una referencia al archivo para subirlo más tarde, puedes simplemente almacenarlo en el estado.
       if (type === 'logo') {
         setLogoFileName(fileName);
-        onLogoFileListChange([selectedFile]);
+        props.setBusinessData((prev) => {
+          return { ...prev, logo: selectedFile };
+        });
       } else if (type === 'banner') {
         setBannerFileName(fileName);
-        onBannerFileListChange([selectedFile]);
+        props.setBusinessData((prev) => {
+          return { ...prev, banner: selectedFile };
+        });
       }
     }
   };
-
-  useEffect(() => {
-    const downloadBusinessType = async () => {
-      const res = await businessTypeService.getBusinessTypes({
-        limit: 20,
-        page: 1,
-      });
-      setBusinessTypes(res.items);
-    };
-
-    downloadBusinessType();
-  }, []);
 
   return (
     <GrowsFromLeft>
       <div className={styles.container}>
         <Input
           placeholder="Nombre del Negocio"
-          value={businessName}
-          onChange={(e) => onBusinessNameChange(e.target.value)}
+          value={props.businessData.name}
+          onChange={(e) => {
+            props.setBusinessData((prev) => {
+              return { ...prev, name: e.target.value };
+            });
+          }}
           className={styles.input}
         />
 
         <Select
           placeholder="Tipo de Negocio"
-          value={businessType.name}
-          onChange={(value) => {
-            const indexBusinessType = businessTypes.findIndex(
-              (val) => val.id == value,
-            );
-            console.log('index: ', indexBusinessType);
-            onBusinessTypeChange(businessTypes[indexBusinessType]);
+          value={
+            businessTypeList.find((bt) => bt.id == props.businessData.typeID)
+              ?.name
+          }
+          onChange={(idParam) => {
+            props.setBusinessData((prev) => {
+              return { ...prev, typeID: idParam };
+            });
           }}
           className={styles.select}
         >
-          {businessTypes.map((business: any) => (
-            <Option key={business.id} value={business.id}>
-              {business.name}
+          {businessTypeList.map((businessType: IBusinessType) => (
+            <Option key={businessType.id} value={businessType.id}>
+              {businessType.name}
             </Option>
           ))}
         </Select>
 
         <TextArea
           placeholder="Descripción del Negocio"
-          value={businessDescription}
-          onChange={(e) => onBusinessDescriptionChange(e.target.value)}
+          value={props.businessData.description}
+          onChange={(e) =>
+            props.setBusinessData((prev) => {
+              return { ...prev, description: e.target.value };
+            })
+          }
           className={styles.textArea}
           rows={4}
         />

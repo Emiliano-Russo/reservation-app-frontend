@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Row, Col, Button } from 'antd';
-import styles from './CreateBusiness.module.css';
+import styles from './styles/CreateBusiness.module.css';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 
 const { Meta } = Card;

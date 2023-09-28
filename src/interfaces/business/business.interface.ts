@@ -12,17 +12,11 @@ export interface IMap {
   pointY: string;
 }
 
-export interface IShift {
-  id: string;
-  openingTime: string;
-  closingTime: string;
-}
-
 export interface IAvailability {
   id: string;
   day: WeekDays;
-  shifts: IShift[];
-  open: boolean;
+  openingTime: string;
+  closingTime: string;
 }
 
 export interface IBusiness {

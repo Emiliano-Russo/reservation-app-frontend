@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { PaginatedResponse, PaginationDto } from '../interfaces/pagination.dto';
 import { formatQueryParams } from '../utils/formatQuery';
 import { IBusiness } from '../interfaces/business/business.interface';
+import { IBusinessCreateDto } from '../pages/User/CreateBusiness/dto/create-business.dto';
 
 export class BusinessService {
   private api: any;
@@ -12,15 +13,11 @@ export class BusinessService {
   }
 
   public async registerBusiness(
-    business: any,
+    business: IBusinessCreateDto,
     logoImage?: File | null,
     bannerImage?: File | null,
   ): Promise<any> {
     const formData = new FormData();
-    const objnewCoordinates = {
-      pointX: business.coordinates.latitude.toString(),
-      pointY: business.coordinates.longitude.toString(),
-    };
     formData.append('ownerId', business.ownerId);
     formData.append('typeId', business.typeId);
     formData.append('name', business.name);
@@ -28,8 +25,8 @@ export class BusinessService {
     formData.append('address', business.address);
     formData.append('description', business.description);
     formData.append('department', business.department);
-    formData.append('coordinates', JSON.stringify(objnewCoordinates));
-    formData.append('availability', JSON.stringify(business.availability));
+    formData.append('coordinatesStringify', business.coordinatesStringify);
+    formData.append('availabilityStringify', business.availabilityStringify);
 
     if (logoImage) {
       formData.append('logo', logoImage, logoImage.name);

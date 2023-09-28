@@ -3,9 +3,10 @@ import { Geolocation } from '@capacitor/geolocation';
 import React, { useRef, useEffect } from 'react';
 import { GOOGLE_API_KEY_MAPS } from '../../../env';
 import styles from './Map.module.css';
+import { MapClickCallbackData } from '@capacitor/google-maps/dist/typings/definitions';
 
 interface Props {
-  onMarkerPlace: any;
+  onMarkerPlace: (event: MapClickCallbackData) => void;
 }
 
 const MyMap: React.FC<Props> = (props: Props) => {

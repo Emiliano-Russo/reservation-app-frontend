@@ -3,24 +3,63 @@ import { TimePicker, Button, Modal, Divider } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
+import { PropsStep } from '.';
+import dayjs from 'dayjs';
+import { IAvailability } from '../../../interfaces/business/business.interface';
+import { mapDayToEnglish } from '../../../utils/dateFormat';
 
-export const ReservationDetails = ({
-  openingTime,
-  closingTime,
-  daysAvailable,
-  onOpeningTimeChange,
-  onClosingTimeChange,
-  onDaysAvailableChange,
-}) => {
+export const Step3 = (props: PropsStep) => {
+  console.log('Props: ', props);
   const [showNote, setShowNote] = useState(false);
+  const [opening, setOpening] = useState<dayjs.Dayjs | null>(null);
+  const [closing, setClosing] = useState<dayjs.Dayjs | null>(null);
+  const [daysAvailable, setDaysAvailable] = useState<string[]>([]);
   const { t } = useTranslation();
 
   const toggleDay = (day) => {
+    const availabilityStringified = buildAvailabilityStringify(day);
+    console.log(availabilityStringified);
+    props.setBusinessData((prev) => {
+      console.log('a ver el stringify aviability: ', availabilityStringified);
+      return { ...prev, availabilityStringify: availabilityStringified };
+    });
     if (daysAvailable.includes(day)) {
-      onDaysAvailableChange(daysAvailable.filter((d) => d !== day));
+      setDaysAvailable((prev) => {
+        return prev.filter((d) => d !== day);
+      });
     } else {
-      onDaysAvailableChange([...daysAvailable, day]);
+      setDaysAvailable((prev) => [...prev, day]);
     }
+  };
+
+  const buildAvailabilityStringify: (day: string) => string = (day: string) => {
+    const op = opening != null ? opening?.toDate().toISOString() : '';
+    const clos = closing != null ? closing?.toDate().toISOString() : '';
+    let list: IAvailability[] = daysAvailable.map((day) => {
+      const av: IAvailability = {
+        id: '',
+        day: mapDayToEnglish(day),
+        openingTime: op,
+        closingTime: clos,
+      };
+      return av;
+    });
+
+    list = list.filter((val) => val.openingTime != '' && val.closingTime != '');
+
+    if (daysAvailable.includes(day)) {
+      list = list.filter((val) => val.day != day);
+    } else {
+      const item: IAvailability = {
+        id: '',
+        day: mapDayToEnglish(day),
+        openingTime: op,
+        closingTime: clos,
+      };
+      list.push(item);
+    }
+
+    return JSON.stringify(list);
   };
 
   return (
@@ -47,8 +86,10 @@ export const ReservationDetails = ({
             <label>{t('Apertura')}</label>
             <TimePicker
               format="HH:mm"
-              value={openingTime}
-              onChange={onOpeningTimeChange}
+              value={opening}
+              onChange={(val) => {
+                setOpening(val);
+              }}
               placeholder={t('Selecciona la Hora')}
               style={{ width: '100%', marginTop: '5px' }}
             />
@@ -57,8 +98,10 @@ export const ReservationDetails = ({
             <label>{t('Clausura')}</label>
             <TimePicker
               format="HH:mm"
-              value={closingTime}
-              onChange={onClosingTimeChange}
+              value={closing}
+              onChange={(val) => {
+                setClosing(val);
+              }}
               placeholder={t('Selecciona la Hora')}
               style={{ width: '100%', marginTop: '5px' }}
             />
@@ -116,7 +159,7 @@ export const ReservationDetails = ({
 
         <Modal
           title={t('Nota')}
-          visible={showNote}
+          open={showNote}
           onCancel={() => setShowNote(false)}
           footer={null}
         >
