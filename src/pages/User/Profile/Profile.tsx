@@ -7,6 +7,7 @@ import {
   MessageOutlined,
   PhoneOutlined,
   SettingOutlined,
+  ShoppingCartOutlined,
 } from '@ant-design/icons';
 import styles from './Profile.module.css';
 import { StatusBar } from '@capacitor/status-bar';
@@ -115,8 +116,13 @@ const ProfileHeader = (props: PropsHeader) => {
           {/* 96px */}
         </div>
         <div className={styles.messageButtonContainer}>
-          <button style={{ color: 'black', background: 'white' }}>
-            <MessageOutlined style={{ fontSize: '1.5rem' }} />
+          <button
+            style={{ color: 'black', background: 'white' }}
+            onClick={() => {
+              nav('/store');
+            }}
+          >
+            <ShoppingCartOutlined style={{ fontSize: '1.5rem' }} />
           </button>
         </div>
         <div className={styles.settingsButtonContainer}>
