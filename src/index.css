@@ -18,6 +18,17 @@ div::-webkit-scrollbar {
   overflow-y: scroll;
 }
 
+@font-face {
+  font-family: 'Garnet'; /* Puedes poner el nombre que desees para referenciar la fuente */
+  src: url('../assets/fonts/garnet-capitals-bold.ttf') format('truetype'); /* Asegúrate de que la ruta y el formato sean correctos */
+  font-weight: bold;
+  font-style: normal;
+}
+
+.font-garnet {
+  font-family: 'Garnet', sans-serif; /* Usa el nombre que definiste en @font-face */
+}
+
 /* ok aca es la transicion estilos */
 
 .fade-enter {

@@ -244,7 +244,7 @@ const userService = new UserService(REACT_APP_BASE_URL);
 
 export const Profile = withAuth(
   withPageLayout(() => {
-    StatusBar.setBackgroundColor({ color: '#fd6f8e' });
+    StatusBar.setBackgroundColor({ color: '#ffa500' });
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user.user);
     const [open, setOpen] = useState(false);

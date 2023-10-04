@@ -109,19 +109,19 @@ export const SignUp = withGuest(() => {
     return (
       <GrowsFromLeft>
         <div>
-          <div style={{ height: '15vh', overflow: 'hidden' }}>
-            <img
-              src={banner}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              alt="Neon Mountains"
-            />
+          <div
+            style={{
+              height: '15vh',
+              overflow: 'hidden',
+              background: '#ffa500',
+            }}
+          >
             <div
               style={{
                 position: 'absolute',
                 top: '2%',
                 left: '50%',
                 transform: 'translate(-50%, 0)',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
                 padding: '20px',
                 borderRadius: '10px',
                 textAlign: 'center',
@@ -133,6 +133,7 @@ export const SignUp = withGuest(() => {
             >
               <Button
                 icon={<LeftOutlined />}
+                style={{ background: 'transparent', color: 'white' }}
                 onClick={() => {
                   nav(-1);
                 }}
@@ -141,10 +142,7 @@ export const SignUp = withGuest(() => {
                 style={{
                   color: 'white',
                   margin: 0,
-                  fontSize: '1.5rem',
-                  fontWeight: 'bold',
                   letterSpacing: '2px',
-                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
                 }}
               >
                 Registrarse
@@ -262,19 +260,19 @@ export const SignUp = withGuest(() => {
     return (
       <GrowsFromLeft>
         <div>
-          <div style={{ height: '15vh', overflow: 'hidden' }}>
-            <img
-              src={banner}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              alt="Neon Mountains"
-            />
+          <div
+            style={{
+              height: '15vh',
+              overflow: 'hidden',
+              background: '#ffa500',
+            }}
+          >
             <div
               style={{
                 position: 'absolute',
                 top: '2%',
                 left: '50%',
                 transform: 'translate(-50%, 0)',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
                 padding: '20px',
                 borderRadius: '10px',
                 textAlign: 'center',
@@ -285,6 +283,7 @@ export const SignUp = withGuest(() => {
               }}
             >
               <Button
+                style={{ background: 'transparent', color: 'white' }}
                 icon={<LeftOutlined />}
                 onClick={() => {
                   setStep(1);
@@ -294,10 +293,7 @@ export const SignUp = withGuest(() => {
                 style={{
                   color: 'white',
                   margin: 0,
-                  fontSize: '1.5rem',
-                  fontWeight: 'bold',
                   letterSpacing: '2px',
-                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
                 }}
               >
                 Registrarse

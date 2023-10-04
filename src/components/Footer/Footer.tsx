@@ -69,7 +69,7 @@ const Footer = ({ isBusiness = false, style = {} }) => {
     background: 'transparent',
   };
 
-  const selectedColor = isBusiness ? '#1677ff' : '#fd6f8e';
+  const selectedColor = isBusiness ? '#1677ff' : '#ffa500';
 
   const buttonSelectedStyle = {
     ...buttonStyle,

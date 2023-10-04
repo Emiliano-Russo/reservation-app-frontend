@@ -3,10 +3,11 @@ import { GOOGLE_API_KEY_MAPS } from './env';
 
 const config: CapacitorConfig = {
   appId: 'com.jirencompany.reservation',
-  appName: 'reservation-app-frontend',
+  appName: 'Reserva Fácil',
   webDir: 'dist',
   server: {
-    androidScheme: 'https',
+    androidScheme: 'http',
+    allowNavigation: ['*'],
   },
   plugins: {
     GoogleMapsPlugin: {

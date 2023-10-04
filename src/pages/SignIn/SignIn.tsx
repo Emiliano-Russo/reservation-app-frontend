@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { Button, Input, message } from 'antd';
 import { REACT_APP_BASE_URL } from '../../../env';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
+import portada from '../../assets/agendafacilnobackground.png';
 
 export const SignIn = withGuest(() => {
   const nav = useNavigate();
@@ -34,6 +35,10 @@ export const SignIn = withGuest(() => {
       })
       .catch((err) => {
         message.error('Error');
+        message.info(err.message);
+        message.error(err);
+        console.log(err);
+        console.error('+++++++++++++++++++++TREMENDO ERROR: ', err);
       });
   };
 
@@ -50,51 +55,40 @@ export const SignIn = withGuest(() => {
       });
   };
 
-  const banner =
-    'https://i.pinimg.com/564x/6f/91/9f/6f919f28cb7a830481f9b0866fc2c15b.jpg';
+  const banner = portada;
 
   return (
     <GrowsFromLeft>
-      <div>
+      <div style={{ background: '#ffa500' }}>
         <div
           style={{
-            height: '40vh',
+            height: '35vh',
             overflow: 'hidden',
             display: 'flex', // Nuevo: Convertir este contenedor en flex
             alignItems: 'center', // Nuevo: Centrar verticalmente
             justifyContent: 'center', // Nuevo: Centrar horizontalmente
+            background: '#ffa500',
           }}
         >
           <img
             src={banner}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '250px', objectFit: 'fill' }}
             alt="Neon Mountains"
           />
-          <div
-            style={{
-              position: 'absolute',
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              padding: '20px',
-              textAlign: 'center',
-              width: '100%',
-            }}
-          >
-            <h1
-              style={{
-                color: 'white',
-                margin: 0,
-                fontSize: '2rem',
-                fontWeight: 'bold',
-                letterSpacing: '2px',
-                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-              }}
-            >
-              Agenda Fácil
-            </h1>
-          </div>
         </div>
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-          <h1 style={{ fontWeight: 'bold', color: 'black' }}>¡Bienvenido!</h1>
+        <div
+          style={{
+            padding: '20px',
+            textAlign: 'center',
+            background: 'white',
+            borderTopLeftRadius: '50px',
+            borderTopRightRadius: '50px',
+            height: '100%',
+          }}
+        >
+          <h3 style={{ color: 'black', marginTop: '50px' }}>
+            ¡Bienvenido! 1.2
+          </h3>
           <Input
             type="email"
             value={email} // Enlazar el valor del campo de entrada con el estado
@@ -111,7 +105,7 @@ export const SignIn = withGuest(() => {
 
           <Button
             loading={loading}
-            style={{ width: '10rem', background: '#DA0063' }}
+            style={{ width: '10rem', background: '#FFA500' }}
             type="primary"
             onClick={() => {
               const user = { email, password };
