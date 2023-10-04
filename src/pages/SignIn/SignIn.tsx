@@ -89,7 +89,7 @@ export const SignIn = withGuest(() => {
                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
               }}
             >
-              Tu Mejor Reserva
+              Agenda Fácil
             </h1>
           </div>
         </div>

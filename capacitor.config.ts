@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 import { GOOGLE_API_KEY_MAPS } from './env';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.jirencompany.reservation',
   appName: 'reservation-app-frontend',
   webDir: 'dist',
   server: {

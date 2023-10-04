@@ -82,3 +82,5 @@ yarn-error.log*
 
 .stencil/
 env.ts
+
+android/google-services.json
