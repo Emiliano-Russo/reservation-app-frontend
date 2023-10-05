@@ -76,4 +76,11 @@ export class UserService {
     });
     return response.data;
   }
+
+  public async updateFCMToken(userId: string, fcmToken: string): Promise<any> {
+    const response = await this.api.patch(`/user/${userId}/fcmToken`, {
+      fcmToken,
+    });
+    return response.data;
+  }
 }

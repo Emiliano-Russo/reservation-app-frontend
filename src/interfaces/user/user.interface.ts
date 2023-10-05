@@ -10,6 +10,7 @@ export interface IUser {
   department: string;
   civilIdDoc: string;
   loyaltyPoints: number;
+  fcmToken: string;
   password: string;
   profileImage: string;
   emailVerified: boolean;

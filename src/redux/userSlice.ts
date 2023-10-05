@@ -10,7 +10,8 @@ interface UpdateStringPropertyAction {
     | 'civilIdDoc'
     | 'profileImage'
     | 'country'
-    | 'department';
+    | 'department'
+    | 'fcmToken';
   value: string;
 }
 

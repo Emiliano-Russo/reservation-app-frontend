@@ -40,56 +40,12 @@ import { Help } from './pages/User/Help/Help';
 import { About } from './pages/About/About';
 import { EditBusinessProfile } from './pages/Entrepreneur/EditBusinessProfile/EditBusinessProfile';
 import { Store } from './pages/User/Store/Store';
-import { useEffect } from 'react';
-import { PushNotifications } from '@capacitor/push-notifications';
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  useEffect(() => {
-    const initPush = async () => {
-      // Solicitar permiso
-      const { receive } = await PushNotifications.requestPermissions();
-
-      if (receive) {
-        // Registrar el dispositivo
-        await PushNotifications.register();
-
-        // Manejar notificaciones recibidas
-        PushNotifications.addListener(
-          'pushNotificationReceived',
-          (notification) => {
-            console.log('Notificación recibida:', notification);
-          },
-        );
-
-        // Manejar notificaciones abiertas
-        PushNotifications.addListener(
-          'pushNotificationActionPerformed',
-          (action) => {
-            console.log('Notificación abierta:', action);
-          },
-        );
-
-        // Obtener y enviar el token al backend
-        PushNotifications.addListener('registration', (token) => {
-          console.log('Token de registro:', token.value);
-          // Aquí debes enviar el token al backend.
-          // Por ejemplo:
-          // apiService.updateUserFCMToken(token.value);
-        });
-
-        // Manejar errores
-        PushNotifications.addListener('registrationError', (error) => {
-          console.error('Error al registrar para notificaciones push:', error);
-        });
-      }
-    };
-
-    initPush();
-  }, []);
-
   SplashScreen.hide();
+
   return (
     <IonApp>
       <Provider store={store}>
