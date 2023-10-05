@@ -86,9 +86,7 @@ export const SignIn = withGuest(() => {
             height: '100%',
           }}
         >
-          <h3 style={{ color: 'black', marginTop: '50px' }}>
-            ¡Bienvenido! 1.2
-          </h3>
+          <h3 style={{ color: 'black', marginTop: '50px' }}>¡Bienvenido!</h3>
           <Input
             type="email"
             value={email} // Enlazar el valor del campo de entrada con el estado

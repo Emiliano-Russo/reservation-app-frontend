@@ -11,7 +11,7 @@ export const Welcome = ({ onNext }) => {
       <div className={styles.background}>
         <div className={styles.content}>
           <h1 className={styles.title}>Bienvenido a </h1>
-          <h1>Reserva Fácil</h1>
+          <h1>Agenda Fácil</h1>
           <p className={styles.description}>
             Empieza a crear y gestionar tu negocio con nosotros.
           </p>
