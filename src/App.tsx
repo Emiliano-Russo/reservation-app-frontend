@@ -40,6 +40,7 @@ import { Help } from './pages/User/Help/Help';
 import { About } from './pages/About/About';
 import { EditBusinessProfile } from './pages/Entrepreneur/EditBusinessProfile/EditBusinessProfile';
 import { Store } from './pages/User/Store/Store';
+import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword';
 
 setupIonicReact();
 
@@ -53,6 +54,10 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route
+              path="/request-password-reset"
+              element={<ForgotPassword />}
+            />
             <Route path="/reservations" element={<UserReservations />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/store" element={<Store />} />

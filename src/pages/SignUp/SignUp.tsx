@@ -133,7 +133,11 @@ export const SignUp = withGuest(() => {
             >
               <Button
                 icon={<LeftOutlined />}
-                style={{ background: 'transparent', color: 'white' }}
+                style={{
+                  background: 'transparent',
+                  color: 'white',
+                  border: 'none',
+                }}
                 onClick={() => {
                   nav(-1);
                 }}
@@ -165,82 +169,90 @@ export const SignUp = withGuest(() => {
             }}
           >
             <div>
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                Nombre
-              </label>
-              <Input
-                placeholder="Nombre"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                style={{ marginBottom: '15px' }}
-              />
-
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                Teléfono
-              </label>
-              <Input
-                type="tel"
-                placeholder="Teléfono"
-                value={formData.phone}
-                onChange={handlePhoneChange}
-                style={{ marginBottom: '15px' }}
-              />
-
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                Correo Electrónico
-              </label>
-              <Input
-                type="email"
-                placeholder="Correo electrónico"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                style={{ marginBottom: '15px' }}
-              />
-
-              <div style={{ marginTop: '30px' }}>
-                <Avatar
-                  size={64}
-                  src={
-                    'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'
+              <AnimatedFromLeft delay={0.1}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Nombre
+                </label>
+                <Input
+                  placeholder="Nombre"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
                   }
                   style={{ marginBottom: '15px' }}
                 />
-                {/* Input oculto */}
-                <input
-                  style={{ display: 'none' }}
-                  id="fileInput"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleAvatarChange(e)}
-                />
+              </AnimatedFromLeft>
 
-                {/* Label personalizado */}
-                <label
-                  htmlFor="fileInput"
-                  style={{
-                    cursor: 'pointer',
-                    color: 'blue',
-                    textDecoration: 'none',
-                    marginLeft: '20px',
-                  }}
-                >
-                  Sube tu Avatar
+              <AnimatedFromLeft delay={0.2}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Teléfono
                 </label>
-                <p
-                  style={{
-                    textOverflow: 'ellipsis',
-                    maxWidth: '150px',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                  }}
-                >
-                  {avatar}
-                </p>
-              </div>
+                <Input
+                  type="tel"
+                  placeholder="Teléfono"
+                  value={formData.phone}
+                  onChange={handlePhoneChange}
+                  style={{ marginBottom: '15px' }}
+                />
+              </AnimatedFromLeft>
+
+              <AnimatedFromLeft delay={0.3}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Correo Electrónico
+                </label>
+                <Input
+                  type="email"
+                  placeholder="Correo electrónico"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  style={{ marginBottom: '15px' }}
+                />
+              </AnimatedFromLeft>
+
+              <AnimatedFromLeft delay={0.4}>
+                <div style={{ marginTop: '30px' }}>
+                  <Avatar
+                    size={64}
+                    src={
+                      'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'
+                    }
+                    style={{ marginBottom: '15px' }}
+                  />
+                  {/* Input oculto */}
+                  <input
+                    style={{ display: 'none' }}
+                    id="fileInput"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleAvatarChange(e)}
+                  />
+
+                  {/* Label personalizado */}
+                  <label
+                    htmlFor="fileInput"
+                    style={{
+                      cursor: 'pointer',
+                      color: 'blue',
+                      textDecoration: 'none',
+                      marginLeft: '20px',
+                    }}
+                  >
+                    Sube tu Avatar
+                  </label>
+                  <p
+                    style={{
+                      textOverflow: 'ellipsis',
+                      maxWidth: '150px',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {avatar}
+                  </p>
+                </div>
+              </AnimatedFromLeft>
             </div>
             <Button
               loading={loading}
@@ -283,7 +295,11 @@ export const SignUp = withGuest(() => {
               }}
             >
               <Button
-                style={{ background: 'transparent', color: 'white' }}
+                style={{
+                  background: 'transparent',
+                  color: 'white',
+                  border: 'none',
+                }}
                 icon={<LeftOutlined />}
                 onClick={() => {
                   setStep(1);
@@ -316,57 +332,65 @@ export const SignUp = withGuest(() => {
             }}
           >
             <div>
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                Contraseña
-              </label>
-              <Input.Password
-                placeholder="Contraseña"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-                style={{ marginBottom: '15px' }}
-              />
+              <AnimatedFromLeft delay={0.1}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Contraseña
+                </label>
+                <Input.Password
+                  placeholder="Contraseña"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  style={{ marginBottom: '15px' }}
+                />
+              </AnimatedFromLeft>
 
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                Confirmar Contraseña
-              </label>
-              <Input.Password
-                placeholder="Confirmar Contraseña"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                style={{ marginBottom: '15px' }}
-              />
+              <AnimatedFromLeft delay={0.2}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Confirmar Contraseña
+                </label>
+                <Input.Password
+                  placeholder="Confirmar Contraseña"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  style={{ marginBottom: '15px' }}
+                />
+              </AnimatedFromLeft>
 
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                Documento de Identidad
-              </label>
-              <Input
-                placeholder="Documento de Identidad"
-                value={formData.civilIdDoc}
-                onChange={(e) =>
-                  setFormData({ ...formData, civilIdDoc: e.target.value })
-                }
-                style={{ marginBottom: '15px' }}
-              />
+              <AnimatedFromLeft delay={0.3}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Documento de Identidad
+                </label>
+                <Input
+                  placeholder="Documento de Identidad"
+                  value={formData.civilIdDoc}
+                  onChange={(e) =>
+                    setFormData({ ...formData, civilIdDoc: e.target.value })
+                  }
+                  style={{ marginBottom: '15px' }}
+                />
+              </AnimatedFromLeft>
 
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                País
-              </label>
-              <Select
-                placeholder="Selecciona tu país"
-                value={formData.country}
-                onChange={(value) =>
-                  setFormData({ ...formData, country: value, department: '' })
-                }
-                style={{ marginBottom: '20px', width: '100%' }}
-              >
-                {countries.map((country) => (
-                  <Option key={country} value={country}>
-                    {country}
-                  </Option>
-                ))}
-              </Select>
+              <AnimatedFromLeft delay={0.4}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  País
+                </label>
+                <Select
+                  placeholder="Selecciona tu país"
+                  value={formData.country}
+                  onChange={(value) =>
+                    setFormData({ ...formData, country: value, department: '' })
+                  }
+                  style={{ marginBottom: '20px', width: '100%' }}
+                >
+                  {countries.map((country) => (
+                    <Option key={country} value={country}>
+                      {country}
+                    </Option>
+                  ))}
+                </Select>
+              </AnimatedFromLeft>
 
               {formData.country != '' && (
                 <Select

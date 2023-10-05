@@ -8,6 +8,8 @@ import { Button, Input, message } from 'antd';
 import { REACT_APP_BASE_URL } from '../../../env';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
 import portada from '../../assets/agendafacilnobackground.png';
+import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
+import { FadeFromTop } from '../../animations/FadeFromTop';
 
 export const SignIn = withGuest(() => {
   const nav = useNavigate();
@@ -60,22 +62,24 @@ export const SignIn = withGuest(() => {
   return (
     <GrowsFromLeft>
       <div style={{ background: '#ffa500' }}>
-        <div
-          style={{
-            height: '35vh',
-            overflow: 'hidden',
-            display: 'flex', // Nuevo: Convertir este contenedor en flex
-            alignItems: 'center', // Nuevo: Centrar verticalmente
-            justifyContent: 'center', // Nuevo: Centrar horizontalmente
-            background: '#ffa500',
-          }}
-        >
-          <img
-            src={banner}
-            style={{ width: '250px', objectFit: 'fill' }}
-            alt="Neon Mountains"
-          />
-        </div>
+        <GrowsFromLeft>
+          <div
+            style={{
+              height: '35vh',
+              overflow: 'hidden',
+              display: 'flex', // Nuevo: Convertir este contenedor en flex
+              alignItems: 'center', // Nuevo: Centrar verticalmente
+              justifyContent: 'center', // Nuevo: Centrar horizontalmente
+              background: '#ffa500',
+            }}
+          >
+            <img
+              src={banner}
+              style={{ width: '250px', objectFit: 'fill' }}
+              alt="Neon Mountains"
+            />
+          </div>
+        </GrowsFromLeft>
         <div
           style={{
             padding: '20px',
@@ -100,30 +104,46 @@ export const SignIn = withGuest(() => {
             placeholder="Contraseña"
             style={{ width: '80%', marginBottom: '20px' }}
           />
-
-          <Button
-            loading={loading}
-            style={{ width: '10rem', background: '#FFA500' }}
-            type="primary"
-            onClick={() => {
-              const user = { email, password };
-              handleLocalLogin(user);
-            }}
-          >
-            Acceder
-          </Button>
-
-          <div style={{ marginTop: '10px' }}>
+          <AnimatedFromLeft>
             <Button
               loading={loading}
-              style={{ width: '10rem' }}
+              style={{ width: '10rem', background: '#FFA500' }}
+              type="primary"
               onClick={() => {
-                nav('/signup');
+                const user = { email, password };
+                handleLocalLogin(user);
               }}
             >
-              Soy Nuevo
+              Acceder
             </Button>
-          </div>
+          </AnimatedFromLeft>
+          <AnimatedFromLeft delay={0.1}>
+            <div style={{ marginTop: '10px' }}>
+              <Button
+                loading={loading}
+                style={{ width: '10rem' }}
+                onClick={() => {
+                  nav('/signup');
+                }}
+              >
+                Soy Nuevo
+              </Button>
+            </div>
+          </AnimatedFromLeft>
+
+          <AnimatedFromLeft delay={0.2}>
+            <div style={{ marginTop: '10px' }}>
+              <Button
+                style={{ fontSize: '12px' }}
+                type="link"
+                onClick={() => {
+                  nav('/request-password-reset');
+                }}
+              >
+                ¿Olvidaste tu contraseña?
+              </Button>
+            </div>
+          </AnimatedFromLeft>
         </div>
         <hr style={{ background: 'white', width: '60%' }} />
       </div>

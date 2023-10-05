@@ -83,4 +83,19 @@ export class UserService {
     });
     return response.data;
   }
+
+  public async requestPasswordReset(email: string): Promise<any> {
+    const response = await this.api.post('/user/request-password-reset', {
+      email,
+    });
+    return response.data;
+  }
+
+  public async resetPassword(token: string, newPassword: string): Promise<any> {
+    const response = await this.api.post('/user/reset-password', {
+      token,
+      newPassword,
+    });
+    return response.data;
+  }
 }
