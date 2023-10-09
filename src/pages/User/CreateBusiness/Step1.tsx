@@ -13,13 +13,26 @@ import { IBusinessType } from '../../../interfaces/businessType/businessType.int
 const { Option } = Select;
 const { TextArea } = Input;
 
+const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
+
 export const Step1 = (props: PropsStep) => {
   const [logoFileName, setLogoFileName] = useState('');
   const [bannerFileName, setBannerFileName] = useState('');
+  const [businessTypeList, setBusinessTypeList] = useState<IBusinessType[]>([]);
 
-  const businessTypeList = useSelector(
+  const reduxBusinessTypeList = useSelector(
     (state: RootState) => state.business.businessTypes,
   );
+
+  useEffect(() => {
+    if (reduxBusinessTypeList.length == 0) {
+      businessTypeService
+        .getBusinessTypes({ limit: 100, page: 1 })
+        .then((val) => {
+          setBusinessTypeList(val.items);
+        });
+    } else setBusinessTypeList(reduxBusinessTypeList);
+  }, []);
 
   const handleUploadChange = (e, type) => {
     const fileName = e.nativeEvent.target.files[0].name;
