@@ -1,0 +1,103 @@
+PODS:
+  - Capacitor (5.4.2):
+    - CapacitorCordova
+  - CapacitorApp (5.0.6):
+    - Capacitor
+  - CapacitorCordova (5.4.2)
+  - CapacitorGeolocation (5.0.6):
+    - Capacitor
+  - CapacitorGoogleMaps (5.3.1):
+    - Capacitor
+    - Google-Maps-iOS-Utils (~> 4.1)
+    - GoogleMaps (~> 7.3)
+  - CapacitorHaptics (5.0.6):
+    - Capacitor
+  - CapacitorKeyboard (5.0.6):
+    - Capacitor
+  - CapacitorPushNotifications (5.1.0):
+    - Capacitor
+  - CapacitorSplashScreen (5.0.6):
+    - Capacitor
+  - CapacitorStatusBar (5.0.6):
+    - Capacitor
+  - Google-Maps-iOS-Utils (4.2.2):
+    - Google-Maps-iOS-Utils/Clustering (= 4.2.2)
+    - Google-Maps-iOS-Utils/Geometry (= 4.2.2)
+    - Google-Maps-iOS-Utils/GeometryUtils (= 4.2.2)
+    - Google-Maps-iOS-Utils/Heatmap (= 4.2.2)
+    - Google-Maps-iOS-Utils/QuadTree (= 4.2.2)
+    - GoogleMaps (~> 7.3)
+  - Google-Maps-iOS-Utils/Clustering (4.2.2):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps (~> 7.3)
+  - Google-Maps-iOS-Utils/Geometry (4.2.2):
+    - GoogleMaps (~> 7.3)
+  - Google-Maps-iOS-Utils/GeometryUtils (4.2.2):
+    - GoogleMaps (~> 7.3)
+  - Google-Maps-iOS-Utils/Heatmap (4.2.2):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps (~> 7.3)
+  - Google-Maps-iOS-Utils/QuadTree (4.2.2):
+    - GoogleMaps (~> 7.3)
+  - GoogleMaps (7.4.0):
+    - GoogleMaps/Maps (= 7.4.0)
+  - GoogleMaps/Base (7.4.0)
+  - GoogleMaps/Maps (7.4.0):
+    - GoogleMaps/Base
+
+DEPENDENCIES:
+  - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorGeolocation (from `../../node_modules/@capacitor/geolocation`)"
+  - "CapacitorGoogleMaps (from `../../node_modules/@capacitor/google-maps`)"
+  - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
+  - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
+  - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
+  - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
+  - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
+
+SPEC REPOS:
+  trunk:
+    - Google-Maps-iOS-Utils
+    - GoogleMaps
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorApp:
+    :path: "../../node_modules/@capacitor/app"
+  CapacitorCordova:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorGeolocation:
+    :path: "../../node_modules/@capacitor/geolocation"
+  CapacitorGoogleMaps:
+    :path: "../../node_modules/@capacitor/google-maps"
+  CapacitorHaptics:
+    :path: "../../node_modules/@capacitor/haptics"
+  CapacitorKeyboard:
+    :path: "../../node_modules/@capacitor/keyboard"
+  CapacitorPushNotifications:
+    :path: "../../node_modules/@capacitor/push-notifications"
+  CapacitorSplashScreen:
+    :path: "../../node_modules/@capacitor/splash-screen"
+  CapacitorStatusBar:
+    :path: "../../node_modules/@capacitor/status-bar"
+
+SPEC CHECKSUMS:
+  Capacitor: 8a9db42d105f55843cd8ed2a3cb54e2b78e7f102
+  CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
+  CapacitorCordova: cfcc06b698481da655415985eeb2b8da363f8451
+  CapacitorGeolocation: 7be5f77abc205c0efe319fff8587a7183e7b0240
+  CapacitorGoogleMaps: 19e631cbe16365f32a3da837f91fdb86579c2de3
+  CapacitorHaptics: 1fffc1217c7e64a472d7845be50fb0c2f7d4204c
+  CapacitorKeyboard: b978154b024a5f65e044908e37d15b7de58b9d12
+  CapacitorPushNotifications: b31e326c6e4eb216a622041d6ca21a973f34943f
+  CapacitorSplashScreen: 5fa2ab5e46cf5cc530cf16a51c80c7a986579ccd
+  CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
+  Google-Maps-iOS-Utils: f77eab4c4326d7e6a277f8e23a0232402731913a
+  GoogleMaps: 032f676450ba0779bd8ce16840690915f84e57ac
+
+PODFILE CHECKSUM: 6d0fd3ca8cde4365eac830c9df6dc9a14f8c88d4
+
+COCOAPODS: 1.11.2
