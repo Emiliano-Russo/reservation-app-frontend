@@ -84,3 +84,24 @@ export function mapDayToEnglish(dayInSpanish: string): WeekDays {
       throw new Error(`Day ${dayInSpanish} not recognized`);
   }
 }
+
+export function getDayValue(day: WeekDays): number {
+  switch (day) {
+    case WeekDays.Monday:
+      return 1;
+    case WeekDays.Tuesday:
+      return 2;
+    case WeekDays.Wednesday:
+      return 3;
+    case WeekDays.Thursday:
+      return 4;
+    case WeekDays.Friday:
+      return 5;
+    case WeekDays.Saturday:
+      return 6;
+    case WeekDays.Sunday:
+      return 7;
+    default:
+      return 0;
+  }
+}

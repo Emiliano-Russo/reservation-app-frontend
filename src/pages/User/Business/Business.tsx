@@ -23,9 +23,10 @@ import {
   IAvailability,
   IBusiness,
 } from '../../../interfaces/business/business.interface';
-import { weekDayToSpanish } from '../../../utils/dateFormat';
+import { getDayValue, weekDayToSpanish } from '../../../utils/dateFormat';
 import { IReservation } from '../../../interfaces/reservation/reservation.interface';
 import { DayAvailability } from '../../../components/DayAvailability/DayAvailability';
+import { WeekDays } from '../../../interfaces/weekday.enum';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -125,7 +126,6 @@ export const Business = withPageLayout(
             color: 'black',
             top: 'calc(env(safe-area-inset-top) + 10px)',
             left: '10px',
-           
           }}
         />
 
@@ -178,10 +178,19 @@ export const Business = withPageLayout(
               </TabPane>
 
               <TabPane tab="Horarios" key="3">
-                <h4>Horarios</h4>
-                {business.availability.map((av) => (
-                  <DayAvailability availability={av} />
-                ))}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    padding: '0px 20px',
+                  }}
+                >
+                  {business.availability
+                    .sort((a, b) => getDayValue(a.day) - getDayValue(b.day))
+                    .map((av) => (
+                      <DayAvailability availability={av} />
+                    ))}
+                </div>
               </TabPane>
             </Tabs>
           </AnimatedFromLeft>
