@@ -19,11 +19,11 @@ export const About = () => {
             style={{ margin: '0px 0px 10px 0px', padding: '0px' }}
             level={3}
           >
-            Acerca de Agenda Facíl
+            Acerca de Agenda Fácil
           </Title>
 
           <Paragraph>
-            Agenda Facíl es una aplicación diseñada para facilitar el proceso de
+            Agenda Fácil es una aplicación diseñada para facilitar el proceso de
             reservas en diferentes tipos de negocios. Nuestro objetivo es
             brindar una experiencia fluida y sencilla para usuarios y negocios
             por igual.
