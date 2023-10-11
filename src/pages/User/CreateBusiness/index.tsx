@@ -34,7 +34,7 @@ export interface BusinessCreateState {
   country: string;
   department: string;
   address: string;
-  coordinatesStringify: string;
+  // coordinatesStringify: string;
   availabilityStringify: string;
 }
 
@@ -50,7 +50,7 @@ export const CreateBusiness = withPageLayout(
       address: '',
       availabilityStringify: '',
       banner: undefined,
-      coordinatesStringify: '',
+      // coordinatesStringify: '',
       country: '',
       department: '',
       description: '',
@@ -73,7 +73,7 @@ export const CreateBusiness = withPageLayout(
       const createDto: IBusinessCreateDto = {
         address: businessData.address,
         availabilityStringify: businessData.availabilityStringify,
-        coordinatesStringify: businessData.coordinatesStringify,
+        // coordinatesStringify: businessData.coordinatesStringify,
         country: businessData.country,
         department: businessData.department,
         description: businessData.description,
@@ -90,7 +90,7 @@ export const CreateBusiness = withPageLayout(
         .catch((err) => {
           message.error('Error al registrar');
         })
-        .catch(() => {
+        .finally(() => {
           setLoading(false);
         });
     };
@@ -150,7 +150,7 @@ export const CreateBusiness = withPageLayout(
             alignContent: 'center',
             justifyContent: 'space-between',
             margin: 'auto auto 10px auto',
-            boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
+            // boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
             width: '100%',
             borderRadius: '10px',
           }}

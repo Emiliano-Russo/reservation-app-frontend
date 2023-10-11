@@ -17,7 +17,7 @@ export interface IBusinessCreateDto {
 
   status: BusinessStatus;
 
-  coordinatesStringify: string;
+  // coordinatesStringify: string;
 
   availabilityStringify: string;
 }

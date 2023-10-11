@@ -46,7 +46,9 @@ export const Step2 = (props: PropsStep) => {
   return (
     <GrowsFromLeft>
       <div className={styles.locationContainer}>
+        <label>País</label>
         <Select
+          style={{ marginTop: '5px' }}
           placeholder="Selecciona un país"
           value={props.businessData.country}
           onChange={(val) => {
@@ -64,36 +66,44 @@ export const Step2 = (props: PropsStep) => {
         </Select>
 
         {props.businessData.country && props.businessData.country != '' && (
-          <Select
-            placeholder="Selecciona un departamento"
-            value={props.businessData.department}
-            onChange={(dep) => {
-              props.setBusinessData((prev) => {
-                return { ...prev, department: dep };
-              });
-            }}
-            className={styles.select}
-          >
-            {country_departments[props.businessData.country].map((dept) => (
-              <Option key={dept} value={dept}>
-                {dept}
-              </Option>
-            ))}
-          </Select>
+          <>
+            <label style={{ marginTop: '20px' }}>Zona</label>
+            <Select
+              style={{ marginTop: '5px' }}
+              placeholder="Selecciona un departamento"
+              value={props.businessData.department}
+              onChange={(dep) => {
+                props.setBusinessData((prev) => {
+                  return { ...prev, department: dep };
+                });
+              }}
+              className={styles.select}
+            >
+              {country_departments[props.businessData.country].map((dept) => (
+                <Option key={dept} value={dept}>
+                  {dept}
+                </Option>
+              ))}
+            </Select>
+          </>
         )}
 
-        <Input
-          placeholder="Dirección"
-          value={props.businessData.address}
-          onChange={(e) =>
-            props.setBusinessData((prev) => {
-              return { ...prev, address: e.target.value };
-            })
-          }
-          className={styles.input}
-        />
+        <>
+          <label style={{ marginTop: '20px' }}>Dirección</label>
+          <Input
+            style={{ marginTop: '5px' }}
+            placeholder="Dirección"
+            value={props.businessData.address}
+            onChange={(e) =>
+              props.setBusinessData((prev) => {
+                return { ...prev, address: e.target.value };
+              })
+            }
+            className={styles.input}
+          />
+        </>
 
-        <div
+        {/* <div
           style={{ margin: '0 auto', width: '100%', background: 'transparent' }}
         >
           <p>{t('Selecciona la ubicacion')}</p>
@@ -111,7 +121,7 @@ export const Step2 = (props: PropsStep) => {
               });
             }}
           />
-        </div>
+        </div> */}
       </div>
     </GrowsFromLeft>
   );

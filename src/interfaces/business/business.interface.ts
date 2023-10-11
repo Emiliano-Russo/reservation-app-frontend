@@ -6,11 +6,11 @@ export enum BusinessStatus {
   Closed = 'Closed',
 }
 
-export interface IMap {
-  id: string;
-  pointX: string;
-  pointY: string;
-}
+// export interface IMap {
+//   id: string;
+//   pointX: string;
+//   pointY: string;
+// }
 
 export interface IAvailability {
   id: string;
@@ -27,7 +27,7 @@ export interface IBusiness {
   country: string;
   department: string;
   address: string;
-  coordinates: IMap;
+  // coordinates: IMap;
   logoURL?: string;
   banner: string;
   description?: string;

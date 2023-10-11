@@ -67,9 +67,9 @@ export const Step3 = (props: PropsStep) => {
       <div
         style={{
           padding: '20px',
-          backgroundColor: '#f6f8fa',
           borderRadius: '8px',
-          boxShadow: '0px 0px 10px rgba(0,0,0,0.1)',
+          // backgroundColor: '#f6f8fa',
+          // boxShadow: '0px 0px 10px rgba(0,0,0,0.1)',
         }}
       >
         <div
@@ -78,14 +78,14 @@ export const Step3 = (props: PropsStep) => {
             padding: '10px',
             position: 'relative',
             borderRadius: '10px',
-            backgroundColor: '#ffffff',
-            boxShadow: '0px 0px 10px rgba(0,0,0,0.05)',
+            // backgroundColor: '#ffffff',
+            // boxShadow: '0px 0px 10px rgba(0,0,0,0.05)',
           }}
         >
           <div style={{ marginBottom: '20px' }}>
             <label>{t('Apertura')}</label>
             <TimePicker
-              format="HH:mm"
+              format="h:mm a"
               value={opening}
               onChange={(val) => {
                 setOpening(val);
@@ -97,7 +97,7 @@ export const Step3 = (props: PropsStep) => {
           <div>
             <label>{t('Clausura')}</label>
             <TimePicker
-              format="HH:mm"
+              format="h:mm a"
               value={closing}
               onChange={(val) => {
                 setClosing(val);
@@ -124,8 +124,8 @@ export const Step3 = (props: PropsStep) => {
           style={{
             padding: '10px',
             borderRadius: '10px',
-            backgroundColor: '#ffffff',
-            boxShadow: '0px 0px 10px rgba(0,0,0,0.05)',
+            // backgroundColor: '#ffffff',
+            // boxShadow: '0px 0px 10px rgba(0,0,0,0.05)',
           }}
         >
           <h3>{t('Días disponibles')}</h3>

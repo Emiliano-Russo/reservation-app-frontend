@@ -55,7 +55,9 @@ export const Step1 = (props: PropsStep) => {
   return (
     <GrowsFromLeft>
       <div className={styles.container}>
+        <label>Nombre</label>
         <Input
+          style={{ marginTop: '5px' }}
           placeholder="Nombre del Negocio"
           value={props.businessData.name}
           onChange={(e) => {
@@ -66,85 +68,100 @@ export const Step1 = (props: PropsStep) => {
           className={styles.input}
         />
 
-        <Select
-          placeholder="Tipo de Negocio"
-          value={
-            businessTypeList.find((bt) => bt.id == props.businessData.typeID)
-              ?.name
-          }
-          onChange={(idParam) => {
-            props.setBusinessData((prev) => {
-              return { ...prev, typeID: idParam };
-            });
+        <>
+          <label style={{ marginTop: '20px' }}>Tipo</label>
+          <Select
+            style={{ marginTop: '5px' }}
+            placeholder="Tipo de Negocio"
+            value={
+              businessTypeList.find((bt) => bt.id == props.businessData.typeID)
+                ?.name
+            }
+            onChange={(idParam) => {
+              props.setBusinessData((prev) => {
+                return { ...prev, typeID: idParam };
+              });
+            }}
+            className={styles.select}
+          >
+            {businessTypeList.map((businessType: IBusinessType) => (
+              <Option key={businessType.id} value={businessType.id}>
+                {businessType.name}
+              </Option>
+            ))}
+          </Select>
+        </>
+
+        <>
+          <label style={{ marginTop: '20px' }}>Descripción</label>
+          <TextArea
+            style={{ marginTop: '5px' }}
+            placeholder="Descripción del Negocio"
+            value={props.businessData.description}
+            onChange={(e) =>
+              props.setBusinessData((prev) => {
+                return { ...prev, description: e.target.value };
+              })
+            }
+            className={styles.textArea}
+            rows={4}
+          />
+        </>
+
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
-          className={styles.select}
         >
-          {businessTypeList.map((businessType: IBusinessType) => (
-            <Option key={businessType.id} value={businessType.id}>
-              {businessType.name}
-            </Option>
-          ))}
-        </Select>
+          <div>
+            {/* Input oculto */}
+            <input
+              style={{ display: 'none' }}
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              onChange={(info) => handleUploadChange(info, 'logo')}
+            />
 
-        <TextArea
-          placeholder="Descripción del Negocio"
-          value={props.businessData.description}
-          onChange={(e) =>
-            props.setBusinessData((prev) => {
-              return { ...prev, description: e.target.value };
-            })
-          }
-          className={styles.textArea}
-          rows={4}
-        />
+            {/* Label personalizado */}
+            <label
+              htmlFor="fileInput"
+              style={{
+                cursor: 'pointer',
+                color: 'blue',
+                textDecoration: 'underline',
+              }}
+            >
+              Sube tu Logo
+            </label>
+            <p>{logoFileName != '' ? logoFileName : null}</p>
+          </div>
+          <hr></hr>
+          <div>
+            {/* Input oculto */}
+            <input
+              style={{ display: 'none' }}
+              id="bannerFileInput"
+              type="file"
+              accept="image/*"
+              onChange={(info) => handleUploadChange(info, 'banner')}
+            />
+            {}
 
-        <div>
-          {/* Input oculto */}
-          <input
-            style={{ display: 'none' }}
-            id="fileInput"
-            type="file"
-            accept="image/*"
-            onChange={(info) => handleUploadChange(info, 'logo')}
-          />
-
-          {/* Label personalizado */}
-          <label
-            htmlFor="fileInput"
-            style={{
-              cursor: 'pointer',
-              color: 'blue',
-              textDecoration: 'underline',
-            }}
-          >
-            Sube tu Logo
-          </label>
-          <p>{logoFileName != '' ? logoFileName : null}</p>
-        </div>
-        <hr></hr>
-        <div>
-          {/* Input oculto */}
-          <input
-            style={{ display: 'none' }}
-            id="bannerFileInput"
-            type="file"
-            accept="image/*"
-            onChange={(info) => handleUploadChange(info, 'banner')}
-          />
-          {}
-
-          {/* Label personalizado */}
-          <label
-            htmlFor="bannerFileInput"
-            style={{
-              cursor: 'pointer',
-              color: 'blue',
-              textDecoration: 'underline',
-            }}
-          >
-            Sube tu Banner
-          </label>
-          <p>{bannerFileName != '' ? bannerFileName : null}</p>
+            {/* Label personalizado */}
+            <label
+              htmlFor="bannerFileInput"
+              style={{
+                cursor: 'pointer',
+                color: 'blue',
+              }}
+            >
+              Sube tu Banner
+            </label>
+            <p>{bannerFileName != '' ? bannerFileName : null}</p>
+          </div>
         </div>
       </div>
     </GrowsFromLeft>
