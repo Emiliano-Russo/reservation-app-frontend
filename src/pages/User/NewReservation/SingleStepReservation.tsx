@@ -56,6 +56,7 @@ export const SingleStepReservation = ({
             onChange={(date) => setStartDate(date)}
             locale={es}
             inline
+            minDate={new Date()} // Añade esta línea
           />
         ) : (
           <DatePicker
@@ -65,6 +66,7 @@ export const SingleStepReservation = ({
             endDate={endDate}
             selectsRange
             inline
+            minDate={new Date()} // Añade esta línea
           />
         )}
       </div>

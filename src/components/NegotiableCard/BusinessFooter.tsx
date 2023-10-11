@@ -113,6 +113,7 @@ export const BusinessFooter = (props: Props) => {
               onChange={(date) => setStartDate(date)}
               locale={es}
               dateFormat="dd/MM/yyyy"
+              minDate={new Date()}
             />
           </>
         )}
