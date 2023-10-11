@@ -123,8 +123,9 @@ export const Business = withPageLayout(
           style={{
             position: 'absolute',
             color: 'black',
-            top: '10px',
+            top: 'calc(env(safe-area-inset-top) + 10px)',
             left: '10px',
+           
           }}
         />
 

@@ -191,13 +191,13 @@ const Summary = () => {
 export const BusinessHome = withPageLayout(
   () => {
     return (
-      <div style={{ padding: '0px 10px' }}>
+      <div style={{ padding: '0px 10px',  paddingTop:" calc(env(safe-area-inset-top) + 10px)" }}>
         <GrowsFromLeft>
           <Tabs
             defaultActiveKey="1"
             style={{
               height: '80vh',
-              marginTop: '30px',
+              marginTop: '10px',
               padding: '10px',
             }}
           >

@@ -6,6 +6,7 @@
   height: 100%;
   background: white;
   color: black;
+  padding-top: calc(env(safe-area-inset-top) + 10px);
 }
 
 .profileName {
@@ -43,6 +44,7 @@
   width: 80%;
   padding: 15px;
   text-align: center;
+  overflow-y: scroll;
 }
 
 .avatar {

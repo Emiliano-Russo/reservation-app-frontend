@@ -81,6 +81,7 @@
   position: relative;
   height: 6.25rem; /* 100px */
   background: #ffa500;
+  padding-top: calc(env(safe-area-inset-top) + 10px);
 }
 
 .profileHeader .avatarContainer {
