@@ -19,20 +19,20 @@ export const About = () => {
             style={{ margin: '0px 0px 10px 0px', padding: '0px' }}
             level={3}
           >
-            Acerca de ReservaApp
+            Acerca de Agenda Facíl
           </Title>
 
           <Paragraph>
-            ReservaApp es una aplicación diseñada para facilitar el proceso de
+            Agenda Facíl es una aplicación diseñada para facilitar el proceso de
             reservas en diferentes tipos de negocios. Nuestro objetivo es
             brindar una experiencia fluida y sencilla para usuarios y negocios
             por igual.
           </Paragraph>
 
           <Paragraph>
-            Desarrollado con pasión por el equipo de ReservaTech, estamos
-            comprometidos con la innovación y la excelencia en todo lo que
-            hacemos.
+            Desarrollado con pasión por el equipo de Jiren Digital Works,
+            estamos comprometidos con la innovación y la excelencia en todo lo
+            que hacemos.
           </Paragraph>
 
           <Title level={4}>Versión</Title>
@@ -41,11 +41,11 @@ export const About = () => {
           <Title level={4}>Contacto</Title>
           <Paragraph>
             ¿Tienes preguntas o comentarios? No dudes en{' '}
-            <a href="mailto:support@reservaapp.com">contactarnos</a>.
+            <a href="mailto:equipo@agendafacil.org">contactarnos</a>.
           </Paragraph>
 
           <Divider />
-          <Button type="primary" href="https://reservaapp.com">
+          <Button type="primary" href="https://agendafacil.org">
             Visita nuestro sitio web
           </Button>
         </Card>

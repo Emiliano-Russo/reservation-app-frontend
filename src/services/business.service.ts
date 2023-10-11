@@ -25,7 +25,6 @@ export class BusinessService {
     formData.append('address', business.address);
     formData.append('description', business.description);
     formData.append('department', business.department);
-    formData.append('coordinatesStringify', business.coordinatesStringify);
     formData.append('availabilityStringify', business.availabilityStringify);
 
     if (logoImage) {
