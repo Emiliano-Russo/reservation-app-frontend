@@ -16,7 +16,7 @@
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   border-radius: 0.625rem;
   padding: 0 1.25rem;
-  background-color: #f5f5f5; /* Un color de fondo claro */
+  background-color: white; /* Un color de fondo claro */
 }
 
 .iconLoyalty {
