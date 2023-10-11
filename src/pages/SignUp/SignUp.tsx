@@ -185,19 +185,6 @@ export const SignUp = withGuest(() => {
 
               <AnimatedFromLeft delay={0.2}>
                 <label style={{ display: 'block', marginBottom: '5px' }}>
-                  Teléfono
-                </label>
-                <Input
-                  type="tel"
-                  placeholder="Teléfono"
-                  value={formData.phone}
-                  onChange={handlePhoneChange}
-                  style={{ marginBottom: '15px' }}
-                />
-              </AnimatedFromLeft>
-
-              <AnimatedFromLeft delay={0.3}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>
                   Correo Electrónico
                 </label>
                 <Input
@@ -206,6 +193,20 @@ export const SignUp = withGuest(() => {
                   value={formData.email}
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
+                  }
+                  style={{ marginBottom: '15px' }}
+                />
+              </AnimatedFromLeft>
+
+              <AnimatedFromLeft delay={0.3}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Documento de Identidad
+                </label>
+                <Input
+                  placeholder="Documento de Identidad"
+                  value={formData.civilIdDoc}
+                  onChange={(e) =>
+                    setFormData({ ...formData, civilIdDoc: e.target.value })
                   }
                   style={{ marginBottom: '15px' }}
                 />
@@ -358,20 +359,6 @@ export const SignUp = withGuest(() => {
                 />
               </AnimatedFromLeft>
 
-              <AnimatedFromLeft delay={0.3}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>
-                  Documento de Identidad
-                </label>
-                <Input
-                  placeholder="Documento de Identidad"
-                  value={formData.civilIdDoc}
-                  onChange={(e) =>
-                    setFormData({ ...formData, civilIdDoc: e.target.value })
-                  }
-                  style={{ marginBottom: '15px' }}
-                />
-              </AnimatedFromLeft>
-
               <AnimatedFromLeft delay={0.4}>
                 <label style={{ display: 'block', marginBottom: '5px' }}>
                   País
@@ -393,22 +380,28 @@ export const SignUp = withGuest(() => {
               </AnimatedFromLeft>
 
               {formData.country != '' && (
-                <Select
-                  placeholder="Selecciona un departamento"
-                  value={formData.department}
-                  style={{ width: '100%' }}
-                  onChange={(department) =>
-                    setFormData((prev) => {
-                      return { ...prev, department };
-                    })
-                  }
-                >
-                  {country_departments[formData.country].map((dept) => (
-                    <Option key={dept} value={dept}>
-                      {dept}
-                    </Option>
-                  ))}
-                </Select>
+                <>
+                  {' '}
+                  <label style={{ display: 'block', marginBottom: '5px' }}>
+                    Zona
+                  </label>
+                  <Select
+                    placeholder="Selecciona un departamento"
+                    value={formData.department}
+                    style={{ width: '100%' }}
+                    onChange={(department) =>
+                      setFormData((prev) => {
+                        return { ...prev, department };
+                      })
+                    }
+                  >
+                    {country_departments[formData.country].map((dept) => (
+                      <Option key={dept} value={dept}>
+                        {dept}
+                      </Option>
+                    ))}
+                  </Select>
+                </>
               )}
             </div>
             <Button

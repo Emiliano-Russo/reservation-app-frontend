@@ -3,6 +3,7 @@ import { withPageLayout } from '../../../wrappers/WithPageLayout';
 import {
   ContactsOutlined,
   DownOutlined,
+  HomeOutlined,
   MailOutlined,
   MessageOutlined,
   PhoneOutlined,
@@ -268,14 +269,14 @@ export const Profile = withAuth(
 
     const onTapEmail = () => {
       console.log('email tapped');
-      setOpen(true);
+      if (user.emailVerified == false) setOpen(true);
     };
 
     const icons = [
       {
-        icon: <PhoneOutlined style={{ color: 'gray' }} />,
-        label: 'Teléfono',
-        value: user.phone,
+        icon: <HomeOutlined style={{ color: 'gray' }} />,
+        label: 'País',
+        value: user.country,
       },
       {
         icon: <MailOutlined style={{ color: 'gray' }} />,
