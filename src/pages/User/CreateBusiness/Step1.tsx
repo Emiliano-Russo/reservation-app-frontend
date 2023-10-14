@@ -122,6 +122,7 @@ export const Step1 = (props: PropsStep) => {
               id="fileInput"
               type="file"
               accept="image/*"
+              capture={false}
               onChange={(info) => handleUploadChange(info, 'logo')}
             />
 
@@ -146,6 +147,7 @@ export const Step1 = (props: PropsStep) => {
               id="bannerFileInput"
               type="file"
               accept="image/*"
+              capture={false}
               onChange={(info) => handleUploadChange(info, 'banner')}
             />
             {}

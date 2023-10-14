@@ -111,6 +111,7 @@ export const SignUp = withGuest(() => {
         <div>
           <div
             style={{
+              paddingTop:"calc(env(safe-area-inset-top) + 10px)",
               height: '15vh',
               overflow: 'hidden',
               background: '#ffa500',
@@ -227,6 +228,7 @@ export const SignUp = withGuest(() => {
                     id="fileInput"
                     type="file"
                     accept="image/*"
+                    capture={false}
                     onChange={(e) => handleAvatarChange(e)}
                   />
 

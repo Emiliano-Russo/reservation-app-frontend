@@ -154,6 +154,7 @@ export const EditBusinessProfile = () => {
             id="fileInput"
             type="file"
             accept="image/*"
+            capture={false}
             onChange={(e) => handleLogoChange(e)}
           />
           <label
@@ -177,6 +178,7 @@ export const EditBusinessProfile = () => {
             id="bannerInput"
             type="file"
             accept="image/*"
+            capture={false}
             onChange={(e) => handleBannerChange(e)}
           />
           <label
