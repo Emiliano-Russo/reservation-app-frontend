@@ -35,6 +35,7 @@ import { CreateBusiness } from './pages/User/CreateBusiness/_index';
 import { BusinessProfile } from './pages/Entrepreneur/Profile/Profile';
 import { BusinessHome } from './pages/Entrepreneur/Home/Home';
 import { BusinessReservation } from './pages/Entrepreneur/Reservations/Reservations';
+import { HomeTwo } from './pages/HomeTwo/HomeTwo';
 
 setupIonicReact();
 
@@ -63,7 +64,8 @@ const App: React.FC = () => {
             <Route path="/businessHome" element={<BusinessHome />} />
             <Route path="/new-reservation/:id" element={<NewReservation />} />
             <Route path="/create-business" element={<CreateBusiness />} />
-            <Route path="*" element={<Home />} />
+            <Route path="*" element={<HomeTwo />} />
+            <Route path="/Home" element={<Home />} />
           </Routes>
         </BrowserRouter>
       </Provider>

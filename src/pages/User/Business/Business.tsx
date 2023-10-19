@@ -20,6 +20,8 @@ import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
 import { ReservationService } from '../../../services/reservation.service';
 import { UserService } from '../../../services/user.service';
 import { IBusiness } from '../../../interfaces/business/business.interface';
+import { useSelector } from 'react-redux';
+import { RegistrationPopUp } from '../../../components/RegistrationPopUp/RegistrationPopUp';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -31,6 +33,7 @@ const userService = new UserService(REACT_APP_BASE_URL);
 export const Business = withPageLayout(
   () => {
     const { id } = useParams<any>(); // Obtener el id desde la URL
+    const myUser = useSelector((state: any) => state.user.user);
     const nav = useNavigate();
     const [business, setBusiness] = useState<IBusiness | null>(null);
     const [reservations, setReservations] = useState<any>(null);
@@ -190,11 +193,13 @@ export const Business = withPageLayout(
             </Tabs>
           </AnimatedFromLeft>
 
+          
+
           <Button
             type="primary"
             style={{ margin: 'auto 0px 0px 0px' }}
             onClick={() => {
-              nav(`/new-reservation/${id}`);
+              myUser != null ? nav(`/new-reservation/${id}`) : <RegistrationPopUp />;
             }}
           >
             Reservar
