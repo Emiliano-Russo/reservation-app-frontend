@@ -1,14 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUser } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user/user.interface';
 
 interface UpdateStringPropertyAction {
-  property: 'name' | 'username' | 'email' | 'bio' | 'token'; // Added 'token' here
+  property:
+    | 'name'
+    | 'email'
+    | 'token'
+    | 'phone'
+    | 'civilIdDoc'
+    | 'profileImage'
+    | 'country'
+    | 'department'
+    | 'fcmToken';
   value: string;
-}
-
-interface UpdateArrayPropertyAction {
-  property: 'followers' | 'following' | 'posts' | 'chats';
-  value: string[];
 }
 
 interface IUserState {
@@ -32,7 +36,6 @@ const initialStateUser = (): IUserState => {
     token: getTokenFromLocalStorage(),
   };
 };
-
 const userSlice = createSlice({
   name: 'user',
   initialState: initialStateUser(),
@@ -47,6 +50,14 @@ const userSlice = createSlice({
         ...state,
         user: action.payload.user,
         token: action.payload.token,
+      };
+    },
+    addUser(state, action: PayloadAction<IUser>) {
+      // Nueva función aquí
+      localStorage.setItem('user', JSON.stringify(action.payload));
+      return {
+        ...state,
+        user: action.payload,
       };
     },
     removeUserAndToken(state) {
@@ -80,22 +91,6 @@ const userSlice = createSlice({
         };
       }
     },
-    updateArrayProperty(
-      state,
-      action: PayloadAction<UpdateArrayPropertyAction>,
-    ) {
-      if (state.user) {
-        const newUser = {
-          ...state.user,
-          [action.payload.property]: action.payload.value,
-        };
-        localStorage.setItem('user', JSON.stringify(newUser));
-        return {
-          ...state,
-          user: newUser,
-        };
-      }
-    },
   },
 });
 
@@ -103,6 +98,6 @@ export const {
   addUserAndToken,
   removeUserAndToken,
   updateStringProperty,
-  updateArrayProperty,
+  addUser,
 } = userSlice.actions;
 export default userSlice.reducer;

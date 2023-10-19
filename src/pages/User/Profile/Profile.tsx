@@ -1,12 +1,14 @@
-import { Avatar, Button, Progress, Modal, Menu } from 'antd';
+import { Avatar, Button, Progress, Modal, Menu, message } from 'antd';
 import { withPageLayout } from '../../../wrappers/WithPageLayout';
 import {
   ContactsOutlined,
   DownOutlined,
+  HomeOutlined,
   MailOutlined,
   MessageOutlined,
   PhoneOutlined,
   SettingOutlined,
+  ShoppingCartOutlined,
 } from '@ant-design/icons';
 import styles from './Profile.module.css';
 import { StatusBar } from '@capacitor/status-bar';
@@ -14,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { FadeFromTop } from '../../../animations/FadeFromTop';
 import { withAuth } from '../../../wrappers/WithAuth';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { UserService } from '../../../services/user.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import { BusinessService } from '../../../services/business.service';
@@ -22,19 +24,25 @@ import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
 import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
 import { ModalAccountChanger } from '../../../components/ModalAccountChanger/ModalAccountChanger';
 import { setBusinessList } from '../../../redux/businessSlice';
+import { IBusiness } from '../../../interfaces/business/business.interface';
+import { RootState } from '../../../redux/store';
+import { addUser } from '../../../redux/userSlice';
+import { iconLoyaltyPoints } from '../../../utils/config';
+import { MailService } from '../../../services/mail.service';
 
 interface IconInfo {
   icon: React.ReactNode;
   label: string;
   value: string | boolean;
   color?: string;
+  onTap?: () => void;
 }
 
 export const BasicProfileInfoWidget = ({ icons }: { icons: IconInfo[] }) => {
   return (
     <div className={styles.container}>
       {icons.map((iconInfo, index) => (
-        <div key={index} className={styles.row}>
+        <div key={index} className={styles.row} onClick={iconInfo.onTap}>
           <p style={{ color: iconInfo.color || 'black' }}>
             {typeof iconInfo.value === 'boolean'
               ? iconInfo.value
@@ -59,14 +67,19 @@ export const SectionLine = ({ title }) => {
   );
 };
 
-const LoyaltyPointsWidget = () => {
+interface PropsLoyalty {
+  points: number;
+}
+
+const LoyaltyPointsWidget = (props: PropsLoyalty) => {
   return (
-    <div className={styles.container}>
-      <main>
-        <p className={styles.loyaltyText}>90 de 200</p>
-        <p className={styles.loyaltySubtext}>Nivel 2</p>
-      </main>
-      <Progress percent={30} />
+    <div className={styles.containerLoyalty}>
+      <img
+        src={iconLoyaltyPoints}
+        alt="Loyalty Points Icon"
+        className={styles.iconLoyalty}
+      />
+      <p className={styles.pointsLoyalty}>{props.points}</p>
     </div>
   );
 };
@@ -106,8 +119,13 @@ const ProfileHeader = (props: PropsHeader) => {
           {/* 96px */}
         </div>
         <div className={styles.messageButtonContainer}>
-          <button style={{ color: 'black', background: 'white' }}>
-            <MessageOutlined style={{ fontSize: '1.5rem' }} />
+          <button
+            style={{ color: 'black', background: 'white' }}
+            onClick={() => {
+              nav('/store');
+            }}
+          >
+            <ShoppingCartOutlined style={{ fontSize: '1.5rem' }} />
           </button>
         </div>
         <div className={styles.settingsButtonContainer}>
@@ -142,23 +160,130 @@ const ProfileHeader = (props: PropsHeader) => {
   );
 };
 
+interface PropsModal {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const RESEND_TIMEOUT = 5 * 60 * 1000; // 5 minutos
+
+const ModalVerifyMail = (props: PropsModal) => {
+  const [loading, setLoading] = useState(false);
+  const user = useSelector((user: RootState) => user.user.user);
+  const mailService = new MailService(REACT_APP_BASE_URL);
+
+  // Obtener la próxima fecha de reenvío desde localStorage al montar el componente
+  const [nextResend, setNextResend] = useState<Date | null>(() => {
+    const storedDate = localStorage.getItem('nextResend');
+    return storedDate ? new Date(storedDate) : null;
+  });
+
+  const canResend = !nextResend || new Date() > nextResend;
+
+  useEffect(() => {
+    // Guardar la próxima fecha de reenvío en localStorage cada vez que cambie
+    if (nextResend) {
+      localStorage.setItem('nextResend', nextResend.toISOString());
+    } else {
+      localStorage.removeItem('nextResend');
+    }
+  }, [nextResend]);
+
+  if (!user)
+    return (
+      <Modal
+        title="Verificación de correo"
+        open={props.open}
+        onCancel={() => props.setOpen(false)}
+        footer={null}
+      >
+        <h1>No User...</h1>
+      </Modal>
+    );
+
+  const handleResend = () => {
+    if (!canResend) {
+      message.info('Por favor, espera antes de reenviar.');
+      return;
+    }
+
+    setLoading(true);
+    mailService
+      .sendConfirmationEmail(user.email)
+      .then((val) => {
+        message.success('Correo Enviado!');
+        setNextResend(new Date(Date.now() + RESEND_TIMEOUT));
+      })
+      .catch((err) => {
+        message.error('Error al enviar correo');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  return (
+    <Modal
+      title="Verificación de correo"
+      open={props.open}
+      onCancel={() => props.setOpen(false)}
+      footer={null}
+    >
+      <p>Tu dirección de correo no está verificada.</p>
+      <p>
+        Si deseas reenviar el correo de verificación, haz clic en el botón
+        abajo.
+      </p>
+      <Button loading={loading} onClick={handleResend} disabled={!canResend}>
+        Reenviar correo de verificación
+      </Button>
+    </Modal>
+  );
+};
+
+const userService = new UserService(REACT_APP_BASE_URL);
+
 export const Profile = withAuth(
   withPageLayout(() => {
-    StatusBar.setBackgroundColor({ color: '#fd6f8e' });
+    StatusBar.setBackgroundColor({ color: '#ffa500' });
+    const dispatch = useDispatch();
+    const user = useSelector((state: RootState) => state.user.user);
+    const [open, setOpen] = useState(false);
 
-    const user = useSelector((state: any) => state.user.user);
+    useEffect(() => {
+      fetchUser();
+    }, []);
+
+    if (!user) return <h1>No user</h1>;
+
+    const fetchUser = async () => {
+      userService
+        .getUser(user.id)
+        .then((user) => {
+          dispatch(addUser(user));
+        })
+        .catch((err) => {
+          message.error('Error al obtener datos del usuario');
+        });
+    };
+
+    const onTapEmail = () => {
+      console.log('email tapped');
+      if (user.emailVerified == false) setOpen(true);
+    };
 
     const icons = [
       {
-        icon: <PhoneOutlined style={{ color: 'gray' }} />,
-        label: 'Teléfono',
-        value: user.phone,
+        icon: <HomeOutlined style={{ color: 'gray' }} />,
+        label: 'País',
+        value: user.country,
       },
       {
         icon: <MailOutlined style={{ color: 'gray' }} />,
         label: 'Email',
         value: user.email,
         color: user.emailVerified ? 'black' : 'red',
+        onTap: onTapEmail,
       },
       {
         icon: <ContactsOutlined style={{ color: 'gray' }} />,
@@ -178,10 +303,10 @@ export const Profile = withAuth(
           }
         />
         <SectionLine title={'Información'} />
-
         <BasicProfileInfoWidget icons={icons} />
         <SectionLine title={'Puntos de Fidelidad'} />
-        <LoyaltyPointsWidget />
+        <LoyaltyPointsWidget points={user.loyaltyPoints} />
+        <ModalVerifyMail open={open} setOpen={setOpen} />
       </FadeFromTop>
     );
   }, '0px'),

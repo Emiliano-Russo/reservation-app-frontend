@@ -1,13 +1,17 @@
-import { Button, Modal } from 'antd';
+import { Button, Input, Modal, Rate } from 'antd';
 import { ReservationStatus } from '../../interfaces/reservation.status';
 import { renderExtra } from './ReservationCard';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+import LoyaltyPointsBadge from '../LoyaltyPointsBadge/LoyaltyPointsBadge';
+import { FadeFromTop } from '../../animations/FadeFromTop';
 
 interface Data {
   status: ReservationStatus;
   businessName: string;
   reservationDate: string | undefined | null;
   extras?: any;
+  alreadyRated: boolean;
+  bookingInstructions: string | undefined;
 }
 
 interface Props {
@@ -16,9 +20,13 @@ interface Props {
   isModalVisible: boolean;
   loading: boolean;
   handleReservationUpdateState: (status: ReservationStatus) => void;
+  onSendStars: (amount: number, comment: string) => void;
 }
 
 export const UserModal = (props: Props) => {
+  const [stars, setStars] = useState(1);
+  const [comment, setComment] = useState('');
+
   return (
     <>
       <Modal
@@ -58,7 +66,7 @@ export const UserModal = (props: Props) => {
           ),
         ]}
       >
-        <p>Reserva para: {props.data.businessName}</p>
+        <h5>{props.data.businessName}</h5>
         {props.data.reservationDate ? (
           <>
             <p>
@@ -78,12 +86,44 @@ export const UserModal = (props: Props) => {
           </>
         ) : (
           <h1>No hay fecha de reserva ERROR</h1>
-        )}
+        )}{' '}
+        <p>{props.data.bookingInstructions}</p>
+        <br></br>
+        {props.data.status == ReservationStatus.Realized &&
+          !props.data.alreadyRated && (
+            <>
+              <FadeFromTop>
+                <div style={{ display: 'flex' }}>
+                  <p>Califica tu Experiencia</p>
 
-        {props.data.extras &&
-          props.data.extras.map((extra) => (
-            <p key={extra.label}>{renderExtra(extra)}</p>
-          ))}
+                  <LoyaltyPointsBadge points={5} />
+                </div>
+              </FadeFromTop>
+
+              <Rate
+                onChange={(amount) => {
+                  console.log('Stars: ', amount);
+                  setStars(amount);
+                }}
+              />
+              <Input
+                style={{ marginTop: '10px' }}
+                placeholder="Muy bueno!"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+              <Button
+                type="primary"
+                style={{ marginTop: '20px' }}
+                loading={props.loading}
+                onClick={() => {
+                  props.onSendStars(stars, comment);
+                }}
+              >
+                Enviar
+              </Button>
+            </>
+          )}
       </Modal>
     </>
   );

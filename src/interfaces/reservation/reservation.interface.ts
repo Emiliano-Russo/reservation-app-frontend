@@ -16,9 +16,31 @@ export interface IReservation {
   user: IUser;
   business: IBusiness;
   reservationDate: Date | null;
+  bookingInstructions: string | undefined;
   rating: number;
   comment: string;
   status: ReservationStatus;
-  negotiable: INegotiable | null;
+  negotiable: INegotiable | null | undefined;
   createdAt: Date;
+}
+
+export enum AcceptStatus {
+  Unanswered = 'Unanswered',
+  Accepted = 'Accepted',
+  NotAccepted = 'NotAccepted',
+}
+
+export function translateForUserAcceptStatus(
+  status: AcceptStatus | undefined,
+): string {
+  switch (status) {
+    case AcceptStatus.Unanswered:
+      return 'Esperando respuesta del usuario';
+    case AcceptStatus.Accepted:
+      return 'Aceptado';
+    case AcceptStatus.NotAccepted:
+      return 'No aceptado, esperando otra propuesta del negocio';
+    default:
+      return 'Aguardando confirmación del negocio';
+  }
 }

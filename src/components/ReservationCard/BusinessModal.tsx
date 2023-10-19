@@ -1,44 +1,63 @@
 import { Button, Modal } from 'antd';
 import { renderExtra } from './ReservationCard';
 import { ReservationStatus } from '../../interfaces/reservation.status';
+import { Dispatch, SetStateAction } from 'react';
 
-export const BusinessModal = ({
-  ticket,
-  handleReservationUpdateState,
-  isModalVisible,
-  setIsModalVisible,
-  loading,
-}) => {
+interface Data {
+  status: ReservationStatus;
+  userName: string;
+  reservationDate: string | undefined | null;
+  civilIdDoc: string;
+  extras?: any;
+  bookingInstructions: string | undefined;
+}
+
+interface Props {
+  data: Data;
+  setIsModalVisible: Dispatch<SetStateAction<boolean>>;
+  isModalVisible: boolean;
+  loading: boolean;
+  handleReservationUpdateState: (status: ReservationStatus) => void;
+}
+
+export const BusinessModal = (props: Props) => {
   return (
     <Modal
       footer={null}
-      open={isModalVisible}
+      open={props.isModalVisible}
       onOk={(e: any) => {
         e.stopPropagation();
-        setIsModalVisible(false);
+        props.setIsModalVisible(false);
       }}
       onCancel={(e: any) => {
         e.stopPropagation();
-        setIsModalVisible(false);
+        props.setIsModalVisible(false);
       }}
     >
       <p>
-        Reserva para <strong>{ticket.userName}</strong>
+        Reserva para: <strong>{props.data.userName}</strong>
       </p>
       <p>
-        Fecha: {new Date(ticket.reservationDate).toLocaleDateString('es-ES')}
+        CI: <strong>{props.data.civilIdDoc}</strong>
       </p>
-      <p>
-        Hora:{' '}
-        {new Date(ticket.reservationDate).toLocaleTimeString('es-ES', {
-          hour: '2-digit',
-          minute: '2-digit',
-        })}
-      </p>
-      {ticket.extras &&
-        ticket.extras.map((extra) => (
-          <p key={extra.label}>{renderExtra(extra)}</p>
-        ))}
+      {props.data.reservationDate ? (
+        <>
+          <p>
+            Fecha:{' '}
+            {new Date(props.data.reservationDate).toLocaleDateString('es-ES')}
+          </p>
+          <p>
+            Hora:{' '}
+            {new Date(props.data.reservationDate).toLocaleTimeString('es-ES', {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </p>
+        </>
+      ) : (
+        <h1>No hay fecha de reserva ERROR</h1>
+      )}
+      <p>{props.data.bookingInstructions}</p>
       <br></br>
       <div
         style={{
@@ -50,60 +69,65 @@ export const BusinessModal = ({
           flexWrap: 'wrap',
         }}
       >
-        {ticket.status === ReservationStatus.Pending && (
+        {props.data.status === ReservationStatus.Pending && (
           <>
             <Button
-              loading={loading}
+              loading={props.loading}
               type="primary"
               onClick={() => {
-                handleReservationUpdateState(ReservationStatus.Confirmed);
+                props.handleReservationUpdateState(ReservationStatus.Confirmed);
               }}
             >
               Aceptar
             </Button>
             <Button
-              loading={loading}
+              loading={props.loading}
               type="primary"
               danger
               onClick={() => {
-                handleReservationUpdateState(ReservationStatus.Rejected);
+                props.handleReservationUpdateState(ReservationStatus.Rejected);
               }}
             >
               Rechazar
             </Button>
           </>
         )}
-        {ticket.status === ReservationStatus.Confirmed && (
-          <>
+        {props.data.status === ReservationStatus.Confirmed && (
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+          >
             <Button
-              loading={loading}
+              loading={props.loading}
               type="primary"
-              style={{ margin: '10px' }}
-              onClick={() => {
-                handleReservationUpdateState(ReservationStatus.Realized);
-              }}
+              onClick={() =>
+                props.handleReservationUpdateState(ReservationStatus.Realized)
+              }
             >
-              Confirmar Asistencia
+              Confimar Asistencia
             </Button>
+
             <Button
-              loading={loading}
-              type="primary"
-              danger
-              onClick={() => {
-                handleReservationUpdateState(ReservationStatus.Rejected);
-              }}
-            >
-              Rechazar
-            </Button>
-            <Button
-              loading={loading}
-              onClick={() => {
-                handleReservationUpdateState(ReservationStatus.NotAttended);
-              }}
+              loading={props.loading}
+              onClick={() =>
+                props.handleReservationUpdateState(
+                  ReservationStatus.NotAttended,
+                )
+              }
             >
               No Asistió
             </Button>
-          </>
+
+            <Button
+              loading={props.loading}
+              type="primary"
+              danger
+              onClick={() =>
+                props.handleReservationUpdateState(ReservationStatus.Rejected)
+              }
+            >
+              Rechazar Reserva
+            </Button>
+          </div>
         )}
       </div>
     </Modal>

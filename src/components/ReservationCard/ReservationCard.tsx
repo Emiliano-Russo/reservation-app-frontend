@@ -10,8 +10,8 @@ import { REACT_APP_BASE_URL } from '../../../env';
 import { ReservationService } from '../../services/reservation.service';
 import { BusinessModal } from './BusinessModal';
 import { UserModal } from './UserModal';
-import { IReservation } from '../../interfaces/reservation.interface';
 import { message } from 'antd';
+import { IReservation } from '../../interfaces/reservation/reservation.interface';
 
 interface Props {
   reservation: IReservation;
@@ -21,6 +21,7 @@ interface Props {
     status: ReservationStatus,
   ) => void;
   isBusiness: boolean;
+  addRateReservation: (id: string, rating: number, comment: string) => void;
 }
 
 const reservationService = new ReservationService(REACT_APP_BASE_URL);
@@ -34,7 +35,6 @@ export const renderExtra = (extra) => {
 };
 
 export const ReservationCard = (ticket: Props) => {
-  console.log('ticket props: ', ticket);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const statusStyle = getStatusColor(ticket.reservation.status);
@@ -103,7 +103,13 @@ export const ReservationCard = (ticket: Props) => {
           loading={loading}
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
-          ticket={ticket}
+          data={{
+            userName: ticket.reservation.user.name,
+            reservationDate: ticket.reservation.reservationDate?.toString(),
+            status: ticket.reservation.status,
+            civilIdDoc: ticket.reservation.user.civilIdDoc,
+            bookingInstructions: ticket.reservation.bookingInstructions,
+          }}
           handleReservationUpdateState={handleReservationUpdateState}
         />
       ) : (
@@ -116,6 +122,31 @@ export const ReservationCard = (ticket: Props) => {
             businessName: ticket.reservation.business.name,
             reservationDate: ticket.reservation.reservationDate?.toString(),
             status: ticket.reservation.status,
+            alreadyRated: ticket.reservation.rating != undefined,
+            bookingInstructions: ticket.reservation.bookingInstructions,
+          }}
+          onSendStars={(amount, comment) => {
+            setLoading(true);
+            console.log('amount: ', amount);
+            reservationService
+              .rateReservation(ticket.reservation.id, {
+                rating: amount,
+                comment,
+              })
+              .then((val) => {
+                message.success('Reserva Calificada!');
+                ticket.addRateReservation(
+                  ticket.reservation.id,
+                  amount,
+                  comment,
+                );
+              })
+              .catch((err) => {
+                message.error('Error al Calificar');
+              })
+              .finally(() => {
+                setLoading(false);
+              });
           }}
         />
       )}

@@ -1,4 +1,4 @@
-import { IShift, WeekDays } from '../interfaces';
+import { WeekDays } from '../weekday.enum';
 
 export enum BusinessStatus {
   Pending = 'Pending',
@@ -6,23 +6,17 @@ export enum BusinessStatus {
   Closed = 'Closed',
 }
 
-export interface IMap {
-  id: string;
-  pointX: string;
-  pointY: string;
-}
-
-export interface iShift {
-  id: string;
-  openingTime: string;
-  closingTime: string;
-}
+// export interface IMap {
+//   id: string;
+//   pointX: string;
+//   pointY: string;
+// }
 
 export interface IAvailability {
   id: string;
   day: WeekDays;
-  shifts: IShift[];
-  open: boolean;
+  openingTime: string;
+  closingTime: string;
 }
 
 export interface IBusiness {
@@ -33,7 +27,7 @@ export interface IBusiness {
   country: string;
   department: string;
   address: string;
-  coordinates: IMap;
+  // coordinates: IMap;
   logoURL?: string;
   banner: string;
   description?: string;

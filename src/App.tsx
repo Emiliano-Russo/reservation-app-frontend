@@ -25,22 +25,29 @@ import { SignUp } from './pages/SignUp/SignUp';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import { Home } from './pages/User/Home/Home';
-import Reservations from './pages/User/Reservations/Reservations';
+import { UserReservations } from './pages/User/Reservations/Reservations';
 import { Profile } from './pages/User/Profile/Profile';
 import { Settings } from './pages/User/Settings/Settings';
 import { Business } from './pages/User/Business/Business';
 import { BusinessList } from './pages/User/BusinessList/BusinessList';
 import { NewReservation } from './pages/User/NewReservation/NewReservation';
-import { CreateBusiness } from './pages/User/CreateBusiness/_index';
+import { CreateBusiness } from './pages/User/CreateBusiness';
 import { BusinessProfile } from './pages/Entrepreneur/Profile/Profile';
 import { BusinessHome } from './pages/Entrepreneur/Home/Home';
-import { BusinessReservation } from './pages/Entrepreneur/Reservations/Reservations';
+import { BusinessReservations } from './pages/Entrepreneur/Reservations';
 import { HomeTwo } from './pages/HomeTwo/HomeTwo';
+import { EditUserData } from './pages/User/EditUserData/EditUserData';
+import { Help } from './pages/User/Help/Help';
+import { About } from './pages/About/About';
+import { EditBusinessProfile } from './pages/Entrepreneur/EditBusinessProfile/EditBusinessProfile';
+import { Store } from './pages/User/Store/Store';
+import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword';
 
 setupIonicReact();
 
 const App: React.FC = () => {
   SplashScreen.hide();
+
   return (
     <IonApp>
       <Provider store={store}>
@@ -48,22 +55,35 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/reservations" element={<Reservations />} />
+            <Route
+              path="/request-password-reset"
+              element={<ForgotPassword />}
+            />
+            <Route path="/reservations" element={<UserReservations />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/store" element={<Store />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/business/:type/:id" element={<Business />} />
+            <Route path="/new-reservation/:id" element={<NewReservation />} />
             <Route path="/business/:type" element={<BusinessList />} />
+            <Route path="/edit-user-data" element={<EditUserData />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/about" element={<About />} />
+            {/* business */}
             <Route
               path="/businessPrivateProfile"
               element={<BusinessProfile />}
             />
             <Route
               path="/businessReservation"
-              element={<BusinessReservation />}
+              element={<BusinessReservations />}
             />
             <Route path="/businessHome" element={<BusinessHome />} />
-            <Route path="/new-reservation/:id" element={<NewReservation />} />
             <Route path="/create-business" element={<CreateBusiness />} />
+            <Route
+              path="/edit-business-profile"
+              element={<EditBusinessProfile />}
+            />
             <Route path="*" element={<HomeTwo />} />
             <Route path="/Home" element={<Home />} />
           </Routes>

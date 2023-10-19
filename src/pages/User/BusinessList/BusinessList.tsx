@@ -10,9 +10,8 @@ import { BusinessService } from '../../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
 import { BusinessTypeService } from '../../../services/businessType.service';
-
-const { Title } = Typography;
-const Search = Input.Search;
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 const businessService = new BusinessService(REACT_APP_BASE_URL);
 const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
@@ -29,36 +28,18 @@ export const BusinessList = withPageLayout(
     const [page, setPage] = useState(1);
     const [hasMoreData, setHasMoreData] = useState(true);
     const [loading, setLoading] = useState(true);
+    const [searchValue, setSearchValue] = useState('');
 
     const containerRef = useRef<any>(null);
+    const user = useSelector((state: RootState) => state.user.user);
     const nav = useNavigate();
 
     useEffect(() => {
-      async function fetchBusinessTypeName() {
-        if (!type) return;
-        const businessType = await businessTypeService.getBusinessType(type);
-        setBusinessTypeName(businessType.name);
-      }
-
       fetchBusinessTypeName();
     }, [type]);
 
     useEffect(() => {
-      async function fetchBusinesses() {
-        setLoading(true);
-        if (!type) return;
-        const res = await businessService.getBusinessesByTypeId(type, {
-          limit: limitPerPage,
-          page: page,
-        });
-        setLoading(false);
-        if (res.items.length == 0) {
-          setHasMoreData(false);
-          return;
-        }
-        setBusinesses((prev) => [...prev, ...res.items]);
-      }
-      fetchBusinesses();
+      fetchBusinesses(searchValue);
     }, [page]);
 
     useEffect(() => {
@@ -73,6 +54,46 @@ export const BusinessList = withPageLayout(
       };
     }, []);
 
+    useEffect(() => {
+      setPage(1);
+      setBusinesses([]);
+      fetchBusinesses(searchValue);
+    }, [searchValue]);
+
+    async function fetchBusinesses(searchTerm = '') {
+      setLoading(true);
+      if (!type) return;
+      const res = await businessService.getBusinessesByTypeId(
+        type,
+        {
+          limit: limitPerPage,
+          page: page,
+        },
+        searchTerm,
+        user?.country,
+        user?.department,
+      );
+      setLoading(false);
+      if (res.items.length == 0) {
+        setHasMoreData(false);
+        return;
+      }
+      setBusinesses((prev) => {
+        // Filtrar los nuevos negocios para asegurarse de que no estén ya en la lista previa
+        const newItems = res.items.filter(
+          (newBusiness) =>
+            !prev.some((prevBusiness) => prevBusiness.id === newBusiness.id),
+        );
+        return [...prev, ...newItems];
+      });
+    }
+
+    async function fetchBusinessTypeName() {
+      if (!type) return;
+      const businessType = await businessTypeService.getBusinessType(type);
+      setBusinessTypeName(businessType.name);
+    }
+
     const handleScroll = (e) => {
       const container = e.target;
       if (
@@ -83,17 +104,36 @@ export const BusinessList = withPageLayout(
       }
     };
 
+    const filteredBusinesses = businesses.filter((business: any) => {
+      return business.name.toLowerCase().includes(searchValue.toLowerCase());
+    });
+
     return (
       <>
         <AnimatedFromLeft>
           <BackNavigationHeader title={businessTypeName} />
           <div style={{ height: '20px' }}></div>
         </AnimatedFromLeft>
-        <SearchInput placeholder="Buscar negocios..." />
+        <SearchInput
+          placeholder="Buscar negocios..."
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+
         {loading && <Spin style={{ marginTop: '100px' }} />}
         <div className={styles.businessContainer} ref={containerRef}>
-          {businesses.map((business: any, index) => (
-            <AnimatedFromLeft delay={index * 0.1} key={business.id}>
+          {filteredBusinesses.length == 0 &&
+            searchValue.length == 0 &&
+            !loading && (
+              <p style={{ textAlign: 'center' }}>
+                Estamos en búsqueda de los mejores negocios para esta categoría.
+                <br />
+                ¡Mantente atento!
+              </p>
+            )}
+
+          {filteredBusinesses.map((business: any, index) => (
+            <AnimatedFromLeft delay={index * 0.1} key={index}>
               <div
                 className={styles.businessCard}
                 onClick={() => {

@@ -5,33 +5,34 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { BusinessService } from '../../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import { BusinessTypeService } from '../../../services/businessType.service';
-import { DownOutlined } from '@ant-design/icons';
+import {
+  ClockCircleOutlined,
+  DownOutlined,
+  EditOutlined,
+} from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { ModalAccountChanger } from '../../../components/ModalAccountChanger/ModalAccountChanger';
 import Footer from '../../../components/Footer/Footer';
 import { withPageLayout } from '../../../wrappers/WithPageLayout';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
+import { RootState } from '../../../redux/store';
+import { WeekDays } from '../../../interfaces/weekday.enum';
+import { weekDayToSpanish } from '../../../utils/dateFormat';
+import { IAvailability } from '../../../interfaces/business/business.interface';
+import { DayAvailability } from '../../../components/DayAvailability/DayAvailability';
 
-const DayAvailability = ({ day, shifts }) => {
-  return (
-    <div className={styles.dayAvailability}>
-      <strong>{day + ' '}</strong>
-      {shifts.map((shift, index) => (
-        <div key={index}>
-          <p>{new Date(shift.openingTime).toLocaleString()}</p>
-          <p>{new Date(shift.closingTime).toLocaleString()}</p>
-        </div>
-      ))}
-    </div>
-  );
-};
+interface Props {
+  availability: IAvailability;
+}
 
 export const BusinessProfile = withPageLayout(
   () => {
     const business = useSelector(
-      (state: any) => state.business.currentBusiness,
+      (state: RootState) => state.business.currentBusiness,
     );
+    console.log('business: ', business);
     const businesses = useSelector((state: any) => state.business.myBusinesses);
+    console.log('businesses list: ', businesses);
     const [loading, setLoading] = useState(false);
     const [availabilityModal, setAvailabilityModal] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -55,12 +56,14 @@ export const BusinessProfile = withPageLayout(
         </div>
       );
 
+    if (!business) return <h1>No Business</h1>;
+
     return (
       <GrowsFromLeft>
         <div className={styles.businessProfileContainer}>
           <div
             style={{
-              backgroundImage: ` url(${business.multimediaURL[0]})`,
+              backgroundImage: ` url(${business.banner})`,
             }}
             className={styles.banner}
           >
@@ -106,12 +109,22 @@ export const BusinessProfile = withPageLayout(
             </p>
             <div className={styles.availability}>
               <Button
+                icon={<ClockCircleOutlined />}
                 style={{ marginTop: '20px' }}
                 onClick={() => {
                   setAvailabilityModal(true);
                 }}
               >
-                Ver Disponibilidad
+                Horarios
+              </Button>
+              <Button
+                style={{ marginTop: '10px' }}
+                icon={<EditOutlined />}
+                onClick={() => {
+                  nav('/edit-business-profile');
+                }}
+              >
+                Editar
               </Button>
               <Modal
                 footer={null}
@@ -131,16 +144,9 @@ export const BusinessProfile = withPageLayout(
                       padding: '40px',
                     }}
                   >
-                    {business?.availability.map(
-                      (avail, index) =>
-                        avail.open && (
-                          <DayAvailability
-                            key={index}
-                            day={avail.day}
-                            shifts={avail.shifts}
-                          />
-                        ),
-                    )}
+                    {business?.availability.map((avail, index) => (
+                      <DayAvailability key={index} availability={avail} />
+                    ))}
                   </div>
                 </div>
               </Modal>

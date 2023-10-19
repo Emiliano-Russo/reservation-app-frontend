@@ -1,53 +1,62 @@
 import { Button, Modal } from 'antd';
 import styles from './NewReservation.module.css';
-import { INegotiable } from '../../../interfaces/reservation.interface';
 import {
   formatDate,
   formatOnlyDate,
   formatTime,
 } from '../../../utils/dateFormat';
+import { INegotiable } from '../../../interfaces/reservation/negotiable.interace';
+import { ControlValue } from './NewReservation';
+import { IBusiness } from '../../../interfaces/business/business.interface';
 
-const NegotiableContent = (negotiable: INegotiable) => {
+interface PropsNegotiable {
+  negotiable: INegotiable;
+  bookingInstructions: string;
+}
+
+const NegotiableContent = (props: PropsNegotiable) => {
+  if (!props.negotiable) return <h1>Empty</h1>;
   return (
     <div>
-      {negotiable.dateRange?.end ? (
+      {props.negotiable.dateRange?.end ? (
         <>
           <h1>Dias Flexibles</h1>
           <p>
             <strong>Del </strong>
-            {formatOnlyDate(negotiable.dateRange?.start.toString())}
+            {formatOnlyDate(props.negotiable.dateRange?.start.toString())}
           </p>
           <p>
             <strong>Hasta</strong>{' '}
-            {formatOnlyDate(negotiable.dateRange?.end.toString())}
+            {formatOnlyDate(props.negotiable.dateRange?.end.toString())}
           </p>
         </>
       ) : (
         <>
           <h1>Dia especifico</h1>
-          <p> {formatOnlyDate(negotiable.dateRange?.start.toString())}</p>
+          <p> {formatOnlyDate(props.negotiable.dateRange?.start.toString())}</p>
         </>
       )}
 
-      {negotiable.timeRange?.end ? (
+      {props.negotiable.timeRange?.end ? (
         <>
           <h1>Horas Flexibles</h1>
           <p>
             <strong>De </strong>
-            {formatTime(new Date(negotiable.timeRange.start))}
+            {formatTime(new Date(props.negotiable.timeRange.start))}
           </p>
           <p>
             {' '}
             <strong>Hasta</strong>{' '}
-            {formatTime(new Date(negotiable.timeRange.end))}
+            {formatTime(new Date(props.negotiable.timeRange.end))}
           </p>
         </>
-      ) : negotiable.timeRange ? (
+      ) : props.negotiable.timeRange ? (
         <>
           <h1>Hora especifica</h1>
-          <p>{formatTime(new Date(negotiable.timeRange.start))}</p>
+          <p>{formatTime(new Date(props.negotiable.timeRange.start))}</p>
         </>
       ) : null}
+      {props.bookingInstructions}
     </div>
   );
 };
@@ -58,6 +67,7 @@ const Specific = ({ business, controlValues }) => {
       <h3>{business?.name}</h3>
       <p>Fecha</p>
       <span>{formatDate(controlValues?.date)}</span>
+      <p>{controlValues.bookingInstructions}</p>
       {controlValues?.extras?.map((val) => {
         return (
           <>
@@ -70,47 +80,55 @@ const Specific = ({ business, controlValues }) => {
   );
 };
 
-export const ReservationModal = ({
-  modalOpen,
-  loading,
-  creatingReservation,
-  createReservation,
-  controlValues,
-  business,
-  setModalOpen,
-}) => {
+interface Props {
+  modalOpen: boolean;
+  loading: boolean;
+  creatingReservation: boolean;
+  createReservation: () => void;
+  controlValues: ControlValue | undefined;
+  business: IBusiness;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const ReservationModal = (props: Props) => {
   return (
     <Modal
-      open={modalOpen}
+      open={props.modalOpen}
       onCancel={() => {
-        if (creatingReservation == false) setModalOpen(false);
+        if (props.creatingReservation == false) props.setModalOpen(false);
       }}
       bodyStyle={{ padding: 0 }}
       footer={
         <div>
           <Button
             danger
-            loading={creatingReservation}
+            loading={props.creatingReservation}
             onClick={() => {
-              if (loading == false) setModalOpen(false);
+              if (props.loading == false) props.setModalOpen(false);
             }}
           >
             Cancelar
           </Button>
           <Button
-            loading={creatingReservation}
+            loading={props.creatingReservation}
             type="primary"
-            onClick={createReservation}
+            onClick={props.createReservation}
           >
             Confimar
           </Button>
         </div>
       }
     >
-      {controlValues && controlValues.negotiable ? (
-        <NegotiableContent {...controlValues.negotiable} />
+      {props.controlValues && props.controlValues.negotiable ? (
+        <NegotiableContent
+          negotiable={props.controlValues.negotiable}
+          bookingInstructions={props.controlValues.bookingInstructions || ''}
+        />
       ) : (
-        <Specific business={business} controlValues={controlValues} />
+        <Specific
+          business={props.business}
+          controlValues={props.controlValues}
+        />
       )}
     </Modal>
   );

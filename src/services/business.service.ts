@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { PaginatedResponse, PaginationDto } from '../interfaces/pagination.dto';
 import { formatQueryParams } from '../utils/formatQuery';
 import { IBusiness } from '../interfaces/business/business.interface';
+import { IBusinessCreateDto } from '../pages/User/CreateBusiness/dto/create-business.dto';
 
 export class BusinessService {
   private api: any;
@@ -12,15 +13,11 @@ export class BusinessService {
   }
 
   public async registerBusiness(
-    business: any,
+    business: IBusinessCreateDto,
     logoImage?: File | null,
     bannerImage?: File | null,
   ): Promise<any> {
     const formData = new FormData();
-    const objnewCoordinates = {
-      pointX: business.coordinates.latitude.toString(),
-      pointY: business.coordinates.longitude.toString(),
-    };
     formData.append('ownerId', business.ownerId);
     formData.append('typeId', business.typeId);
     formData.append('name', business.name);
@@ -28,8 +25,7 @@ export class BusinessService {
     formData.append('address', business.address);
     formData.append('description', business.description);
     formData.append('department', business.department);
-    formData.append('coordinates', JSON.stringify(objnewCoordinates));
-    formData.append('availability', JSON.stringify(business.availability));
+    formData.append('availabilityStringify', business.availabilityStringify);
 
     if (logoImage) {
       formData.append('logo', logoImage, logoImage.name);
@@ -75,10 +71,15 @@ export class BusinessService {
   async getBusinessesByTypeId(
     typeId: string,
     paginated: PaginationDto,
+    search: string = '',
+    country: string = '',
+    department: string = '',
   ): Promise<PaginatedResponse<IBusiness>> {
     const jwtToken = localStorage.getItem('jwtToken');
     const response: AxiosResponse<any> = await this.api.get(
-      `/business?typeId=${typeId}&${formatQueryParams(paginated)}`,
+      `/business?typeId=${typeId}&${formatQueryParams(
+        paginated,
+      )}&search=${search}&country=${country}&department=${department}`,
       {
         headers: { Authorization: `Bearer ${jwtToken}` },
       },
@@ -88,12 +89,15 @@ export class BusinessService {
 
   async editBusiness(
     businessParam: any,
-    logoImage?: File | null,
+    logoImage?: File,
+    bannerImage?: File,
   ): Promise<any> {
     const formData = new FormData();
     formData.append('name', businessParam.name);
     formData.append('address', businessParam.address);
     formData.append('description', businessParam.description);
+    formData.append('country', businessParam.country);
+    formData.append('department', businessParam.department);
 
     if (businessParam.coordinates) {
       formData.append('coordinates[pointX]', businessParam.coordinates.pointX);
@@ -101,15 +105,24 @@ export class BusinessService {
     }
 
     if (logoImage) {
-      formData.append('logoImage', logoImage, logoImage.name);
+      formData.append('logo', logoImage, logoImage.name);
     }
 
-    return this.api.put(`/businesses/${businessParam.id}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+    if (bannerImage) {
+      formData.append('banner', bannerImage, bannerImage.name);
+    }
+
+    const res = await this.api.patch(
+      `/business/${businessParam.id}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+        },
       },
-    });
+    );
+    return res.data;
   }
 
   async searchByBusinessName(businessName: string): Promise<any> {

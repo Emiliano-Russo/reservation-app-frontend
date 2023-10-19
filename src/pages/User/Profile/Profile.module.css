@@ -8,6 +8,29 @@
   padding: 0 1.25rem;
 }
 
+.containerLoyalty {
+  margin: 0 1.25rem;
+  display: flex;
+  align-items: center; /* Alinea verticalmente el contenido */
+  justify-content: center;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 0.625rem;
+  padding: 0 1.25rem;
+  background-color: white; /* Un color de fondo claro */
+}
+
+.iconLoyalty {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.5rem; /* Espacio entre el icono y el número */
+}
+
+.pointsLoyalty {
+  font-size: 1.5rem; /* Un tamaño de fuente más grande para destacar los puntos */
+  font-weight: bold; /* Hacer la tipografía en negrita */
+  color: #ff9900; /* Un color que denote "recompensa" */
+}
+
 .container main {
   display: flex;
   flex-direction: row;
@@ -57,7 +80,8 @@
 .profileHeader {
   position: relative;
   height: 6.25rem; /* 100px */
-  background: #fd6f8e;
+  background: #ffa500;
+  padding-top: calc(env(safe-area-inset-top) + 10px);
 }
 
 .profileHeader .avatarContainer {

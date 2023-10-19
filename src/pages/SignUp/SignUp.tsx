@@ -3,11 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { withGuest } from '../../wrappers/WithGuest';
 import { UserService } from '../../services/user.service';
 import { REACT_APP_BASE_URL } from '../../../env';
-import { Input, Select, Button, message } from 'antd';
+import { Input, Select, Button, message, Modal, Avatar } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUserAndToken } from '../../redux/userSlice';
+import { countries } from '../../utils/countries';
+import { country_departments } from '../../utils/country-departments';
+import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
 
 export const SignUp = withGuest(() => {
   const nav = useNavigate();
@@ -22,8 +25,17 @@ export const SignUp = withGuest(() => {
     password: '',
     civilIdDoc: '',
     country: '',
+    department: '',
+    provider: 'local',
+    emailVerified: false,
   });
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [userToken, setUserToken] = useState<any>();
+  const [step, setStep] = useState(1);
+  const [file, setFile] = useState<File>();
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   useEffect(() => {
     if (userState) {
@@ -31,19 +43,48 @@ export const SignUp = withGuest(() => {
     }
   }, [userState, nav]);
 
-  const handleSubmit = async (user) => {
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatar(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      setFile(file);
+    }
+  };
+
+  const handleSubmit = async () => {
     setLoading(true);
-    user.provider = 'local';
-    user.emailVerified = false;
-    user.isPrivate = false;
+    if (confirmPassword != formData.password) {
+      message.error('Las contraseñas deben coincidir');
+      setLoading(false);
+      return;
+    }
+
+    const allFieldsFilled = Object.values(formData).every((value) => {
+      if (typeof value === 'string') {
+        return value.trim() !== ''; // Verifica que no sea una cadena vacía
+      }
+      return value !== null && value !== undefined; // Verifica que no sea null o undefined
+    });
+
+    if (!allFieldsFilled) {
+      message.error('Por favor, completa todos los campos');
+      setLoading(false);
+      return;
+    }
 
     try {
-      const res = await userService.registerUser(user);
+      const res = await userService.registerUser(formData, file);
       const userRes = res.data.user;
       const tokenRes = res.data.token;
 
       if (res.status === 201) {
-        dispatch(addUserAndToken({ user: userRes, token: tokenRes }));
+        setIsModalVisible(true); // Muestra el modal
+        setUserToken({ user: userRes, token: tokenRes });
+        //dispatch(addUserAndToken({ user: userRes, token: tokenRes }));
       } else {
         message.error('Hubo un error en el registro');
       }
@@ -64,150 +105,345 @@ export const SignUp = withGuest(() => {
     }
   };
 
-  return (
-    <GrowsFromLeft>
-      <div>
-        <div style={{ height: '15vh', overflow: 'hidden' }}>
-          <img
-            src={banner}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            alt="Neon Mountains"
-          />
+  if (step == 1) {
+    return (
+      <GrowsFromLeft>
+        <div>
           <div
             style={{
-              position: 'absolute',
-              top: '2%',
-              left: '50%',
-              transform: 'translate(-50%, 0)',
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              padding: '20px',
-              borderRadius: '10px',
-              textAlign: 'center',
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
+              paddingTop:"calc(env(safe-area-inset-top) + 10px)",
+              height: '15vh',
+              overflow: 'hidden',
+              background: '#ffa500',
             }}
           >
-            <Button
-              icon={<LeftOutlined />}
-              onClick={() => {
-                nav(-1);
-              }}
-            ></Button>
-            <h1
+            <div
               style={{
-                color: 'white',
-                margin: 0,
-                fontSize: '1.5rem',
-                fontWeight: 'bold',
-                letterSpacing: '2px',
-                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                position: 'absolute',
+                top: '2%',
+                left: '50%',
+                transform: 'translate(-50%, 0)',
+                padding: '20px',
+                borderRadius: '10px',
+                textAlign: 'center',
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
               }}
+            >
+              <Button
+                icon={<LeftOutlined />}
+                style={{
+                  background: 'transparent',
+                  color: 'white',
+                  border: 'none',
+                }}
+                onClick={() => {
+                  nav(-1);
+                }}
+              ></Button>
+              <h1
+                style={{
+                  color: 'white',
+                  margin: 0,
+                  letterSpacing: '2px',
+                }}
+              >
+                Registrarse
+              </h1>
+              <Button
+                style={{ visibility: 'hidden' }}
+                icon={<LeftOutlined />}
+              />
+            </div>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              height: 'calc(85vh - 3rem)',
+              width: '60%',
+              margin: '2rem auto 0 auto',
+              paddingBottom: '2rem',
+            }}
+          >
+            <div>
+              <AnimatedFromLeft delay={0.1}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Nombre
+                </label>
+                <Input
+                  placeholder="Nombre"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  style={{ marginBottom: '15px' }}
+                />
+              </AnimatedFromLeft>
+
+              <AnimatedFromLeft delay={0.2}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Correo Electrónico
+                </label>
+                <Input
+                  type="email"
+                  placeholder="Correo electrónico"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  style={{ marginBottom: '15px' }}
+                />
+              </AnimatedFromLeft>
+
+              <AnimatedFromLeft delay={0.3}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Documento de Identidad
+                </label>
+                <Input
+                  placeholder="Documento de Identidad"
+                  value={formData.civilIdDoc}
+                  onChange={(e) =>
+                    setFormData({ ...formData, civilIdDoc: e.target.value })
+                  }
+                  style={{ marginBottom: '15px' }}
+                />
+              </AnimatedFromLeft>
+
+              <AnimatedFromLeft delay={0.4}>
+                <div style={{ marginTop: '30px' }}>
+                  <Avatar
+                    size={64}
+                    src={
+                      'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'
+                    }
+                    style={{ marginBottom: '15px' }}
+                  />
+                  {/* Input oculto */}
+                  <input
+                    style={{ display: 'none' }}
+                    id="fileInput"
+                    type="file"
+                    accept="image/*"
+                    capture={false}
+                    onChange={(e) => handleAvatarChange(e)}
+                  />
+
+                  {/* Label personalizado */}
+                  <label
+                    htmlFor="fileInput"
+                    style={{
+                      cursor: 'pointer',
+                      color: 'blue',
+                      textDecoration: 'none',
+                      marginLeft: '20px',
+                    }}
+                  >
+                    Sube tu Avatar
+                  </label>
+                  <p
+                    style={{
+                      textOverflow: 'ellipsis',
+                      maxWidth: '150px',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {avatar}
+                  </p>
+                </div>
+              </AnimatedFromLeft>
+            </div>
+            <Button
+              loading={loading}
+              type="primary"
+              onClick={() => setStep(2)}
+              style={{ width: '100%' }}
+            >
+              Continuar
+            </Button>
+          </div>
+        </div>
+      </GrowsFromLeft>
+    );
+  }
+
+  if (step == 2) {
+    return (
+      <GrowsFromLeft>
+        <div>
+          <div
+            style={{
+              height: '15vh',
+              overflow: 'hidden',
+              background: '#ffa500',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                top: '2%',
+                left: '50%',
+                transform: 'translate(-50%, 0)',
+                padding: '20px',
+                borderRadius: '10px',
+                textAlign: 'center',
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Button
+                style={{
+                  background: 'transparent',
+                  color: 'white',
+                  border: 'none',
+                }}
+                icon={<LeftOutlined />}
+                onClick={() => {
+                  setStep(1);
+                }}
+              ></Button>
+              <h1
+                style={{
+                  color: 'white',
+                  margin: 0,
+                  letterSpacing: '2px',
+                }}
+              >
+                Registrarse
+              </h1>
+              <Button
+                style={{ visibility: 'hidden' }}
+                icon={<LeftOutlined />}
+              />
+            </div>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              height: 'calc(85vh - 3rem)',
+              width: '60%',
+              margin: '2rem auto 0 auto',
+              paddingBottom: '2rem',
+            }}
+          >
+            <div>
+              <AnimatedFromLeft delay={0.1}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Contraseña
+                </label>
+                <Input.Password
+                  placeholder="Contraseña"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  style={{ marginBottom: '15px' }}
+                />
+              </AnimatedFromLeft>
+
+              <AnimatedFromLeft delay={0.2}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  Confirmar Contraseña
+                </label>
+                <Input.Password
+                  placeholder="Confirmar Contraseña"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  style={{ marginBottom: '15px' }}
+                />
+              </AnimatedFromLeft>
+
+              <AnimatedFromLeft delay={0.4}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>
+                  País
+                </label>
+                <Select
+                  placeholder="Selecciona tu país"
+                  value={formData.country}
+                  onChange={(value) =>
+                    setFormData({ ...formData, country: value, department: '' })
+                  }
+                  style={{ marginBottom: '20px', width: '100%' }}
+                >
+                  {countries.map((country) => (
+                    <Option key={country} value={country}>
+                      {country}
+                    </Option>
+                  ))}
+                </Select>
+              </AnimatedFromLeft>
+
+              {formData.country != '' && (
+                <>
+                  {' '}
+                  <label style={{ display: 'block', marginBottom: '5px' }}>
+                    Zona
+                  </label>
+                  <Select
+                    placeholder="Selecciona un departamento"
+                    value={formData.department}
+                    style={{ width: '100%' }}
+                    onChange={(department) =>
+                      setFormData((prev) => {
+                        return { ...prev, department };
+                      })
+                    }
+                  >
+                    {country_departments[formData.country].map((dept) => (
+                      <Option key={dept} value={dept}>
+                        {dept}
+                      </Option>
+                    ))}
+                  </Select>
+                </>
+              )}
+            </div>
+            <Button
+              loading={loading}
+              type="primary"
+              onClick={() => handleSubmit()}
             >
               Registrarse
-            </h1>
-            <Button style={{ visibility: 'hidden' }} icon={<LeftOutlined />} />
+            </Button>
           </div>
         </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: 'calc(85vh - 3rem)',
-            width: '60%',
-            margin: '2rem auto 0 auto',
-            paddingBottom: '2rem',
-          }}
+        <Modal
+          title="¿Qué tipo de usuario eres?"
+          open={isModalVisible}
+          onCancel={() => setIsModalVisible(false)}
+          footer={null}
+          closable={false}
         >
-          <div>
-            <label style={{ display: 'block', marginBottom: '5px' }}>
-              Nombre
-            </label>
-            <Input
-              placeholder="Nombre"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              style={{ marginBottom: '15px' }}
-            />
-
-            <label style={{ display: 'block', marginBottom: '5px' }}>
-              Teléfono
-            </label>
-            <Input
-              type="tel"
-              placeholder="Teléfono"
-              value={formData.phone}
-              onChange={handlePhoneChange}
-              style={{ marginBottom: '15px' }}
-            />
-
-            <label style={{ display: 'block', marginBottom: '5px' }}>
-              Correo Electrónico
-            </label>
-            <Input
-              type="email"
-              placeholder="Correo electrónico"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              style={{ marginBottom: '15px' }}
-            />
-
-            <label style={{ display: 'block', marginBottom: '5px' }}>
-              Contraseña
-            </label>
-            <Input.Password
-              placeholder="Contraseña"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              style={{ marginBottom: '15px' }}
-            />
-
-            <label style={{ display: 'block', marginBottom: '5px' }}>
-              Documento de Identidad
-            </label>
-            <Input
-              placeholder="Documento de Identidad"
-              value={formData.civilIdDoc}
-              onChange={(e) =>
-                setFormData({ ...formData, civilIdDoc: e.target.value })
-              }
-              style={{ marginBottom: '15px' }}
-            />
-
-            <label style={{ display: 'block', marginBottom: '5px' }}>
-              País
-            </label>
-            <Select
-              placeholder="Selecciona tu país"
-              value={formData.country}
-              onChange={(value) => setFormData({ ...formData, country: value })}
-              style={{ marginBottom: '20px', width: '100%' }}
-            >
-              <Option value="Argentina">Argentina</Option>
-              <Option value="Brasil">Brasil</Option>
-              <Option value="Chile">Chile</Option>
-              <Option value="Uruguay">Uruguay</Option>
-            </Select>
-          </div>
-
           <Button
-            loading={loading}
+            block
             type="primary"
-            onClick={() => handleSubmit(formData)}
-            style={{ width: '100%' }}
+            onClick={() => {
+              nav('/business');
+              dispatch(addUserAndToken(userToken));
+            }}
           >
-            Registrarse
+            Usuario Corriente
           </Button>
-        </div>
-      </div>
-    </GrowsFromLeft>
-  );
+          <Button
+            block
+            style={{ marginTop: '10px' }}
+            onClick={() => {
+              dispatch(addUserAndToken(userToken));
+              nav('/create-business');
+            }}
+          >
+            Negocio
+          </Button>
+        </Modal>
+      </GrowsFromLeft>
+    );
+  }
 });

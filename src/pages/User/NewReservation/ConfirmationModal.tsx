@@ -1,5 +1,7 @@
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
+import { iconLoyaltyPoints } from '../../../utils/config';
+import LoyaltyPointsBadge from '../../../components/LoyaltyPointsBadge/LoyaltyPointsBadge';
 
 export const ConfirmationModal = ({ doneModal, nav, setDoneModal }) => {
   return (
@@ -16,6 +18,8 @@ export const ConfirmationModal = ({ doneModal, nav, setDoneModal }) => {
         <CheckCircleOutlined style={{ fontSize: '72px', color: 'green' }} />
         <h2>Reserva Lista</h2>
         <p>Tu reserva ha sido enviada con éxito!</p>
+        <LoyaltyPointsBadge points={10} />
+
         <Button
           onClick={() => {
             nav('/business');

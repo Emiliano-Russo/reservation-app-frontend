@@ -1,45 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface IBusiness {
-  id: string;
-  ownerId: string;
-  typeId: string;
-  name: string;
-  country: string;
-  department: string;
-  address: string;
-  coordinates: {
-    pointX: string;
-    pointY: string;
-  };
-  logoURL: string;
-  multimediaURL: string[];
-  description: string;
-  assistantsID: string[];
-  pendingInvitationsID: string[];
-  status: string;
-  totalRatingSum: number;
-  totalRatingsCount: number;
-  averageRating: number;
-  availability: Array<any>; // Puedes especificar una interfaz para esto si es necesario
-}
-
-interface IControl {
-  type: String;
-  label: String;
-  options?: String[];
-  default?: String;
-  min?: Number;
-  max?: Number;
-}
-
-interface IBusinessType {
-  id: String;
-  name: String;
-  description: String;
-  icon: String;
-  controls?: IControl[];
-}
+import { IBusiness } from '../interfaces/business/business.interface';
+import { IBusinessType } from '../interfaces/businessType/businessType.interface';
 
 interface IBusinessState {
   myBusinesses: IBusiness[];
@@ -59,6 +20,11 @@ const businessSlice = createSlice({
   reducers: {
     setCurrentBusiness(state, action: PayloadAction<IBusiness>) {
       state.currentBusiness = action.payload;
+    },
+    updateCurrentBusiness(state, action: PayloadAction<Partial<IBusiness>>) {
+      if (state.currentBusiness) {
+        state.currentBusiness = { ...state.currentBusiness, ...action.payload };
+      }
     },
     clearCurrentBusiness(state) {
       state.currentBusiness = null;
@@ -82,6 +48,7 @@ const businessSlice = createSlice({
 
 export const {
   setCurrentBusiness,
+  updateCurrentBusiness,
   clearCurrentBusiness,
   addBusinessToList,
   removeBusinessFromList,

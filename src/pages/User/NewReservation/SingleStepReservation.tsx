@@ -1,13 +1,15 @@
 import styles from './NewReservation.module.css';
 import { FadeFromTop } from '../../../animations/FadeFromTop';
 import { Controls } from './Controls';
-import { Button, message, Select, TimePicker } from 'antd';
+import { Button, message, Select, TimePicker, Input } from 'antd';
 import DatePicker from 'react-datepicker';
 import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import { es } from 'date-fns/locale';
 import { ControlValue } from './NewReservation';
 import { convertToJSDate } from '../../../utils/dateFormat';
+
+const { TextArea } = Input;
 
 export const SingleStepReservation = ({
   setControlValues,
@@ -23,6 +25,8 @@ export const SingleStepReservation = ({
 
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState<null | Date>(null);
+
+  const [bookingInstructions, setBookingInstructions] = useState('');
 
   const onChangeDate = (dates) => {
     const [start, end] = dates;
@@ -52,6 +56,7 @@ export const SingleStepReservation = ({
             onChange={(date) => setStartDate(date)}
             locale={es}
             inline
+            minDate={new Date()} // Añade esta línea
           />
         ) : (
           <DatePicker
@@ -61,12 +66,21 @@ export const SingleStepReservation = ({
             endDate={endDate}
             selectsRange
             inline
+            minDate={new Date()} // Añade esta línea
           />
         )}
       </div>
 
       {/* Time Picker */}
-      <div style={{ margin: '20px auto 30px auto', width: '80%' }}>
+      <div
+        style={{
+          margin: '20px auto 30px auto',
+          width: '80%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         {hourTypeSelection == 'S' ? (
           <div
             style={{
@@ -99,16 +113,24 @@ export const SingleStepReservation = ({
             />
           </div>
         )}
+
+        <p style={{ margin: '0px', marginTop: '20px', textAlign: 'left' }}>
+          Notas
+        </p>
+        <TextArea
+          style={{ width: '200px' }}
+          value={bookingInstructions}
+          rows={4}
+          maxLength={180}
+          placeholder="Reserva para dos cerca de la ventana porfavor!"
+          onChange={(e) => {
+            const value = e.target.value;
+            console.log('value: ', value);
+            setBookingInstructions(value);
+          }}
+        />
       </div>
 
-      <div>
-        <FadeFromTop>
-          <Controls
-            controls={businessType.controls}
-            setControlValues={setControlValues}
-          />
-        </FadeFromTop>
-      </div>
       <div className={styles.buttonsContainer}>
         <Button loading={creatingReservation} style={{ visibility: 'hidden' }}>
           Enviar
@@ -143,6 +165,7 @@ export const SingleStepReservation = ({
                   },
                 };
               }
+              newControlValues.bookingInstructions = bookingInstructions;
 
               setControlValues((prev: ControlValue) => ({
                 ...prev,

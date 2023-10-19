@@ -1,0 +1,66 @@
+.locationContainer html,
+.locationContainer body,
+.locationContainer ion-content {
+  background: transparent !important;
+  /* background: red !important; */
+}
+
+.background {
+  background-image: url('https://i.pinimg.com/564x/93/13/94/9313941a1d92f8264fde23ce376047d9.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  color: white;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.7
+  ); /* Opacidad para hacer que el texto sea legible sobre la imagen */
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 500px;
+  margin: 20px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-size: 16px;
+}
+
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.locationContainer {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+}
+
+.input,
+.select,
+.textArea,
+.upload {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.textArea,
+.upload {
+  margin-bottom: 20px;
+}

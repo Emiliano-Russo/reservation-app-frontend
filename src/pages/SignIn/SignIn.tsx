@@ -7,6 +7,9 @@ import { AuthService } from '../../services/auth.service';
 import { Button, Input, message } from 'antd';
 import { REACT_APP_BASE_URL } from '../../../env';
 import { GrowsFromLeft } from '../../animations/GrowsFromLeft';
+import portada from '../../assets/agendafacilnobackground.png';
+import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
+import { FadeFromTop } from '../../animations/FadeFromTop';
 
 export const SignIn = withGuest(() => {
   const nav = useNavigate();
@@ -34,6 +37,10 @@ export const SignIn = withGuest(() => {
       })
       .catch((err) => {
         message.error('Error');
+        message.info(err.message);
+        message.error(err);
+        console.log(err);
+        console.error('+++++++++++++++++++++TREMENDO ERROR: ', err);
       });
   };
 
@@ -50,51 +57,40 @@ export const SignIn = withGuest(() => {
       });
   };
 
-  const banner =
-    'https://i.pinimg.com/564x/6f/91/9f/6f919f28cb7a830481f9b0866fc2c15b.jpg';
+  const banner = portada;
 
   return (
     <GrowsFromLeft>
-      <div>
-        <div
-          style={{
-            height: '40vh',
-            overflow: 'hidden',
-            display: 'flex', // Nuevo: Convertir este contenedor en flex
-            alignItems: 'center', // Nuevo: Centrar verticalmente
-            justifyContent: 'center', // Nuevo: Centrar horizontalmente
-          }}
-        >
-          <img
-            src={banner}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            alt="Neon Mountains"
-          />
+      <div style={{ background: '#ffa500' }}>
+        <GrowsFromLeft>
           <div
             style={{
-              position: 'absolute',
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              padding: '20px',
-              textAlign: 'center',
-              width: '100%',
+              height: '35vh',
+              overflow: 'hidden',
+              display: 'flex', // Nuevo: Convertir este contenedor en flex
+              alignItems: 'center', // Nuevo: Centrar verticalmente
+              justifyContent: 'center', // Nuevo: Centrar horizontalmente
+              background: '#ffa500',
             }}
           >
-            <h1
-              style={{
-                color: 'white',
-                margin: 0,
-                fontSize: '2rem',
-                fontWeight: 'bold',
-                letterSpacing: '2px',
-                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-              }}
-            >
-              Tu Mejor Reserva
-            </h1>
+            <img
+              src={banner}
+              style={{ width: '250px', objectFit: 'fill' }}
+              alt="Neon Mountains"
+            />
           </div>
-        </div>
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-          <h1 style={{ fontWeight: 'bold', color: 'black' }}>¡Bienvenido!</h1>
+        </GrowsFromLeft>
+        <div
+          style={{
+            padding: '20px',
+            textAlign: 'center',
+            background: 'white',
+            borderTopLeftRadius: '50px',
+            borderTopRightRadius: '50px',
+            height: '100%',
+          }}
+        >
+          <h3 style={{ color: 'black', marginTop: '50px' }}>¡Bienvenido!</h3>
           <Input
             type="email"
             value={email} // Enlazar el valor del campo de entrada con el estado
@@ -108,30 +104,46 @@ export const SignIn = withGuest(() => {
             placeholder="Contraseña"
             style={{ width: '80%', marginBottom: '20px' }}
           />
-
-          <Button
-            loading={loading}
-            style={{ width: '10rem', background: '#DA0063' }}
-            type="primary"
-            onClick={() => {
-              const user = { email, password };
-              handleLocalLogin(user);
-            }}
-          >
-            Acceder
-          </Button>
-
-          <div style={{ marginTop: '10px' }}>
+          <AnimatedFromLeft>
             <Button
               loading={loading}
-              style={{ width: '10rem' }}
+              style={{ width: '10rem', background: '#FFA500' }}
+              type="primary"
               onClick={() => {
-                nav('/signup');
+                const user = { email, password };
+                handleLocalLogin(user);
               }}
             >
-              Soy Nuevo
+              Acceder
             </Button>
-          </div>
+          </AnimatedFromLeft>
+          <AnimatedFromLeft delay={0.1}>
+            <div style={{ marginTop: '10px' }}>
+              <Button
+                loading={loading}
+                style={{ width: '10rem' }}
+                onClick={() => {
+                  nav('/signup');
+                }}
+              >
+                Soy Nuevo
+              </Button>
+            </div>
+          </AnimatedFromLeft>
+
+          <AnimatedFromLeft delay={0.2}>
+            <div style={{ marginTop: '10px' }}>
+              <Button
+                style={{ fontSize: '12px' }}
+                type="link"
+                onClick={() => {
+                  nav('/request-password-reset');
+                }}
+              >
+                ¿Olvidaste tu contraseña?
+              </Button>
+            </div>
+          </AnimatedFromLeft>
         </div>
         <hr style={{ background: 'white', width: '60%' }} />
       </div>
