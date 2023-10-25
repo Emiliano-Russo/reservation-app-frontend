@@ -91,7 +91,7 @@ interface PropsHeader {
 
 const ProfileHeader = (props: PropsHeader) => {
   const nav = useNavigate();
-  const user = useSelector((state: any) => state.user.user);
+  const user = useSelector((state: RootState) => state.user.user);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const businesses = useSelector((state: any) => state.business.myBusinesses);
   const businessService = new BusinessService(REACT_APP_BASE_URL);
@@ -101,7 +101,7 @@ const ProfileHeader = (props: PropsHeader) => {
   useEffect(() => {
     const getBusinessByOwnerId = () => {
       businessService
-        .getBusinessesByOwnerId(user.id, { limit: 20, page: 1 })
+        .getBusinessesByOwnerId(user!.id, { limit: 20, page: 1 })
         .then((data) => {
           dispatch(setBusinessList(data.items));
         });
@@ -243,71 +243,98 @@ const ModalVerifyMail = (props: PropsModal) => {
 
 const userService = new UserService(REACT_APP_BASE_URL);
 
-export const Profile = withAuth(
-  withPageLayout(() => {
-    StatusBar.setBackgroundColor({ color: '#ffa500' });
-    const dispatch = useDispatch();
-    const user = useSelector((state: RootState) => state.user.user);
-    const [open, setOpen] = useState(false);
+export const Profile = withPageLayout(() => {
+  StatusBar.setBackgroundColor({ color: '#ffa500' });
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.user);
+  const [open, setOpen] = useState(false);
+  const nav = useNavigate();
 
-    useEffect(() => {
-      fetchUser();
-    }, []);
-
-    if (!user) return <h1>No user</h1>;
-
-    const fetchUser = async () => {
-      userService
-        .getUser(user.id)
-        .then((user) => {
-          dispatch(addUser(user));
-        })
-        .catch((err) => {
-          message.error('Error al obtener datos del usuario');
-        });
-    };
-
-    const onTapEmail = () => {
-      console.log('email tapped');
-      if (user.emailVerified == false) setOpen(true);
-    };
-
-    const icons = [
-      {
-        icon: <HomeOutlined style={{ color: 'gray' }} />,
-        label: 'País',
-        value: user.country,
-      },
-      {
-        icon: <MailOutlined style={{ color: 'gray' }} />,
-        label: 'Email',
-        value: user.email,
-        color: user.emailVerified ? 'black' : 'red',
-        onTap: onTapEmail,
-      },
-      {
-        icon: <ContactsOutlined style={{ color: 'gray' }} />,
-        label: 'Documento',
-        value: user.civilIdDoc,
-      },
-    ];
-
+  if (user == null) {
     return (
-      <FadeFromTop>
-        <ProfileHeader
-          name={user.name}
-          url={
-            user.profileImage
-              ? user.profileImage
-              : 'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'
-          }
-        />
-        <SectionLine title={'Información'} />
-        <BasicProfileInfoWidget icons={icons} />
-        <SectionLine title={'Puntos de Fidelidad'} />
-        <LoyaltyPointsWidget points={user.loyaltyPoints} />
-        <ModalVerifyMail open={open} setOpen={setOpen} />
-      </FadeFromTop>
+      <div
+        style={{
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center', // <-- Cambiado de 'alignContent' a 'alignItems'
+        }}
+      >
+        <GrowsFromLeft>
+          <h1 style={{ textAlign: 'center' }}>
+            ¡Regístrese ahora para visualizar su perfil!
+          </h1>
+        </GrowsFromLeft>
+        <Button
+          type="primary"
+          onClick={() => {
+            nav('/signin');
+          }}
+        >
+          Unirme
+        </Button>
+      </div>
     );
-  }, '0px'),
-);
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  if (!user) return <h1>No user</h1>;
+
+  const fetchUser = async () => {
+    userService
+      .getUser(user.id)
+      .then((user) => {
+        dispatch(addUser(user));
+      })
+      .catch((err) => {
+        message.error('Error al obtener datos del usuario');
+      });
+  };
+
+  const onTapEmail = () => {
+    console.log('email tapped');
+    if (user.emailVerified == false) setOpen(true);
+  };
+
+  const icons = [
+    {
+      icon: <HomeOutlined style={{ color: 'gray' }} />,
+      label: 'País',
+      value: user.country,
+    },
+    {
+      icon: <MailOutlined style={{ color: 'gray' }} />,
+      label: 'Email',
+      value: user.email,
+      color: user.emailVerified ? 'black' : 'red',
+      onTap: onTapEmail,
+    },
+    {
+      icon: <ContactsOutlined style={{ color: 'gray' }} />,
+      label: 'Documento',
+      value: user.civilIdDoc,
+    },
+  ];
+
+  return (
+    <FadeFromTop>
+      <ProfileHeader
+        name={user.name}
+        url={
+          user.profileImage
+            ? user.profileImage
+            : 'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'
+        }
+      />
+      <SectionLine title={'Información'} />
+      <BasicProfileInfoWidget icons={icons} />
+      <SectionLine title={'Puntos de Fidelidad'} />
+      <LoyaltyPointsWidget points={user.loyaltyPoints} />
+      <ModalVerifyMail open={open} setOpen={setOpen} />
+    </FadeFromTop>
+  );
+}, '0px');

@@ -4,46 +4,48 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedPath } from '../../redux/footerSlice';
 import styles from './Footer.module.css';
-
-const userButtonsConfig = [
-  {
-    path: '/reservations',
-    icon: 'https://img.icons8.com/ios-filled/100/FFFFFF/reservation-2.png',
-  },
-  {
-    path: '/business',
-    icon: 'https://img.icons8.com/ios-filled/50/FFFFFF/home.png',
-  },
-  {
-    path: '/profile',
-    icon: 'https://img.icons8.com/material-sharp/96/FFFFFF/user.png',
-  },
-];
-
-const businessButtonsConfig = [
-  {
-    path: '/businessReservation',
-    icon: 'https://img.icons8.com/ios-filled/100/FFFFFF/reservation-2.png',
-  },
-  {
-    path: '/businessHome',
-    icon: 'https://img.icons8.com/ios-filled/50/FFFFFF/home.png',
-  },
-  {
-    path: '/businessPrivateProfile',
-    icon: 'https://img.icons8.com/material-sharp/96/FFFFFF/user.png',
-  },
-];
+import { RootState } from '../../redux/store';
 
 const Footer = ({ isBusiness = false, style = {} }) => {
   const nav = useNavigate();
   const dispatch = useDispatch();
+  const userState = useSelector((state: RootState) => state.user.user);
   const selectedPath = useSelector((state: any) => state.footer.selectedPath);
 
   const handleNavigation = (path) => {
     nav(path);
     dispatch(setSelectedPath(path));
   };
+
+  const userButtonsConfig = [
+    {
+      path: '/reservations',
+      icon: 'https://img.icons8.com/ios-filled/100/FFFFFF/reservation-2.png',
+    },
+    {
+      path: userState ? '/business' : '/',
+      icon: 'https://img.icons8.com/ios-filled/50/FFFFFF/home.png',
+    },
+    {
+      path: '/profile',
+      icon: 'https://img.icons8.com/material-sharp/96/FFFFFF/user.png',
+    },
+  ];
+
+  const businessButtonsConfig = [
+    {
+      path: '/businessReservation',
+      icon: 'https://img.icons8.com/ios-filled/100/FFFFFF/reservation-2.png',
+    },
+    {
+      path: '/businessHome',
+      icon: 'https://img.icons8.com/ios-filled/50/FFFFFF/home.png',
+    },
+    {
+      path: '/businessPrivateProfile',
+      icon: 'https://img.icons8.com/material-sharp/96/FFFFFF/user.png',
+    },
+  ];
 
   const currentButtonsConfig = isBusiness
     ? businessButtonsConfig

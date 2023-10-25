@@ -12,6 +12,7 @@ import { ModalReservationsFilters } from '../ModalReservationFilters/ModalReserv
 import { NegotiableCard } from '../NegotiableCard/NegotiableCard';
 import { ReservationCard } from '../ReservationCard/ReservationCard';
 import { PaginatedResponse } from '../../interfaces/pagination.dto';
+import { RootState } from '../../redux/store';
 
 const limitPerPage = 7;
 
@@ -38,6 +39,7 @@ export const ReservationList = (props: Props) => {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('');
+  const userState = useSelector((state: RootState) => state.user.user);
 
   const containerRef = useRef<any>(null);
 

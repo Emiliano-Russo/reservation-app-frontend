@@ -9,6 +9,7 @@ import {
   List,
   Avatar,
   Spin,
+  Modal,
 } from 'antd';
 import { ArrowLeftOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import styles from './Business.module.css';
@@ -23,10 +24,12 @@ import {
   IAvailability,
   IBusiness,
 } from '../../../interfaces/business/business.interface';
+import { useSelector } from 'react-redux';
 import { getDayValue, weekDayToSpanish } from '../../../utils/dateFormat';
 import { IReservation } from '../../../interfaces/reservation/reservation.interface';
 import { DayAvailability } from '../../../components/DayAvailability/DayAvailability';
 import { WeekDays } from '../../../interfaces/weekday.enum';
+import { RootState } from '../../../redux/store';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -38,6 +41,7 @@ const userService = new UserService(REACT_APP_BASE_URL);
 export const Business = withPageLayout(
   () => {
     const { id } = useParams<any>(); // Obtener el id desde la URL
+    const myUser = useSelector((state: RootState) => state.user.user);
     if (id === undefined) return <h1>No Business Found</h1>;
     const nav = useNavigate();
     const [business, setBusiness] = useState<IBusiness | null>(null);
@@ -45,6 +49,7 @@ export const Business = withPageLayout(
     const [reservationWithReview, setReservationWithReview] = useState<
       IReservation[]
     >([]);
+    const [registerFirstModal, setRegisterFirstModal] = useState(false);
     // console.log('reservationWithReview ', reservationWithReview);
     console.log('RESERVATIONS: ', reservations);
 
@@ -199,11 +204,44 @@ export const Business = withPageLayout(
             type="primary"
             style={{ margin: 'auto 0px 0px 0px' }}
             onClick={() => {
-              nav(`/new-reservation/${id}`);
+              if (myUser) {
+                nav(`/new-reservation/${id}`);
+              } else {
+                setRegisterFirstModal(true);
+              }
             }}
           >
             Reservar
           </Button>
+          <Modal
+            footer={
+              <div>
+                <Button
+                  danger
+                  type="primary"
+                  onClick={() => {
+                    setRegisterFirstModal(false);
+                  }}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    nav('/signin');
+                  }}
+                >
+                  Unirme
+                </Button>
+              </div>
+            }
+            open={registerFirstModal}
+            onCancel={() => {
+              setRegisterFirstModal(false);
+            }}
+          >
+            <h2>¡Únete a nuestra comunidad para hacer tus reservas!</h2>
+          </Modal>
         </div>
       </>
     );
