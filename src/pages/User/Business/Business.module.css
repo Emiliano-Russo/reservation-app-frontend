@@ -1,42 +1,50 @@
-.businessDetails {
-  display: flex;
-  flex-direction: column; /* Establece la dirección en vertical */
-  padding: 20px;
-  height: 100%;
-  overflow-y: scroll; /* Habilita el scroll si el contenido excede la altura máxima */
-}
-
-.businessTabs {
-  flex: 1; /* Ocupa todo el espacio vertical restante */
-  overflow: hidden; /* Evita el desbordamiento no deseado */
-  margin-bottom: 20px;
-}
-
-.businessLocation {
+.greetingContainer {
   display: flex;
   align-items: center;
-  gap: 10px;
+  margin: 10px 0px 20px 0px;
+  padding: 0px 20px;
+  padding-top: calc(env(safe-area-inset-top) + 10px);
 }
 
-/* Estilo para las reseñas */
-.review {
-  padding: 10px 0;
-  border-bottom: 1px solid #f0f0f0;
+.avatarStyle {
+  margin-right: 15px;
 }
 
-.reviewHeader {
+.greetingText {
+  color: black;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.inputStyle {
+  margin: 0 20px 10px 20px;
+  padding: 10px 40px 10px 10px; /* padding-right es mayor para evitar que el texto se superponga con el icono */
+  height: 57px;
+  background: transparent url('https://img.icons8.com/color/48/search--v1.png')
+    no-repeat right 15px center;
+  background-size: 24px 24px; /* ajusta el tamaño del ícono */
+  border: 1px solid rgb(196, 196, 196);
+  border-radius: 10px;
+  transition: border 0.3s ease;
+  outline: none;
+}
+
+.inputStyle:focus {
+  border-color: #fd6f8e; /* Cambia el color del borde a azul cuando el input esté enfocado */
+  box-shadow: 0 0 5px rgba(0, 0, 255, 0.3); /* Agregado para darle un ligero resplandor azul alrededor */
+}
+
+.businessTypeContainer {
   display: flex;
-  align-items: center;
-  gap: 10px; /* Espacio entre elementos */
-}
-
-.author {
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow-y: scroll;
   flex: 1;
-  font-weight: bold;
+  margin-bottom: 30px;
+  padding: 20px 20px;
+  align-items: start;
 }
 
-.datetime {
-  font-size: 0.8rem;
-  color: #888;
-  margin-top: 5px;
+.footerStyle {
+  margin: 0px 20px 20px 20px;
 }

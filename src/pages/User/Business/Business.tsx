@@ -44,6 +44,7 @@ export const Business = withPageLayout(
     if (id === undefined) return <h1>No Business Found</h1>;
     const nav = useNavigate();
     const [business, setBusiness] = useState<IBusiness | null>(null);
+    const [showPopUp, setShowPopUp] = useState(false);
     const [reservations, setReservations] = useState<IReservation[]>([]);
     const [reservationWithReview, setReservationWithReview] = useState<
       IReservation[]
@@ -204,11 +205,14 @@ export const Business = withPageLayout(
             type="primary"
             style={{ margin: 'auto 0px 0px 0px' }}
             onClick={() => {
-              myUser != null ? nav(`/new-reservation/${id}`) : <RegistrationPopUp />;
+              myUser != null ? nav(`/new-reservation/${id}`) : setShowPopUp(true);
             }}
           >
             Reservar
           </Button>
+
+         {showPopUp ? <RegistrationPopUp navigate={false} /> : ""}
+
         </div>
       </>
     );

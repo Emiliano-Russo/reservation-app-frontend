@@ -34,7 +34,7 @@ import { NewReservation } from './pages/User/NewReservation/NewReservation';
 import { CreateBusiness } from './pages/User/CreateBusiness';
 import { BusinessProfile } from './pages/Entrepreneur/Profile/Profile';
 import { BusinessHome } from './pages/Entrepreneur/Home/Home';
-import { BusinessReservations } from './pages/Entrepreneur/Reservations';
+import { BusinessReservations } from './pages/Entrepreneur/Reservations/Reservations';
 import { HomeTwo } from './pages/HomeTwo/HomeTwo';
 import { EditUserData } from './pages/User/EditUserData/EditUserData';
 import { Help } from './pages/User/Help/Help';
@@ -84,8 +84,8 @@ const App: React.FC = () => {
               path="/edit-business-profile"
               element={<EditBusinessProfile />}
             />
-            <Route path="*" element={<HomeTwo />} />
-            <Route path="/Home" element={<Home />} />
+            <Route path="*" element={<HomeTwo />} /> 
+            <Route path="/home" element={<Home />} />
           </Routes>
         </BrowserRouter>
       </Provider>

@@ -1,21 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { Avatar, Spin } from 'antd';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Avatar, Spin, message } from 'antd';
+import { PushNotifications } from '@capacitor/push-notifications';
 import { withPageLayout } from '../../wrappers/WithPageLayout';
 import { BusinessTypeCard } from '../../components/BusinessTypeCard/BusinessTypeCard';
-import styles from './Home.module.css';
+import styles from './HomeTwo.module.css';
 import SearchInput from '../../components/SearchInput/SearchInput';
 import { BusinessTypeService } from '../../services/businessType.service';
 import { REACT_APP_BASE_URL } from '../../../env';
 import { FadeFromTop } from '../../animations/FadeFromTop';
-import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { UserService } from '../../services/user.service';
 import { setBusinessTypes } from '../../redux/businessSlice';
 
+const userService = new UserService(REACT_APP_BASE_URL);
+
 export const HomeTwo = withPageLayout(() => {
-    const userState = useSelector((state: any) => state.user.user);
+    const userState = useSelector((state: RootState) => state.user.user);
     const businessTypeList = useSelector(
       (state: any) => state.business.businessTypes,
     );
     const dispatch = useDispatch();
+
+    const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
       const service = new BusinessTypeService(REACT_APP_BASE_URL);
@@ -24,37 +31,35 @@ export const HomeTwo = withPageLayout(() => {
         .then((data) => {
           console.log('data: ', data);
           dispatch(setBusinessTypes(data.items));
-          setBusinessTypes(data.items);
         })
         .catch((error) =>
           console.error('Error fetching business types:', error),
         );
     }, []);
 
+    const filteredBusinessTypes = businessTypeList.filter((type: any) => {
+      return type.name.toLowerCase().includes(searchValue.toLowerCase());
+    });
+
     return (
       <>
         <FadeFromTop>
           <div className={styles.greetingContainer}>
-            <Avatar
-              src={userState.profileImage}
-              size={64}
-              className={styles.avatarStyle}
-            >
-              D
-            </Avatar>
-            <p className={styles.greetingText}>Hola, {userState.name}!</p>
+            <p className={styles.greetingText}>Hola, guest!</p>
           </div>
         </FadeFromTop>
-        <SearchInput />
-        {businessTypeList.length == 0 && (
+        <SearchInput
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+        {businessTypeList.length === 0 && (
           <Spin style={{ marginTop: '100px' }} />
         )}
         <div className={styles.businessTypeContainer}>
-          {businessTypeList.map((val: any, index: number) => (
+          {filteredBusinessTypes.map((val: any, index: number) => (
             <BusinessTypeCard {...val} index={index} />
           ))}
         </div>
       </>
     );
-  }, '0px'
-);
+  }, '0px');

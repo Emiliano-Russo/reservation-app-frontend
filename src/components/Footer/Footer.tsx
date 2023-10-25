@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedPath } from '../../redux/footerSlice';
 import styles from './Footer.module.css';
+import { RegistrationPopUp } from '../RegistrationPopUp/RegistrationPopUp';
+import { RootState } from '../../redux/store';
 
 const userButtonsConfig = [
   {
@@ -38,6 +40,7 @@ const businessButtonsConfig = [
 const Footer = ({ isBusiness = false, style = {} }) => {
   const nav = useNavigate();
   const dispatch = useDispatch();
+  const userState = useSelector((state: RootState) => state.user.user); 
   const selectedPath = useSelector((state: any) => state.footer.selectedPath);
 
   const handleNavigation = (path) => {
@@ -81,18 +84,20 @@ const Footer = ({ isBusiness = false, style = {} }) => {
   };
 
   return (
-    <div style={footerStyle}>
-      {currentButtonsConfig.map((button) => (
-        <Button
-          key={button.path}
-          style={
-            selectedPath === button.path ? buttonSelectedStyle : buttonStyle
-          }
-          onClick={() => handleNavigation(button.path)}
-          icon={<img style={iconStyle} src={button.icon} alt="Icono" />}
-        ></Button>
-      ))}
-    </div>
+    selectedPath == "/profile" && userState == null
+      ? <RegistrationPopUp />
+      : <div style={footerStyle}>
+        {currentButtonsConfig.map((button) => (
+          <Button
+            key={button.path}
+            style={
+              selectedPath === button.path ? buttonSelectedStyle : buttonStyle
+            }
+            onClick={() => handleNavigation(button.path)}
+            icon={<img style={iconStyle} src={button.icon} alt="Icono" />}
+          ></Button>
+        ))}
+      </div>
   );
 };
 

@@ -1,34 +1,28 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
-export const RegistrationPopUp: React.FC = () => {
-  const [open, setOpen] = useState(false);
+interface RegistrationPropUpProps {
+  navigate: boolean;
+}
+
+export const RegistrationPopUp: React.FC<RegistrationPropUpProps> = (props) => {
+  const [open, setOpen] = useState(true);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
-
-  const showModal = () => {
-    setOpen(true);
-  };
+  const nav = useNavigate();
 
   const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
     setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
+    nav('/signin');
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
+    props.navigate ? nav('/business') : "";
     setOpen(false);
   };
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Open Modal with async logic
-      </Button>
       <Modal
         title="Title"
         open={open}
@@ -36,7 +30,7 @@ export const RegistrationPopUp: React.FC = () => {
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
-        <p>{modalText}</p>
+        <p>To continue, you must to sing up</p>
       </Modal>
     </>
   );
