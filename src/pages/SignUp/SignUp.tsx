@@ -93,17 +93,6 @@ export const SignUp = withGuest(() => {
     setLoading(false);
   };
 
-  const banner =
-    'https://i.pinimg.com/564x/6f/91/9f/6f919f28cb7a830481f9b0866fc2c15b.jpg';
-
-  const handlePhoneChange = (e) => {
-    const value = e.target.value;
-    if (/^[0-9]*$/.test(value)) {
-      // Asegura que solo se estén introduciendo números
-      setFormData({ ...formData, phone: value });
-    }
-  };
-
   if (step == 1) {
     return (
       <GrowsFromLeft>

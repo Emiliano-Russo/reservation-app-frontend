@@ -15,7 +15,6 @@ export class UserService {
     formData.append('name', user.name);
     formData.append('email', user.email);
     formData.append('password', user.password);
-    formData.append('phone', user.phone);
     formData.append('civilIdDoc', user.civilIdDoc);
     formData.append('country', user.country);
     formData.append('department', user.department);
@@ -23,6 +22,8 @@ export class UserService {
     if (profileImage) {
       formData.append('profileImage', profileImage, profileImage.name);
     }
+
+    console.log('object to send: ', formData);
 
     return this.api.post('/user', formData, {
       headers: {
