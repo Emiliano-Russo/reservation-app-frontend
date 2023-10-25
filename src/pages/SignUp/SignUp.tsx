@@ -20,7 +20,6 @@ export const SignUp = withGuest(() => {
   const userState = useSelector((state: any) => state.user.user);
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
     email: '',
     password: '',
     civilIdDoc: '',
@@ -111,7 +110,7 @@ export const SignUp = withGuest(() => {
         <div>
           <div
             style={{
-              paddingTop:"calc(env(safe-area-inset-top) + 10px)",
+              paddingTop: 'calc(env(safe-area-inset-top) + 10px)',
               height: '15vh',
               overflow: 'hidden',
               background: '#ffa500',
