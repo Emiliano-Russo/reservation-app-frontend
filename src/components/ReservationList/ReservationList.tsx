@@ -13,7 +13,6 @@ import { NegotiableCard } from '../NegotiableCard/NegotiableCard';
 import { ReservationCard } from '../ReservationCard/ReservationCard';
 import { PaginatedResponse } from '../../interfaces/pagination.dto';
 import { RootState } from '../../redux/store';
-import { RegistrationPopUp } from '../RegistrationPopUp/RegistrationPopUp';
 
 const limitPerPage = 7;
 
@@ -177,7 +176,7 @@ export const ReservationList = (props: Props) => {
     setReservations(updatedReservations);
   };
 
-  return userState != null ?  (
+  return (
     <>
       <FadeFromTop>
         <div className={styles.header}>
@@ -226,6 +225,5 @@ export const ReservationList = (props: Props) => {
         resetFilters={resetFilters}
       />
     </>
-  ) 
-  : <RegistrationPopUp />;
+  );
 };

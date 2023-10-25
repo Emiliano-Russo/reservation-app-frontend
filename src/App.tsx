@@ -22,8 +22,8 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import { SignIn } from './pages/SignIn/SignIn';
 import { SignUp } from './pages/SignUp/SignUp';
-import { Provider } from 'react-redux';
-import store from './redux/store';
+import { Provider, useSelector } from 'react-redux';
+import store, { RootState } from './redux/store';
 import { Home } from './pages/User/Home/Home';
 import { UserReservations } from './pages/User/Reservations/Reservations';
 import { Profile } from './pages/User/Profile/Profile';
@@ -84,8 +84,8 @@ const App: React.FC = () => {
               path="/edit-business-profile"
               element={<EditBusinessProfile />}
             />
-            <Route path="*" element={<HomeTwo />} /> 
-            <Route path="/home" element={<Home />} />
+            <Route path="/business" element={<Home />} />
+            <Route path="*" element={<HomeTwo />} />
           </Routes>
         </BrowserRouter>
       </Provider>
