@@ -45,6 +45,16 @@ import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword';
 
 setupIonicReact();
 
+const Redirect = () => {
+  const { user } = useSelector((state: RootState) => state.user);
+
+  if (user) {
+    return <Home />;
+  } else {
+    return <HomeTwo />;
+  }
+};
+
 const App: React.FC = () => {
   SplashScreen.hide();
 
@@ -85,6 +95,7 @@ const App: React.FC = () => {
               element={<EditBusinessProfile />}
             />
             <Route path="/business" element={<Home />} />
+            <Route path="/" element={<Redirect />} />
             <Route path="*" element={<HomeTwo />} />
           </Routes>
         </BrowserRouter>
