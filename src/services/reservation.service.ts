@@ -131,4 +131,11 @@ export class ReservationService {
     );
     return response.data;
   }
+
+  async deleteUser(userId: string): Promise<any> {
+    const response: AxiosResponse<any> = await this.api.delete(
+      `/reservation/user/${userId}`,
+    );
+    return response.data;
+  }
 }

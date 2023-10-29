@@ -42,6 +42,7 @@ import { About } from './pages/About/About';
 import { EditBusinessProfile } from './pages/Entrepreneur/EditBusinessProfile/EditBusinessProfile';
 import { Store } from './pages/User/Store/Store';
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword';
+import { DeleteAccount } from './pages/User/DeleteAccount/DeleteAccount';
 
 setupIonicReact();
 
@@ -77,6 +78,7 @@ const App: React.FC = () => {
             <Route path="/new-reservation/:id" element={<NewReservation />} />
             <Route path="/business/:type" element={<BusinessList />} />
             <Route path="/edit-user-data" element={<EditUserData />} />
+            <Route path="/delete-account" element={<DeleteAccount />} />
             <Route path="/help" element={<Help />} />
             <Route path="/about" element={<About />} />
             {/* business */}

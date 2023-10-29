@@ -43,6 +43,7 @@ export const Settings = withAuth(
             <Button className={styles.button} onClick={() => nav('/about')}>
               Acerca De
             </Button>
+
             <Button
               danger
               className={styles.button}
@@ -51,6 +52,16 @@ export const Settings = withAuth(
               }}
             >
               Cerrar Sesión
+            </Button>
+            <Button
+              danger
+              type="text"
+              style={{ color: '#8B0000' }}
+              onClick={() => {
+                nav('/delete-account');
+              }}
+            >
+              Eliminar Cuenta
             </Button>
           </FadeFromTop>
         </>
