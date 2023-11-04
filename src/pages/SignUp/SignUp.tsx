@@ -11,6 +11,7 @@ import { addUserAndToken } from '../../redux/userSlice';
 import { countries } from '../../utils/countries';
 import { country_departments } from '../../utils/country-departments';
 import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
+import { Camera, CameraResultType } from '@capacitor/camera';
 
 export const SignUp = withGuest(() => {
   const nav = useNavigate();
@@ -42,16 +43,18 @@ export const SignUp = withGuest(() => {
     }
   }, [userState, nav]);
 
-  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatar(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-      setFile(file);
-    }
+  const handleAvatarChange = async () => {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Uri,
+    });
+
+    if (image.webPath) setAvatar(image.webPath);
+    else console.log('NO HAY WEBPATH');
+    setFile(
+      new File([image.base64String!], 'avatar.jpg', { type: 'image/jpeg' }),
+    );
   };
 
   const handleSubmit = async () => {
@@ -210,28 +213,7 @@ export const SignUp = withGuest(() => {
                     }
                     style={{ marginBottom: '15px' }}
                   />
-                  {/* Input oculto */}
-                  <input
-                    style={{ display: 'none' }}
-                    id="fileInput"
-                    type="file"
-                    accept="image/*"
-                    capture={false}
-                    onChange={(e) => handleAvatarChange(e)}
-                  />
-
-                  {/* Label personalizado */}
-                  <label
-                    htmlFor="fileInput"
-                    style={{
-                      cursor: 'pointer',
-                      color: 'blue',
-                      textDecoration: 'none',
-                      marginLeft: '20px',
-                    }}
-                  >
-                    Sube tu Avatar
-                  </label>
+                  <Button onClick={handleAvatarChange}>Sube tu Avatar</Button>
                   <p
                     style={{
                       textOverflow: 'ellipsis',

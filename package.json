@@ -16,6 +16,7 @@
     "@ant-design/icons": "^5.2.5",
     "@capacitor/android": "^5.3.0",
     "@capacitor/app": "5.0.6",
+    "@capacitor/camera": "^5.0.7",
     "@capacitor/core": "^5.3.0",
     "@capacitor/geolocation": "^5.0.6",
     "@capacitor/google-maps": "^5.3.1",
