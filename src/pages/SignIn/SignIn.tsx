@@ -27,21 +27,12 @@ export const SignIn = withGuest(() => {
     }
   }, [myUser, nav]);
 
-  const handleGoogleSuccess = async (response: any) => {
-    authService
-      .googleLogin(response.credential)
-      .then((data) => {
-        const jwtToken = data.access_token;
-        const user = data.user;
-        dispatch(addUserAndToken({ user, token: jwtToken }));
-      })
-      .catch((err) => {
-        message.error('Error');
-        message.info(err.message);
-        message.error(err);
-        console.log(err);
-        console.error('+++++++++++++++++++++TREMENDO ERROR: ', err);
-      });
+  // Función para detectar dispositivos iOS
+  const isIOS = () => {
+    return (
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    );
   };
 
   const handleLocalLogin = async (user: any) => {
@@ -130,6 +121,21 @@ export const SignIn = withGuest(() => {
               </Button>
             </div>
           </AnimatedFromLeft>
+          {isIOS() && (
+            <AnimatedFromLeft delay={0.1}>
+              <Button
+                style={{
+                  width: '10rem',
+                  marginTop: '10px',
+                  backgroundColor: '#d0eaff',
+                  color: '#0275d8',
+                }}
+                onClick={() => nav('/random')}
+              >
+                Modo Invitado
+              </Button>
+            </AnimatedFromLeft>
+          )}
 
           <AnimatedFromLeft delay={0.2}>
             <div style={{ marginTop: '10px' }}>
