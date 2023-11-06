@@ -9,6 +9,7 @@ import { BusinessCreateState, PropsStep } from '.';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { IBusinessType } from '../../../interfaces/businessType/businessType.interface';
+import { Camera, CameraResultType } from '@capacitor/camera';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -34,21 +35,54 @@ export const Step1 = (props: PropsStep) => {
     } else setBusinessTypeList(reduxBusinessTypeList);
   }, []);
 
-  const handleUploadChange = (e, type) => {
-    const fileName = e.nativeEvent.target.files[0].name;
-    if (e.target.files.length > 0) {
-      const selectedFile = e.target.files[0];
-      if (type === 'logo') {
-        setLogoFileName(fileName);
-        props.setBusinessData((prev) => {
-          return { ...prev, logo: selectedFile };
-        });
-      } else if (type === 'banner') {
-        setBannerFileName(fileName);
-        props.setBusinessData((prev) => {
-          return { ...prev, banner: selectedFile };
-        });
+  const handleLogoChange = async () => {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Base64,
+    });
+
+    if (image.base64String) {
+      const byteCharacters = atob(image.base64String);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/jpeg' });
+      const imageUrl = URL.createObjectURL(blob);
+      setLogoFileName(imageUrl); // Actualiza el nombre del archivo de logo con la URL
+
+      const logoFile = new File([blob], 'logo.jpg', { type: 'image/jpeg' });
+      props.setBusinessData((prev) => {
+        return { ...prev, logo: logoFile };
+      });
+    }
+  };
+
+  const handleBannerChange = async () => {
+    // Repite el proceso para la imagen del banner
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Base64,
+    });
+
+    if (image.base64String) {
+      const byteCharacters = atob(image.base64String);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/jpeg' });
+      const imageUrl = URL.createObjectURL(blob);
+      setBannerFileName(imageUrl); // Actualiza el nombre del archivo de logo con la URL
+
+      const logoFile = new File([blob], 'banner.jpg', { type: 'image/jpeg' });
+      props.setBusinessData((prev) => {
+        return { ...prev, banner: logoFile };
+      });
     }
   };
 
@@ -116,52 +150,12 @@ export const Step1 = (props: PropsStep) => {
           }}
         >
           <div>
-            {/* Input oculto */}
-            <input
-              style={{ display: 'none' }}
-              id="fileInput"
-              type="file"
-              accept="image/*"
-              capture={false}
-              onChange={(info) => handleUploadChange(info, 'logo')}
-            />
-
-            {/* Label personalizado */}
-            <label
-              htmlFor="fileInput"
-              style={{
-                cursor: 'pointer',
-                color: 'blue',
-                textDecoration: 'underline',
-              }}
-            >
-              Sube tu Logo
-            </label>
+            <Button onClick={handleLogoChange}>Sube tu Logo</Button>
             <p>{logoFileName != '' ? logoFileName : null}</p>
           </div>
           <hr></hr>
           <div>
-            {/* Input oculto */}
-            <input
-              style={{ display: 'none' }}
-              id="bannerFileInput"
-              type="file"
-              accept="image/*"
-              capture={false}
-              onChange={(info) => handleUploadChange(info, 'banner')}
-            />
-            {}
-
-            {/* Label personalizado */}
-            <label
-              htmlFor="bannerFileInput"
-              style={{
-                cursor: 'pointer',
-                color: 'blue',
-              }}
-            >
-              Sube tu Banner
-            </label>
+            <Button onClick={handleBannerChange}>Sube tu Banner</Button>
             <p>{bannerFileName != '' ? bannerFileName : null}</p>
           </div>
         </div>

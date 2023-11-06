@@ -18,6 +18,7 @@ export class UserService {
     formData.append('civilIdDoc', user.civilIdDoc);
     formData.append('country', user.country);
     formData.append('department', user.department);
+    console.log('PROFILE IMAGE:', profileImage);
 
     if (profileImage) {
       formData.append('profileImage', profileImage, profileImage.name);

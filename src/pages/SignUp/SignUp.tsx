@@ -47,15 +47,28 @@ export const SignUp = withGuest(() => {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: true,
-      resultType: CameraResultType.Uri,
+      resultType: CameraResultType.Base64,
     });
+    if (image.base64String) {
+      // Convertir base64 a Blob
+      const byteCharacters = atob(image.base64String);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/jpeg' });
 
-    if (image.webPath) setAvatar(image.webPath);
-    else console.log('NO HAY WEBPATH');
-    setFile(
-      new File([image.base64String!], 'avatar.jpg', { type: 'image/jpeg' }),
-    );
+      // Crear una URL de objeto a partir del Blob para visualización
+      const imageUrl = URL.createObjectURL(blob);
+      setAvatar(imageUrl); // Asignar la URL al estado 'avatar'
+
+      // Además, guardar el File para ser enviado al backend
+      setFile(new File([blob], 'avatar.jpg', { type: 'image/jpeg' }));
+    }
   };
+
+  console.log('$$$$$$file: ', file);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -209,9 +222,10 @@ export const SignUp = withGuest(() => {
                   <Avatar
                     size={64}
                     src={
+                      avatar ||
                       'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'
-                    }
-                    style={{ marginBottom: '15px' }}
+                    } // Utiliza el estado avatar aquí
+                    style={{ marginBottom: '15px', marginRight: '10px' }}
                   />
                   <Button onClick={handleAvatarChange}>Sube tu Avatar</Button>
                   <p
