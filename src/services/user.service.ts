@@ -15,7 +15,6 @@ export class UserService {
     formData.append('name', user.name);
     formData.append('email', user.email);
     formData.append('password', user.password);
-    formData.append('civilIdDoc', user.civilIdDoc);
     formData.append('country', user.country);
     formData.append('department', user.department);
 
@@ -52,7 +51,6 @@ export class UserService {
     if (userData.name) formData.append('name', userData.name);
     if (userData.email) formData.append('email', userData.email);
     if (userData.phone) formData.append('phone', userData.phone);
-    if (userData.civilIdDoc) formData.append('civilIdDoc', userData.civilIdDoc);
     if (userData.country) formData.append('country', userData.country);
     if (userData.department) formData.append('department', userData.department);
 

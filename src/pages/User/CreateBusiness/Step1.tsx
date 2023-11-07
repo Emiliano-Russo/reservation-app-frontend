@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { GrowsFromLeft } from '../../../animations/GrowsFromLeft';
-import { Input, Select, Upload, Button } from 'antd';
+import { Input, Select, Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import styles from './styles/CreateBusiness.module.css';
 import { BusinessTypeService } from '../../../services/businessType.service';
@@ -36,6 +36,15 @@ export const Step1 = (props: PropsStep) => {
   }, []);
 
   const handleLogoChange = async () => {
+    // Verificar si ya se tiene permiso para usar la cámara
+    // Solicitar permisos de cámara con Capacitor
+    const permissions = await Camera.requestPermissions();
+
+    // Si los permisos no se otorgan, mostrar un mensaje
+    if (permissions.camera !== 'granted') {
+      message.error('Permiso de cámara denegado.');
+      return;
+    }
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: true,
@@ -61,6 +70,15 @@ export const Step1 = (props: PropsStep) => {
   };
 
   const handleBannerChange = async () => {
+    // Verificar si ya se tiene permiso para usar la cámara
+    // Solicitar permisos de cámara con Capacitor
+    const permissions = await Camera.requestPermissions();
+
+    // Si los permisos no se otorgan, mostrar un mensaje
+    if (permissions.camera !== 'granted') {
+      message.error('Permiso de cámara denegado.');
+      return;
+    }
     // Repite el proceso para la imagen del banner
     const image = await Camera.getPhoto({
       quality: 90,

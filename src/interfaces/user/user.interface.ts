@@ -8,7 +8,6 @@ export interface IUser {
   phone: string;
   country: string;
   department: string;
-  civilIdDoc: string;
   loyaltyPoints: number;
   fcmToken: string;
   password: string;
@@ -22,7 +21,6 @@ export interface UpdateUserDto {
   name?: string;
   email?: string;
   phone?: string;
-  civilIdDoc?: string;
   userImage?: File;
   country?: string;
   department?: string;

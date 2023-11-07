@@ -27,6 +27,16 @@ export const EditUserData = () => {
   const distpach = useDispatch();
 
   const handleAvatarChange = async () => {
+    // Verificar si ya se tiene permiso para usar la cámara
+    // Solicitar permisos de cámara con Capacitor
+    const permissions = await Camera.requestPermissions();
+
+    // Si los permisos no se otorgan, mostrar un mensaje
+    if (permissions.camera !== 'granted') {
+      message.error('Permiso de cámara denegado.');
+      return;
+    }
+
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: true,
@@ -78,7 +88,6 @@ export const EditUserData = () => {
                     | 'name'
                     | 'email'
                     | 'phone'
-                    | 'civilIdDoc'
                     | 'profileImage'
                     | 'country'
                     | 'department',

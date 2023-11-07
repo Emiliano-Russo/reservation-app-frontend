@@ -7,7 +7,6 @@ interface Data {
   status: ReservationStatus;
   userName: string;
   reservationDate: string | undefined | null;
-  civilIdDoc: string;
   extras?: any;
   bookingInstructions: string | undefined;
 }
@@ -36,9 +35,6 @@ export const BusinessModal = (props: Props) => {
     >
       <p>
         Reserva para: <strong>{props.data.userName}</strong>
-      </p>
-      <p>
-        CI: <strong>{props.data.civilIdDoc}</strong>
       </p>
       {props.data.reservationDate ? (
         <>

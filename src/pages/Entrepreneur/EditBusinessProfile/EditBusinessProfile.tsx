@@ -10,6 +10,7 @@ import { countries } from '../../../utils/countries';
 import { country_departments } from '../../../utils/country-departments';
 import { BusinessService } from '../../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
+import { Camera, CameraResultType } from '@capacitor/camera';
 
 const { Option } = Select;
 
@@ -17,8 +18,14 @@ const businessService = new BusinessService(REACT_APP_BASE_URL);
 
 export const EditBusinessProfile = () => {
   const [loading, setLoading] = useState(false);
-  const [file, setFile] = useState<File>();
+  const [logoFile, setLogoFile] = useState<File>();
   const [bannerFile, setBannerFile] = useState<File>();
+
+  const [avatarLogo, setAvatarLogo] = useState<undefined | string>(undefined);
+  const [avatarBanner, setAvatarBanner] = useState<undefined | string>(
+    undefined,
+  );
+
   const business = useSelector(
     (state: RootState) => state.business.currentBusiness,
   );
@@ -29,28 +36,70 @@ export const EditBusinessProfile = () => {
     dispatch(updateCurrentBusiness({ [property]: value }));
   };
 
-  const handleBannerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      setBannerFile(file);
+  const handleBannerChange = async () => {
+    const permissions = await Camera.requestPermissions();
+    if (permissions.camera !== 'granted') {
+      message.error('Permiso de cámara denegado.');
+      return;
+    }
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Base64,
+    });
+    if (image.base64String) {
+      // Convertir base64 a Blob
+      const byteCharacters = atob(image.base64String);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
+      // Crear una URL de objeto a partir del Blob para visualización
+      const imageUrl = URL.createObjectURL(blob);
+      setAvatarBanner(imageUrl); // Asignar la URL al estado 'avatar'
+
+      // Además, guardar el File para ser enviado al backend
+      setBannerFile(new File([blob], 'banner.jpg', { type: 'image/jpeg' }));
     }
   };
 
-  const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      setFile(file);
+  const handleLogoChange = async () => {
+    const permissions = await Camera.requestPermissions();
+    if (permissions.camera !== 'granted') {
+      message.error('Permiso de cámara denegado.');
+      return;
+    }
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Base64,
+    });
+
+    if (image.base64String) {
+      // Convertir base64 a Blob
+      const byteCharacters = atob(image.base64String);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
+      // Crear una URL de objeto a partir del Blob para visualización
+      const imageUrl = URL.createObjectURL(blob);
+      setAvatarLogo(imageUrl); // Asignar la URL al estado 'avatar'
+
+      // Además, guardar el File para ser enviado al backend
+      setLogoFile(new File([blob], 'avatar.jpg', { type: 'image/jpeg' }));
     }
   };
 
   const onUpdateBusiness = () => {
-    //setLoading(true);
     if (!business) return;
-    console.log('tenemos todos los datos? ', file, '###', bannerFile);
+    setLoading(true);
 
     const objToSend = {
       id: business.id,
@@ -63,29 +112,19 @@ export const EditBusinessProfile = () => {
 
     console.log('sending obj... ');
     businessService
-      .editBusiness(objToSend, file, bannerFile)
+      .editBusiness(objToSend, logoFile, bannerFile)
       .then((businessRes: IBusiness) => {
         message.success('Negocio Actualizado!');
         dispatch(updateCurrentBusiness({ ['banner']: businessRes.banner }));
         dispatch(updateCurrentBusiness({ ['logoURL']: businessRes.logoURL }));
-        console.log(businessRes);
+        console.log('BusinessREs:', businessRes);
       })
       .catch((err) => {
         message.error('Error Al Actualizar!');
+      })
+      .finally(() => {
+        setLoading(false);
       });
-
-    // Aquí deberías llamar a tu servicio para actualizar el perfil del negocio
-    // Una vez que se haya completado la actualización, puedes actualizar el estado de Redux y mostrar un mensaje al usuario
-
-    // Ejemplo:
-    // businessService.updateBusiness(business.id, updateObj).then(() => {
-    //   message.success('Perfil del negocio actualizado!');
-    //   dispatch(updateBusinessProfile(updateObj));
-    // }).catch(() => {
-    //   message.error('Error al actualizar!');
-    // }).finally(() => {
-    //   setLoading(false);
-    // });
   };
 
   return (
@@ -143,55 +182,21 @@ export const EditBusinessProfile = () => {
           </Select>
         )}
 
-        <div style={{ marginTop: '20px' }}>
+        <div>
           <Avatar
             size={64}
-            src={business?.logoURL}
-            style={{ marginBottom: '15px' }}
+            src={avatarLogo || business?.logoURL}
+            style={{ marginBottom: '15px', marginRight: '10px' }}
           />
-          <input
-            style={{ display: 'none' }}
-            id="fileInput"
-            type="file"
-            accept="image/*"
-            capture={false}
-            onChange={(e) => handleLogoChange(e)}
-          />
-          <label
-            htmlFor="fileInput"
-            style={{
-              cursor: 'pointer',
-              color: 'blue',
-              textDecoration: 'none',
-              marginLeft: '20px',
-            }}
-          >
-            Sube tu Logo {file?.name}
-          </label>
+          <Button onClick={handleLogoChange}>Sube tu Logo</Button>
         </div>
-        <div
-          style={{ display: 'flex', alignItems: 'center', marginLeft: '8px' }}
-        >
-          <img src={business?.banner} style={{ maxHeight: '100px' }}></img>
-          <input
-            style={{ display: 'none' }}
-            id="bannerInput"
-            type="file"
-            accept="image/*"
-            capture={false}
-            onChange={(e) => handleBannerChange(e)}
+        <div>
+          <Avatar
+            size={64}
+            src={avatarBanner || business?.banner}
+            style={{ marginBottom: '15px', marginRight: '10px' }}
           />
-          <label
-            htmlFor="bannerInput"
-            style={{
-              cursor: 'pointer',
-              color: 'blue',
-              textDecoration: 'none',
-              marginLeft: '20px',
-            }}
-          >
-            Sube tu Banner {bannerFile?.name}
-          </label>
+          <Button onClick={handleBannerChange}>Sube tu Banner</Button>
         </div>
       </div>
 

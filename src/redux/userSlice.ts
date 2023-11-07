@@ -7,7 +7,6 @@ interface UpdateStringPropertyAction {
     | 'email'
     | 'token'
     | 'phone'
-    | 'civilIdDoc'
     | 'profileImage'
     | 'country'
     | 'department'
