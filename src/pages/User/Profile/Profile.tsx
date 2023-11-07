@@ -3,6 +3,7 @@ import { withPageLayout } from '../../../wrappers/WithPageLayout';
 import {
   ContactsOutlined,
   DownOutlined,
+  EnvironmentOutlined,
   HomeOutlined,
   MailOutlined,
   MessageOutlined,
@@ -306,17 +307,18 @@ export const Profile = withPageLayout(() => {
       label: 'País',
       value: user.country,
     },
+
+    {
+      icon: <EnvironmentOutlined style={{ color: 'gray' }} />,
+      label: 'Zona',
+      value: user.department,
+    },
     {
       icon: <MailOutlined style={{ color: 'gray' }} />,
       label: 'Email',
       value: user.email,
       color: user.emailVerified ? 'black' : 'red',
       onTap: onTapEmail,
-    },
-    {
-      icon: <ContactsOutlined style={{ color: 'gray' }} />,
-      label: 'Documento',
-      value: user.civilIdDoc,
     },
   ];
 

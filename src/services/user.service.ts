@@ -10,7 +10,7 @@ export class UserService {
     });
   }
 
-  public registerUser(user: any, profileImage: any) {
+  public registerUser(user: any) {
     const formData = new FormData();
     formData.append('name', user.name);
     formData.append('email', user.email);
@@ -18,13 +18,6 @@ export class UserService {
     formData.append('civilIdDoc', user.civilIdDoc);
     formData.append('country', user.country);
     formData.append('department', user.department);
-    console.log('PROFILE IMAGE:', profileImage);
-
-    if (profileImage) {
-      formData.append('profileImage', profileImage, profileImage.name);
-    }
-
-    console.log('object to send: ', formData);
 
     return this.api.post('/user', formData, {
       headers: {

@@ -47,11 +47,13 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Necesitamos acceder a tu ubicación para mostrarte el mapa.</string>
+
 	<key>NSCameraUsageDescription</key>
-    <string>Necesitamos usar tu camara</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Necesitamos acceder a los archivos</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Necesitamos acceder a los archivos</string>
+	<string>Esta aplicación requiere acceso a tu cámara para que puedas tomar y subir una foto de perfil durante el proceso de registro. Así otros usuarios podrán reconocerte fácilmente.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Necesitamos permiso para guardar fotos en tu biblioteca, lo que te permitirá almacenar imágenes directamente desde la aplicación sin necesidad de usar otras herramientas.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Para que puedas seleccionar una foto de perfil de tu biblioteca de imágenes, necesitamos acceso. Esto facilitará el uso de fotos que ya tienes sin necesidad de tomar una nueva.</string>
+
 </dict>
 </plist>

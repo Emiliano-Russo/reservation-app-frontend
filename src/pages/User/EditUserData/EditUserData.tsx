@@ -13,6 +13,7 @@ import { REACT_APP_BASE_URL } from '../../../../env';
 import { IUser, UpdateUserDto } from '../../../interfaces/user/user.interface';
 import { countries } from '../../../utils/countries';
 import { country_departments } from '../../../utils/country-departments';
+import { Camera, CameraResultType } from '@capacitor/camera';
 
 const userService = new UserService(REACT_APP_BASE_URL);
 
@@ -25,15 +26,28 @@ export const EditUserData = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const distpach = useDispatch();
 
-  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatar(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-      setFile(file);
+  const handleAvatarChange = async () => {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Base64,
+    });
+    if (image.base64String) {
+      // Convertir base64 a Blob
+      const byteCharacters = atob(image.base64String);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
+      // Crear una URL de objeto a partir del Blob para visualización
+      const imageUrl = URL.createObjectURL(blob);
+      setAvatar(imageUrl); // Asignar la URL al estado 'avatar'
+
+      // Además, guardar el File para ser enviado al backend
+      setFile(new File([blob], 'avatar.jpg', { type: 'image/jpeg' }));
     }
   };
 
@@ -44,8 +58,6 @@ export const EditUserData = () => {
     const updateObj: UpdateUserDto = {
       name: user?.name,
       email: user?.email,
-      phone: user?.phone,
-      civilIdDoc: user?.civilIdDoc,
       userImage: file,
       country: user?.country,
       department: user?.department,
@@ -103,6 +115,9 @@ export const EditUserData = () => {
       </FadeFromTop>
       <AnimatedFromLeft>
         <div style={{ padding: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '5px' }}>
+            Nombre
+          </label>
           <Input
             placeholder="Name"
             value={user?.name}
@@ -116,32 +131,7 @@ export const EditUserData = () => {
             }
             style={{ marginBottom: '15px' }}
           />
-          <Input
-            placeholder="Phone"
-            value={user?.phone}
-            onChange={(e) =>
-              distpach(
-                updateStringProperty({
-                  property: 'phone',
-                  value: e.target.value,
-                }),
-              )
-            }
-            style={{ marginBottom: '15px' }}
-          />
-          <Input
-            placeholder="Cédula"
-            value={user?.civilIdDoc}
-            onChange={(e) =>
-              distpach(
-                updateStringProperty({
-                  property: 'civilIdDoc',
-                  value: e.target.value,
-                }),
-              )
-            }
-            style={{ marginBottom: '15px' }}
-          />
+          <label style={{ display: 'block', marginBottom: '5px' }}>Email</label>
           <Input
             placeholder="Email"
             value={user?.email}
@@ -178,67 +168,49 @@ export const EditUserData = () => {
           </Select>
 
           {user?.country != '' && (
-            <Select
-              placeholder="Selecciona un departamento"
-              value={user?.department}
-              style={{ width: '100%' }}
-              onChange={(department) =>
-                dispatch(
-                  updateStringProperty({
-                    property: 'department',
-                    value: department,
-                  }),
-                )
-              }
-            >
-              {user &&
-                country_departments[user.country].map((dept) => (
-                  <Option key={dept} value={dept}>
-                    {dept}
-                  </Option>
-                ))}
-            </Select>
+            <>
+              <label style={{ display: 'block', marginBottom: '5px' }}>
+                Zona
+              </label>
+              <Select
+                placeholder="Selecciona un departamento"
+                value={user?.department}
+                style={{ width: '100%' }}
+                onChange={(department) =>
+                  dispatch(
+                    updateStringProperty({
+                      property: 'department',
+                      value: department,
+                    }),
+                  )
+                }
+              >
+                {user &&
+                  country_departments[user.country].map((dept) => (
+                    <Option key={dept} value={dept}>
+                      {dept}
+                    </Option>
+                  ))}
+              </Select>
+            </>
           )}
 
           <hr></hr>
 
           <div style={{ marginTop: '30px' }}>
-            <Avatar
-              size={64}
-              src={user?.profileImage}
-              style={{ marginBottom: '15px' }}
-            />
-            {/* Input oculto */}
-            <input
-              style={{ display: 'none' }}
-              id="fileInput"
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleAvatarChange(e)}
-            />
-
-            {/* Label personalizado */}
-            <label
-              htmlFor="fileInput"
-              style={{
-                cursor: 'pointer',
-                color: 'blue',
-                textDecoration: 'none',
-                marginLeft: '20px',
-              }}
-            >
-              Sube tu Avatar
-            </label>
-            <p
-              style={{
-                textOverflow: 'ellipsis',
-                maxWidth: '150px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-              }}
-            >
-              {avatar}
-            </p>
+            <AnimatedFromLeft delay={0.4}>
+              <div style={{ marginTop: '30px' }}>
+                <Avatar
+                  size={64}
+                  src={
+                    avatar ||
+                    'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'
+                  } // Utiliza el estado avatar aquí
+                  style={{ marginBottom: '15px', marginRight: '10px' }}
+                />
+                <Button onClick={handleAvatarChange}>Sube tu Avatar</Button>
+              </div>
+            </AnimatedFromLeft>
           </div>
         </div>
       </AnimatedFromLeft>

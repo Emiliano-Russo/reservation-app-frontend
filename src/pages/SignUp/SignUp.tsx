@@ -11,7 +11,6 @@ import { addUserAndToken } from '../../redux/userSlice';
 import { countries } from '../../utils/countries';
 import { country_departments } from '../../utils/country-departments';
 import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
-import { Camera, CameraResultType } from '@capacitor/camera';
 
 export const SignUp = withGuest(() => {
   const nav = useNavigate();
@@ -23,7 +22,6 @@ export const SignUp = withGuest(() => {
     name: '',
     email: '',
     password: '',
-    civilIdDoc: '',
     country: '',
     department: '',
     provider: 'local',
@@ -32,10 +30,6 @@ export const SignUp = withGuest(() => {
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [userToken, setUserToken] = useState<any>();
-  const [step, setStep] = useState(1);
-  const [file, setFile] = useState<File>();
-  const [avatar, setAvatar] = useState<string | null>(null);
-  const [confirmPassword, setConfirmPassword] = useState('');
 
   useEffect(() => {
     if (userState) {
@@ -43,40 +37,8 @@ export const SignUp = withGuest(() => {
     }
   }, [userState, nav]);
 
-  const handleAvatarChange = async () => {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: true,
-      resultType: CameraResultType.Base64,
-    });
-    if (image.base64String) {
-      // Convertir base64 a Blob
-      const byteCharacters = atob(image.base64String);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'image/jpeg' });
-
-      // Crear una URL de objeto a partir del Blob para visualización
-      const imageUrl = URL.createObjectURL(blob);
-      setAvatar(imageUrl); // Asignar la URL al estado 'avatar'
-
-      // Además, guardar el File para ser enviado al backend
-      setFile(new File([blob], 'avatar.jpg', { type: 'image/jpeg' }));
-    }
-  };
-
-  console.log('$$$$$$file: ', file);
-
   const handleSubmit = async () => {
     setLoading(true);
-    if (confirmPassword != formData.password) {
-      message.error('Las contraseñas deben coincidir');
-      setLoading(false);
-      return;
-    }
 
     const allFieldsFilled = Object.values(formData).every((value) => {
       if (typeof value === 'string') {
@@ -92,7 +54,7 @@ export const SignUp = withGuest(() => {
     }
 
     try {
-      const res = await userService.registerUser(formData, file);
+      const res = await userService.registerUser(formData);
       const userRes = res.data.user;
       const tokenRes = res.data.token;
 
@@ -109,242 +71,111 @@ export const SignUp = withGuest(() => {
     setLoading(false);
   };
 
-  if (step == 1) {
-    return (
-      <GrowsFromLeft>
-        <div>
+  return (
+    <GrowsFromLeft>
+      <div>
+        <div
+          style={{
+            paddingTop: 'calc(env(safe-area-inset-top) + 10px)',
+            height: '15vh',
+            overflow: 'hidden',
+            background: '#ffa500',
+          }}
+        >
           <div
             style={{
-              paddingTop: 'calc(env(safe-area-inset-top) + 10px)',
-              height: '15vh',
-              overflow: 'hidden',
-              background: '#ffa500',
+              position: 'absolute',
+              top: '2%',
+              left: '50%',
+              transform: 'translate(-50%, 0)',
+              padding: '20px',
+              borderRadius: '10px',
+              textAlign: 'center',
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
             }}
           >
-            <div
+            <Button
+              icon={<LeftOutlined />}
               style={{
-                position: 'absolute',
-                top: '2%',
-                left: '50%',
-                transform: 'translate(-50%, 0)',
-                padding: '20px',
-                borderRadius: '10px',
-                textAlign: 'center',
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
+                background: 'transparent',
+                color: 'white',
+                border: 'none',
+              }}
+              onClick={() => {
+                nav(-1);
+              }}
+            ></Button>
+            <h1
+              style={{
+                color: 'white',
+                margin: 0,
+                letterSpacing: '2px',
               }}
             >
-              <Button
-                icon={<LeftOutlined />}
-                style={{
-                  background: 'transparent',
-                  color: 'white',
-                  border: 'none',
-                }}
-                onClick={() => {
-                  nav(-1);
-                }}
-              ></Button>
-              <h1
-                style={{
-                  color: 'white',
-                  margin: 0,
-                  letterSpacing: '2px',
-                }}
-              >
-                Registrarse
-              </h1>
-              <Button
-                style={{ visibility: 'hidden' }}
-                icon={<LeftOutlined />}
-              />
-            </div>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              height: 'calc(85vh - 3rem)',
-              width: '60%',
-              margin: '2rem auto 0 auto',
-              paddingBottom: '2rem',
-            }}
-          >
-            <div>
-              <AnimatedFromLeft delay={0.1}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>
-                  Nombre
-                </label>
-                <Input
-                  placeholder="Nombre"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  style={{ marginBottom: '15px' }}
-                />
-              </AnimatedFromLeft>
-
-              <AnimatedFromLeft delay={0.2}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>
-                  Correo Electrónico
-                </label>
-                <Input
-                  type="email"
-                  placeholder="Correo electrónico"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  style={{ marginBottom: '15px' }}
-                />
-              </AnimatedFromLeft>
-
-              <AnimatedFromLeft delay={0.3}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>
-                  Documento de Identidad
-                </label>
-                <Input
-                  placeholder="Documento de Identidad"
-                  value={formData.civilIdDoc}
-                  onChange={(e) =>
-                    setFormData({ ...formData, civilIdDoc: e.target.value })
-                  }
-                  style={{ marginBottom: '15px' }}
-                />
-              </AnimatedFromLeft>
-
-              <AnimatedFromLeft delay={0.4}>
-                <div style={{ marginTop: '30px' }}>
-                  <Avatar
-                    size={64}
-                    src={
-                      avatar ||
-                      'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'
-                    } // Utiliza el estado avatar aquí
-                    style={{ marginBottom: '15px', marginRight: '10px' }}
-                  />
-                  <Button onClick={handleAvatarChange}>Sube tu Avatar</Button>
-                  <p
-                    style={{
-                      textOverflow: 'ellipsis',
-                      maxWidth: '150px',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {avatar}
-                  </p>
-                </div>
-              </AnimatedFromLeft>
-            </div>
-            <Button
-              loading={loading}
-              type="primary"
-              onClick={() => setStep(2)}
-              style={{ width: '100%' }}
-            >
-              Continuar
-            </Button>
+              Registrarse
+            </h1>
+            <Button style={{ visibility: 'hidden' }} icon={<LeftOutlined />} />
           </div>
         </div>
-      </GrowsFromLeft>
-    );
-  }
-
-  if (step == 2) {
-    return (
-      <GrowsFromLeft>
-        <div>
-          <div
-            style={{
-              height: '15vh',
-              overflow: 'hidden',
-              background: '#ffa500',
-            }}
-          >
-            <div
-              style={{
-                position: 'absolute',
-                top: '2%',
-                left: '50%',
-                transform: 'translate(-50%, 0)',
-                padding: '20px',
-                borderRadius: '10px',
-                textAlign: 'center',
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Button
-                style={{
-                  background: 'transparent',
-                  color: 'white',
-                  border: 'none',
-                }}
-                icon={<LeftOutlined />}
-                onClick={() => {
-                  setStep(1);
-                }}
-              ></Button>
-              <h1
-                style={{
-                  color: 'white',
-                  margin: 0,
-                  letterSpacing: '2px',
-                }}
-              >
-                Registrarse
-              </h1>
-              <Button
-                style={{ visibility: 'hidden' }}
-                icon={<LeftOutlined />}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: 'calc(85vh - 3rem)',
+            width: '60%',
+            margin: '2rem auto 0 auto',
+            paddingBottom: '2rem',
+          }}
+        >
+          <div>
+            <AnimatedFromLeft delay={0.1}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>
+                Nombre
+              </label>
+              <Input
+                placeholder="Nombre"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                style={{ marginBottom: '15px' }}
               />
-            </div>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              height: 'calc(85vh - 3rem)',
-              width: '60%',
-              margin: '2rem auto 0 auto',
-              paddingBottom: '2rem',
-            }}
-          >
+            </AnimatedFromLeft>
+
+            <AnimatedFromLeft delay={0.2}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>
+                Correo Electrónico
+              </label>
+              <Input
+                type="email"
+                placeholder="Correo electrónico"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                style={{ marginBottom: '15px' }}
+              />
+            </AnimatedFromLeft>
+
+            <AnimatedFromLeft delay={0.3}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>
+                Contraseña
+              </label>
+              <Input.Password
+                placeholder="Contraseña"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                style={{ marginBottom: '15px' }}
+              />
+            </AnimatedFromLeft>
+
             <div>
-              <AnimatedFromLeft delay={0.1}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>
-                  Contraseña
-                </label>
-                <Input.Password
-                  placeholder="Contraseña"
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                  style={{ marginBottom: '15px' }}
-                />
-              </AnimatedFromLeft>
-
-              <AnimatedFromLeft delay={0.2}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>
-                  Confirmar Contraseña
-                </label>
-                <Input.Password
-                  placeholder="Confirmar Contraseña"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  style={{ marginBottom: '15px' }}
-                />
-              </AnimatedFromLeft>
-
               <AnimatedFromLeft delay={0.4}>
                 <label style={{ display: 'block', marginBottom: '5px' }}>
                   País
@@ -353,7 +184,11 @@ export const SignUp = withGuest(() => {
                   placeholder="Selecciona tu país"
                   value={formData.country}
                   onChange={(value) =>
-                    setFormData({ ...formData, country: value, department: '' })
+                    setFormData({
+                      ...formData,
+                      country: value,
+                      department: '',
+                    })
                   }
                   style={{ marginBottom: '20px', width: '100%' }}
                 >
@@ -390,44 +225,44 @@ export const SignUp = withGuest(() => {
                 </>
               )}
             </div>
-            <Button
-              loading={loading}
-              type="primary"
-              onClick={() => handleSubmit()}
-            >
-              Registrarse
-            </Button>
           </div>
-        </div>
-        <Modal
-          title="¿Qué tipo de usuario eres?"
-          open={isModalVisible}
-          onCancel={() => setIsModalVisible(false)}
-          footer={null}
-          closable={false}
-        >
           <Button
-            block
+            loading={loading}
             type="primary"
-            onClick={() => {
-              nav('/business');
-              dispatch(addUserAndToken(userToken));
-            }}
+            onClick={() => handleSubmit()}
           >
-            Usuario Corriente
+            Registrarse
           </Button>
-          <Button
-            block
-            style={{ marginTop: '10px' }}
-            onClick={() => {
-              dispatch(addUserAndToken(userToken));
-              nav('/create-business');
-            }}
-          >
-            Negocio
-          </Button>
-        </Modal>
-      </GrowsFromLeft>
-    );
-  }
+        </div>
+      </div>
+      <Modal
+        title="¿Qué tipo de usuario eres?"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+        closable={false}
+      >
+        <Button
+          block
+          type="primary"
+          onClick={() => {
+            nav('/business');
+            dispatch(addUserAndToken(userToken));
+          }}
+        >
+          Usuario Corriente
+        </Button>
+        <Button
+          block
+          style={{ marginTop: '10px' }}
+          onClick={() => {
+            dispatch(addUserAndToken(userToken));
+            nav('/create-business');
+          }}
+        >
+          Negocio
+        </Button>
+      </Modal>
+    </GrowsFromLeft>
+  );
 });
