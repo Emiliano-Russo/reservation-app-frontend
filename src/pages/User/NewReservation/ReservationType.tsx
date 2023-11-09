@@ -17,9 +17,17 @@ export const ReservationType = ({
     setHourTypeSelection(e.target.value);
   };
 
+  const isIOS = () => {
+    return (
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    );
+  };
+
   return (
     <div
       style={{
+        marginTop: isIOS() ? '30px' : '0px',
         padding: '20px',
         display: 'flex',
         flexDirection: 'column',

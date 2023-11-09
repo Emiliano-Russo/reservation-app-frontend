@@ -31,6 +31,13 @@ export const SignUp = withGuest(() => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [userToken, setUserToken] = useState<any>();
 
+  const isIOS = () => {
+    return (
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    );
+  };
+
   useEffect(() => {
     if (userState) {
       nav('/business');
@@ -85,7 +92,7 @@ export const SignUp = withGuest(() => {
           <div
             style={{
               position: 'absolute',
-              top: '2%',
+              top: isIOS() ? '5%' : '2%',
               left: '50%',
               transform: 'translate(-50%, 0)',
               padding: '20px',
