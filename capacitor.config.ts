@@ -6,7 +6,8 @@ const config: CapacitorConfig = {
   appName: 'Agenda Fácil',
   webDir: 'dist',
   server: {
-    androidScheme: 'http',
+    url: 'http://192.168.0.241:8100',
+    cleartext: true,
     allowNavigation: ['*'],
   },
   plugins: {

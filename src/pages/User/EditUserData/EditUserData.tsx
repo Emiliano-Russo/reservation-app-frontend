@@ -27,11 +27,15 @@ export const EditUserData = () => {
   const distpach = useDispatch();
 
   const handleAvatarChange = async () => {
-    // Verificar si ya se tiene permiso para usar la cámara
-    // Solicitar permisos de cámara con Capacitor
-    const permissions = await Camera.requestPermissions();
-
-    // Si los permisos no se otorgan, mostrar un mensaje
+    console.log('handle avatar change');
+    let permissions;
+    try {
+      permissions = await Camera.requestPermissions();
+    } catch (error: any) {
+      message.error(error.message);
+      console.error('Error al solicitar permisos:', error);
+      return;
+    }
     if (permissions.camera !== 'granted') {
       message.error('Permiso de cámara denegado.');
       return;
@@ -42,6 +46,7 @@ export const EditUserData = () => {
       allowEditing: true,
       resultType: CameraResultType.Base64,
     });
+
     if (image.base64String) {
       // Convertir base64 a Blob
       const byteCharacters = atob(image.base64String);
@@ -125,7 +130,7 @@ export const EditUserData = () => {
       <AnimatedFromLeft>
         <div style={{ padding: '20px' }}>
           <label style={{ display: 'block', marginBottom: '5px' }}>
-            Nombre
+            Nombreee
           </label>
           <Input
             placeholder="Name"
