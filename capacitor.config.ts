@@ -6,9 +6,10 @@ const config: CapacitorConfig = {
   appName: 'Agenda Fácil',
   webDir: 'dist',
   server: {
-    url: 'http://192.168.0.241:8100',
-    cleartext: true,
+    androidScheme: 'http',
     allowNavigation: ['*'],
+    // url: 'http://192.168.x.x:8100',
+    // cleartext: true
   },
   plugins: {
     GoogleMapsPlugin: {

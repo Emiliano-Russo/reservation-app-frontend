@@ -78,6 +78,7 @@ export const BusinessList = withPageLayout(
         setHasMoreData(false);
         return;
       }
+      console.log(res);
       setBusinesses((prev) => {
         // Filtrar los nuevos negocios para asegurarse de que no estén ya en la lista previa
         const newItems = res.items.filter(

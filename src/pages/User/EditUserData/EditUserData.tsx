@@ -14,6 +14,7 @@ import { IUser, UpdateUserDto } from '../../../interfaces/user/user.interface';
 import { countries } from '../../../utils/countries';
 import { country_departments } from '../../../utils/country-departments';
 import { Camera, CameraResultType } from '@capacitor/camera';
+import { generateRandomFilename } from '../../../utils/generator';
 
 const userService = new UserService(REACT_APP_BASE_URL);
 
@@ -61,8 +62,9 @@ export const EditUserData = () => {
       const imageUrl = URL.createObjectURL(blob);
       setAvatar(imageUrl); // Asignar la URL al estado 'avatar'
 
+      const randomFilename = 'avatar_' + generateRandomFilename(10) + '.jpg';
       // Además, guardar el File para ser enviado al backend
-      setFile(new File([blob], 'avatar.jpg', { type: 'image/jpeg' }));
+      setFile(new File([blob], randomFilename, { type: 'image/jpeg' }));
     }
   };
 

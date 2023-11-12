@@ -11,6 +11,7 @@ import { country_departments } from '../../../utils/country-departments';
 import { BusinessService } from '../../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import { Camera, CameraResultType } from '@capacitor/camera';
+import { generateRandomFilename } from '../../../utils/generator';
 
 const { Option } = Select;
 
@@ -61,8 +62,9 @@ export const EditBusinessProfile = () => {
       const imageUrl = URL.createObjectURL(blob);
       setAvatarBanner(imageUrl); // Asignar la URL al estado 'avatar'
 
+      const randomFilename = 'banner_' + generateRandomFilename(10) + '.jpg';
       // Además, guardar el File para ser enviado al backend
-      setBannerFile(new File([blob], 'banner.jpg', { type: 'image/jpeg' }));
+      setBannerFile(new File([blob], randomFilename, { type: 'image/jpeg' }));
     }
   };
 
@@ -92,8 +94,9 @@ export const EditBusinessProfile = () => {
       const imageUrl = URL.createObjectURL(blob);
       setAvatarLogo(imageUrl); // Asignar la URL al estado 'avatar'
 
+      const randomFilename = 'logo_' + generateRandomFilename(10) + '.jpg';
       // Además, guardar el File para ser enviado al backend
-      setLogoFile(new File([blob], 'avatar.jpg', { type: 'image/jpeg' }));
+      setLogoFile(new File([blob], randomFilename, { type: 'image/jpeg' }));
     }
   };
 

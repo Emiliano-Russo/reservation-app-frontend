@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { IBusinessType } from '../../../interfaces/businessType/businessType.interface';
 import { Camera, CameraResultType } from '@capacitor/camera';
+import { generateRandomFilename } from '../../../utils/generator';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -62,7 +63,11 @@ export const Step1 = (props: PropsStep) => {
       const imageUrl = URL.createObjectURL(blob);
       setLogoFileName(imageUrl); // Actualiza el nombre del archivo de logo con la URL
 
-      const logoFile = new File([blob], 'logo.jpg', { type: 'image/jpeg' });
+      // Uso de la función para crear un nombre de archivo aleatorio
+      const randomFilename = 'logo_' + generateRandomFilename(10) + '.jpg';
+      const logoFile = new File([blob], randomFilename, {
+        type: 'image/jpeg',
+      });
       props.setBusinessData((prev) => {
         return { ...prev, logo: logoFile };
       });
@@ -97,7 +102,10 @@ export const Step1 = (props: PropsStep) => {
       const imageUrl = URL.createObjectURL(blob);
       setBannerFileName(imageUrl); // Actualiza el nombre del archivo de logo con la URL
 
-      const logoFile = new File([blob], 'banner.jpg', { type: 'image/jpeg' });
+      const randomFilename = 'banner_' + generateRandomFilename(10) + '.jpg';
+      const logoFile = new File([blob], randomFilename, {
+        type: 'image/jpeg',
+      });
       props.setBusinessData((prev) => {
         return { ...prev, banner: logoFile };
       });
