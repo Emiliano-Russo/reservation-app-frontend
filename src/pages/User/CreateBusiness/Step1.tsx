@@ -39,13 +39,13 @@ export const Step1 = (props: PropsStep) => {
   const handleLogoChange = async () => {
     // Verificar si ya se tiene permiso para usar la cámara
     // Solicitar permisos de cámara con Capacitor
-    const permissions = await Camera.requestPermissions();
+    // const permissions = await Camera.requestPermissions();
 
-    // Si los permisos no se otorgan, mostrar un mensaje
-    if (permissions.camera !== 'granted') {
-      message.error('Permiso de cámara denegado.');
-      return;
-    }
+    // // Si los permisos no se otorgan, mostrar un mensaje
+    // if (permissions.camera !== 'granted') {
+    //   message.error('Permiso de cámara denegado.');
+    //   return;
+    // }
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: true,
@@ -77,13 +77,13 @@ export const Step1 = (props: PropsStep) => {
   const handleBannerChange = async () => {
     // Verificar si ya se tiene permiso para usar la cámara
     // Solicitar permisos de cámara con Capacitor
-    const permissions = await Camera.requestPermissions();
+    // const permissions = await Camera.requestPermissions();
 
-    // Si los permisos no se otorgan, mostrar un mensaje
-    if (permissions.camera !== 'granted') {
-      message.error('Permiso de cámara denegado.');
-      return;
-    }
+    // // Si los permisos no se otorgan, mostrar un mensaje
+    // if (permissions.camera !== 'granted') {
+    //   message.error('Permiso de cámara denegado.');
+    //   return;
+    // }
     // Repite el proceso para la imagen del banner
     const image = await Camera.getPhoto({
       quality: 90,
@@ -177,12 +177,12 @@ export const Step1 = (props: PropsStep) => {
         >
           <div>
             <Button onClick={handleLogoChange}>Sube tu Logo</Button>
-            <p>{logoFileName != '' ? logoFileName : null}</p>
+            <p>{logoFileName != '' ? 'Subido ✅' : null}</p>
           </div>
           <hr></hr>
           <div>
             <Button onClick={handleBannerChange}>Sube tu Banner</Button>
-            <p>{bannerFileName != '' ? bannerFileName : null}</p>
+            <p>{bannerFileName != '' ? 'Subido ✅' : null}</p>
           </div>
         </div>
       </div>
