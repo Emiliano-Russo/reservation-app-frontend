@@ -123,6 +123,7 @@ export const BusinessFooter = (props: Props) => {
             placeholder="Selecciona la Hora"
             format="h:mm a"
             onChange={onChangeHour}
+            minuteStep={15}
           />
         )}
         <div

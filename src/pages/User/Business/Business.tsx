@@ -11,7 +11,11 @@ import {
   Spin,
   Modal,
 } from 'antd';
-import { ArrowLeftOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import {
+  ArrowLeftOutlined,
+  ClockCircleOutlined,
+  EnvironmentOutlined,
+} from '@ant-design/icons';
 import styles from './Business.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BusinessService } from '../../../services/business.service';
@@ -186,6 +190,7 @@ export const Business = withPageLayout(
                 <div
                   style={{
                     display: 'flex',
+                    flexDirection: 'row',
                     flexWrap: 'wrap',
                     padding: '0px 20px',
                   }}

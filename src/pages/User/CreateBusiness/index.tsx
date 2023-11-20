@@ -19,6 +19,7 @@ import {
 import { mapDayToEnglish } from '../../../utils/dateFormat';
 import { IBusinessCreateDto } from './dto/create-business.dto';
 import { RootState } from '../../../redux/store';
+import { Step3Turbo } from './Step3Turbo';
 
 export interface PropsStep {
   businessData: BusinessCreateState;
@@ -125,7 +126,7 @@ export const CreateBusiness = withPageLayout(
 
         case 4:
           return (
-            <Step3
+            <Step3Turbo
               businessData={businessData}
               setBusinessData={setBusinessData}
             />

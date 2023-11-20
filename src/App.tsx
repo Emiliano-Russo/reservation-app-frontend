@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { IonApp, setupIonicReact } from '@ionic/react';
 import { SplashScreen } from '@capacitor/splash-screen';
 
@@ -43,11 +43,16 @@ import { EditBusinessProfile } from './pages/Entrepreneur/EditBusinessProfile/Ed
 import { Store } from './pages/User/Store/Store';
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword';
 import { DeleteAccount } from './pages/User/DeleteAccount/DeleteAccount';
+import BackButtonHandler from './components/BackButton/BackButton';
+import { useEffect } from 'react';
+import { App as CapacitorApp } from '@capacitor/app';
 
 setupIonicReact();
 
 const Redirect = () => {
   const { user } = useSelector((state: RootState) => state.user);
+
+  console.log('redirect....', user);
 
   if (user) {
     return <Home />;
@@ -58,11 +63,12 @@ const Redirect = () => {
 
 const App: React.FC = () => {
   SplashScreen.hide();
-
+  console.log('app');
   return (
     <IonApp>
       <Provider store={store}>
         <BrowserRouter>
+          <BackButtonHandler />
           <Routes>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
