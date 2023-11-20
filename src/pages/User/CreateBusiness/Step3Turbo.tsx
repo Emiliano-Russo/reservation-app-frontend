@@ -4,25 +4,24 @@ import { useState } from 'react';
 import { convertToJSDate, mapDayToEnglish } from '../../../utils/dateFormat';
 import { IAvailability } from '../../../interfaces/business/business.interface';
 import dayjs from 'dayjs';
+import { WeekDays } from '../../../interfaces/weekday.enum';
 
 interface PropsRowScheduleSelector {
   day: string;
-  onChange: (start: Date, end: Date, isOpen: boolean) => void;
+  onChange: (start: string, end: string, isOpen: boolean) => void;
 }
 
 const RowScheduleSelector = (props: PropsRowScheduleSelector) => {
-  const [start, setStart] = useState<Date>(
-    new Date('2021-01-01T09:00:00.000Z'),
-  );
-  const [end, setEnd] = useState<Date>(new Date('2021-01-01T17:00:00.000Z'));
+  const [start, setStart] = useState<string>('09:00');
+  const [end, setEnd] = useState<string>('20:00');
   const [isOpen, setIsOpen] = useState(false);
 
   const onChangeHourRange = (time: any, timeString: [string, string]) => {
-    const start = convertToJSDate(timeString[0]);
-    const end = convertToJSDate(timeString[1]);
-    console.log('start: ', start.toDateString());
-    console.log('end: ', end.toDateString());
-    props.onChange(start, end, isOpen);
+    console.log('opening dayjs: ', timeString[0]);
+    console.log('closing dayjs: ', timeString[1]);
+    setStart(timeString[0]);
+    setEnd(timeString[1]);
+    props.onChange(timeString[0], timeString[1], isOpen);
   };
 
   const onChangeSwitch = (open: boolean) => {
@@ -43,7 +42,7 @@ const RowScheduleSelector = (props: PropsRowScheduleSelector) => {
       }}
     >
       <div>
-        <p style={{ width: '90px' }}>{props.day}</p>
+        <p style={{ width: '180px' }}>{props.day}</p>
         <TimePicker.RangePicker
           disabled={!isOpen}
           onChange={onChangeHourRange}
@@ -74,38 +73,49 @@ const RowScheduleSelector = (props: PropsRowScheduleSelector) => {
 
 export const Step3Turbo = (props: PropsStep) => {
   const [schedule, setSchedule] = useState<IAvailability[]>([]);
-  const [days, setDays] = useState([
-    'Lunes',
-    'Martes',
-    'Miercoles',
-    'Jueves',
-    'Viernes',
-    'Sabado',
-    'Domingo',
-  ]);
+  const [changesPending, setChangesPending] = useState(false);
 
   console.log('schedule: ', schedule);
 
-  const addScheduleHandler = (
-    day: string,
-    start: Date,
-    end: Date,
+  const saveSchedule = () => {
+    setChangesPending(false);
+    const availabilityStringified = JSON.stringify(schedule);
+    console.log('availabilityStringified: ', availabilityStringified);
+    props.setBusinessData((prev) => {
+      console.log('a ver el stringify aviability: ', availabilityStringified);
+      return { ...prev, availabilityStringify: availabilityStringified };
+    });
+  };
+
+  const addScheduleHandlerWeekDays = (
+    start: string,
+    end: string,
     isOpen: boolean,
   ) => {
-    console.log(isOpen ? 'Is opeeeeen for ' + day : 'Is cloooosed for ' + day);
+    ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'].forEach((day) => {
+      addScheduleHandler(day, start, end, isOpen);
+    });
+  };
+
+  const addScheduleHandler = (
+    day: string,
+    start: string,
+    end: string,
+    isOpen: boolean,
+  ) => {
+    setChangesPending(true);
+    //sabado o domingo
     if (isOpen) {
       const daySchedule: IAvailability = {
         id: '',
         day: mapDayToEnglish(day),
-        openingTime: start.toISOString(),
-        closingTime: end.toISOString(),
+        openingTime: start,
+        closingTime: end,
       };
       setSchedule((prev) => {
-        console.log('########before filter: ', prev);
         const clonedPrev = prev.filter(
           (item) => item.day !== mapDayToEnglish(day),
         );
-        console.log('########after filter: ', clonedPrev);
         clonedPrev.push(daySchedule);
         return clonedPrev;
       });
@@ -119,43 +129,6 @@ export const Step3Turbo = (props: PropsStep) => {
     }
   };
 
-  const buildAvailabilityStringify = (
-    dayOfTheWeek: string,
-    start: Date,
-    end: Date,
-  ) => {
-    const opening = start.toISOString();
-    const closing = end.toISOString();
-    const item: IAvailability = {
-      id: '',
-      day: mapDayToEnglish(dayOfTheWeek),
-      openingTime: opening,
-      closingTime: closing,
-    };
-    return JSON.stringify(item);
-  };
-
-  const groupDaysBy = (singleDay: boolean) => {
-    console.log('agrupar');
-    if (singleDay) {
-      setDays([
-        'Lunes',
-        'Martes',
-        'Miercoles',
-        'Jueves',
-        'Viernes',
-        'Sabado',
-        'Domingo',
-      ]);
-    } else {
-      setDays(['L a V', 'Sabado', 'Domingo']);
-    }
-  };
-
-  const saveSchedule = () => {
-    console.log('guardar');
-  };
-
   return (
     <div
       style={{
@@ -165,35 +138,40 @@ export const Step3Turbo = (props: PropsStep) => {
         padding: '20px',
       }}
     >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          width: '100%',
-          justifyContent: 'space-between',
-          marginBottom: '30px',
-          paddingRight: '10px',
-        }}
-      >
-        <label>Agrupar Lunes a Viernes</label>
-        <Switch
-          style={{ marginLeft: '40px' }}
-          onChange={(val) => {
-            groupDaysBy(!val);
-          }}
-        />
-      </div>
-      {days.map((day: string) => {
+      {['Lunes a Viernes', 'Sabado', 'Domingo'].map((day: string) => {
         return (
           <RowScheduleSelector
             day={day}
-            onChange={(start: Date, end: Date, isOpen: boolean) => {
-              addScheduleHandler(day, start, end, isOpen);
+            onChange={(start: string, end: string, isOpen: boolean) => {
+              if (day === 'Lunes a Viernes')
+                addScheduleHandlerWeekDays(start, end, isOpen);
+              else addScheduleHandler(day, start, end, isOpen);
             }}
           />
         );
       })}
-      <Button onClick={saveSchedule}>Guardar</Button>
+      <div
+        style={{
+          marginTop: '20px',
+          display: 'flex',
+          width: '100%',
+          flexDirection: 'column',
+          alignItems: 'flex-end',
+        }}
+      >
+        {changesPending && (
+          <label style={{ color: 'gray', fontSize: '13px', padding: '10px' }}>
+            Hay cambios pendientes para guardar!
+          </label>
+        )}
+        <Button
+          type="primary"
+          style={{ width: '100px' }}
+          onClick={saveSchedule}
+        >
+          Guardar
+        </Button>
+      </div>
     </div>
   );
 };

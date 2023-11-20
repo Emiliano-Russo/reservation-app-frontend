@@ -1,13 +1,32 @@
 import { WeekDays } from '../interfaces/weekday.enum';
 
+// export const formatDate = (dateString: string) => {
+//   const date = new Date(dateString);
+//   const hours = date.getHours().toString().padStart(2, '0');
+//   const minutes = date.getMinutes().toString().padStart(2, '0');
+
+//   return `${date.getDate()}/${
+//     date.getMonth() + 1
+//   }/${date.getFullYear()} • ${hours}:${minutes}`;
+// };
+
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString);
-  const hours = date.getHours().toString().padStart(2, '0');
+  let hours = date.getHours();
   const minutes = date.getMinutes().toString().padStart(2, '0');
+
+  // Determinar AM o PM
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+
+  // Convertir a formato 12 horas
+  hours = hours % 12;
+  hours = hours ? hours : 12; // El valor 0 debe ser convertido a 12
+
+  const formattedHours = hours.toString().padStart(2, '0');
 
   return `${date.getDate()}/${
     date.getMonth() + 1
-  }/${date.getFullYear()} • ${hours}:${minutes}`;
+  }/${date.getFullYear()} • ${formattedHours}:${minutes} ${ampm}`;
 };
 
 export const formatOnlyDate = (date: string) => {
@@ -15,10 +34,26 @@ export const formatOnlyDate = (date: string) => {
   return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
 };
 
+// export const formatTime = (date: Date) => {
+//   const hours = String(date.getHours()).padStart(2, '0');
+//   const minutes = String(date.getMinutes()).padStart(2, '0');
+//   return `${hours}:${minutes}`;
+// };
+
 export const formatTime = (date: Date) => {
-  const hours = String(date.getHours()).padStart(2, '0');
+  let hours = date.getHours();
   const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${hours}:${minutes}`;
+
+  // Determinar AM o PM
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+
+  // Convertir a formato 12 horas
+  hours = hours % 12;
+  hours = hours ? hours : 12; // El valor 0 debe ser convertido a 12
+
+  const formattedHours = hours.toString().padStart(2, '0');
+
+  return `${formattedHours}:${minutes} ${ampm}`;
 };
 
 export const convertTo24Hour = (timeStr: string) => {
@@ -74,11 +109,15 @@ export function mapDayToEnglish(dayInSpanish: string): WeekDays {
       return WeekDays.Tuesday;
     case 'Miércoles':
       return WeekDays.Wednesday;
+    case 'Miercoles':
+      return WeekDays.Wednesday;
     case 'Jueves':
       return WeekDays.Thursday;
     case 'Viernes':
       return WeekDays.Friday;
     case 'Sábado':
+      return WeekDays.Saturday;
+    case 'Sabado':
       return WeekDays.Saturday;
     default:
       throw new Error(`Day ${dayInSpanish} not recognized`);

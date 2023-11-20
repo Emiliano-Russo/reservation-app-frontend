@@ -95,6 +95,7 @@ export const SingleStepReservation = ({
               placeholder="Selecciona la Hora"
               format="h:mm a"
               onChange={onChangeHour}
+              minuteStep={15}
             />
           </div>
         ) : (
@@ -110,6 +111,7 @@ export const SingleStepReservation = ({
               onChange={onChangeHourRange}
               style={{ margin: '0 auto', width: '200px' }}
               format="h:mm a"
+              minuteStep={15}
             />
           </div>
         )}

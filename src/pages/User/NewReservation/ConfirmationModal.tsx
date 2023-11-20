@@ -21,6 +21,7 @@ export const ConfirmationModal = ({ doneModal, nav, setDoneModal }) => {
         <LoyaltyPointsBadge points={10} />
 
         <Button
+          style={{ marginTop: '10px' }}
           onClick={() => {
             nav('/business');
           }}

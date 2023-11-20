@@ -120,6 +120,7 @@ export const Step1 = (props: PropsStep) => {
           style={{ marginTop: '5px' }}
           placeholder="Nombre del Negocio"
           value={props.businessData.name}
+          maxLength={17}
           onChange={(e) => {
             props.setBusinessData((prev) => {
               return { ...prev, name: e.target.value };
@@ -155,6 +156,7 @@ export const Step1 = (props: PropsStep) => {
         <>
           <label style={{ marginTop: '20px' }}>Descripción</label>
           <TextArea
+            maxLength={200}
             style={{ marginTop: '5px' }}
             placeholder="Descripción del Negocio"
             value={props.businessData.description}
@@ -172,17 +174,21 @@ export const Step1 = (props: PropsStep) => {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
+            alignItems: 'flex-start',
           }}
         >
-          <div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <Button onClick={handleLogoChange}>Sube tu Logo</Button>
-            <p>{logoFileName != '' ? 'Subido ✅' : null}</p>
+            <p style={{ marginLeft: '10px' }}>
+              {logoFileName != '' ? 'Subido ✅' : null}
+            </p>
           </div>
           <hr></hr>
-          <div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <Button onClick={handleBannerChange}>Sube tu Banner</Button>
-            <p>{bannerFileName != '' ? 'Subido ✅' : null}</p>
+            <p style={{ marginLeft: '10px' }}>
+              {bannerFileName != '' ? 'Subido ✅' : null}
+            </p>
           </div>
         </div>
       </div>

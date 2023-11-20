@@ -23,10 +23,6 @@ export const Step4 = (businessData: BusinessCreateState) => {
     businessData.availabilityStringify,
   );
 
-  console.log('^^ aviablility list parse: ', aviabilityList);
-
-  const opening = new Date(aviabilityList[0].openingTime);
-  const closing = new Date(aviabilityList[0].closingTime);
   const days = aviabilityList.map((av) => weekDayToSpanish(av.day));
 
   return (
@@ -60,26 +56,15 @@ export const Step4 = (businessData: BusinessCreateState) => {
 
       <div style={{ marginBottom: '20px' }}>
         <h3>Detalles de Reservación</h3>
-        <p>
-          <strong>Hora de apertura: </strong>
-          {opening.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          })}
-        </p>
-        <p>
-          <strong>Hora de cierre: </strong>
-          {closing.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          })}
-        </p>
-        <p>
-          <strong>Días disponibles: </strong>
-          {days.map((day) => (
-            <label>{day + ', '}</label>
-          ))}
-        </p>
+        {aviabilityList.map((av) => (
+          <div>
+            <p>
+              <strong>{weekDayToSpanish(av.day)}</strong>
+            </p>
+            <p>Apertura: {av.openingTime}</p>
+            <p>Clausura: {av.closingTime}</p>
+          </div>
+        ))}
       </div>
       {logoURL && (
         <div style={{ marginBottom: '20px' }}>

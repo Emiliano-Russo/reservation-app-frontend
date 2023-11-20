@@ -20,7 +20,7 @@ const NegotiableContent = (props: PropsNegotiable) => {
     <div>
       {props.negotiable.dateRange?.end ? (
         <>
-          <h1>Dias Flexibles</h1>
+          <h1>Días Flexibles</h1>
           <p>
             <strong>Del </strong>
             {formatOnlyDate(props.negotiable.dateRange?.start.toString())}
