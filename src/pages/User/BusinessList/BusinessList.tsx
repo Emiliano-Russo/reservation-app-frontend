@@ -142,9 +142,10 @@ export const BusinessList = withPageLayout(
                 }}
               >
                 <div>
-                  <Avatar src={business.logoURL} size={42}>
+                  {loading && <Spin style={{ marginTop: '2.625rem' }} />}  
+                  {!loading && <Avatar src={business.logoURL} size={42}>
                     E
-                  </Avatar>
+                  </Avatar>}
                   <p>{business.name}</p>
                 </div>
                 <div className={styles.rating}>
