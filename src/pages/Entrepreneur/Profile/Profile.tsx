@@ -20,6 +20,7 @@ import { WeekDays } from '../../../interfaces/weekday.enum';
 import { weekDayToSpanish } from '../../../utils/dateFormat';
 import { IAvailability } from '../../../interfaces/business/business.interface';
 import { DayAvailability } from '../../../components/DayAvailability/DayAvailability';
+import LoadingAvatar from '../../../components/LoadingAvatar/LoadingAvatar';
 
 interface Props {
   availability: IAvailability;
@@ -41,6 +42,30 @@ export const BusinessProfile = withPageLayout(
       (state: any) => state.business.businessTypes,
     );
 
+    const LoadingImage = ({ src, children, ...props }) => {
+      const [loading, setLoading] = useState(true);
+    
+      useEffect(() => {
+        const image = new Image();
+        image.src = src;
+        image.onload = () => setLoading(false);
+      }, [src]);
+    
+      if (loading) {
+        return <Spin size='large' />;
+      }
+    
+      return <div
+              style={{
+                backgroundImage: ` url(${src})`,
+              }}
+              
+              {...props}
+             > 
+             {children}
+             </div>
+    };  
+
     if (loading)
       return (
         <div
@@ -61,14 +86,14 @@ export const BusinessProfile = withPageLayout(
     return (
       <GrowsFromLeft>
         <div className={styles.businessProfileContainer}>
-          <div
+        <LoadingImage
+            src={business.banner} 
             style={{
               backgroundImage: ` url(${business.banner})`,
             }}
             className={styles.banner}
-          >
-            {/* Aquí puedes poner una imagen de fondo para el banner */}
-            <Avatar
+            children={<LoadingAvatar
+              spinStyle={{}}
               style={{
                 position: 'absolute',
                 top: '30px',
@@ -79,8 +104,7 @@ export const BusinessProfile = withPageLayout(
               alt="Foto de perfil"
               className={styles.avatar}
               size={100}
-            />
-          </div>
+            />} />
           <div className={styles.profileContent}>
             <div className={styles.profileName}>
               <p>{business.name}</p>

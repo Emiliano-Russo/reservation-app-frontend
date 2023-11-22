@@ -54,6 +54,7 @@ export const Business = withPageLayout(
       IReservation[]
     >([]);
     const [registerFirstModal, setRegisterFirstModal] = useState(false);
+    const [loading, setLoading] = useState(true);
     // console.log('reservationWithReview ', reservationWithReview);
     console.log('RESERVATIONS: ', reservations);
 
@@ -83,6 +84,7 @@ export const Business = withPageLayout(
           setReservations(items);
           const listReview = items.filter((val) => val.rating != null);
           setReservationWithReview(listReview);
+          setLoading(false);
         }
       } catch (error) {
         console.error('Error fetching business data:', error);
@@ -118,13 +120,14 @@ export const Business = withPageLayout(
     return (
       <>
         <FadeFromTop>
-          <Image
+          {!loading && <Image
             width="100%"
             height="40vh"
             src={business.banner}
             alt="Business Banner"
-            style={{ objectFit: 'cover' }}
-          />
+            style={{ objectFit: 'cover' }} /> }
+          {loading && <Spin size='large' style={{ marginTop: '10rem' }} />}
+          
         </FadeFromTop>
 
         <Button

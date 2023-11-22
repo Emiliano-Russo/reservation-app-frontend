@@ -12,6 +12,7 @@ import AnimatedFromLeft from '../../../animations/AnimatedFromLeft';
 import { BusinessTypeService } from '../../../services/businessType.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
+import LoadingAvatar from '../../../components/LoadingAvatar/LoadingAvatar';
 
 const businessService = new BusinessService(REACT_APP_BASE_URL);
 const businessTypeService = new BusinessTypeService(REACT_APP_BASE_URL);
@@ -73,9 +74,9 @@ export const BusinessList = withPageLayout(
         user?.country,
         user?.department,
       );
-      setLoading(false);
       if (res.items.length == 0) {
         setHasMoreData(false);
+        setLoading(false);
         return;
       }
       console.log(res);
@@ -87,6 +88,7 @@ export const BusinessList = withPageLayout(
         );
         return [...prev, ...newItems];
       });
+      setLoading(false);
     }
 
     async function fetchBusinessTypeName() {
@@ -108,7 +110,7 @@ export const BusinessList = withPageLayout(
     const filteredBusinesses = businesses.filter((business: any) => {
       return business.name.toLowerCase().includes(searchValue.toLowerCase());
     });
-
+    
     return (
       <>
         <AnimatedFromLeft>
@@ -142,10 +144,7 @@ export const BusinessList = withPageLayout(
                 }}
               >
                 <div>
-                  {loading && <Spin style={{ marginTop: '2.625rem' }} />}  
-                  {!loading && <Avatar src={business.logoURL} size={42}>
-                    E
-                  </Avatar>}
+                  <LoadingAvatar spinStyle={{ marginRight: '1rem' }} src={business.logoURL} size={42} />
                   <p>{business.name}</p>
                 </div>
                 <div className={styles.rating}>

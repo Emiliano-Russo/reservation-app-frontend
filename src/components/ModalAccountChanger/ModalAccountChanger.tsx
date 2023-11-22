@@ -3,6 +3,7 @@ import AnimatedFromLeft from '../../animations/AnimatedFromLeft';
 import { useDispatch } from 'react-redux';
 import { setCurrentBusiness } from '../../redux/businessSlice';
 import { setSelectedPath } from '../../redux/footerSlice';
+import LoadingAvatar from '../LoadingAvatar/LoadingAvatar';
 
 export const ModalAccountChanger = ({
   businesses,
@@ -65,7 +66,7 @@ export const ModalAccountChanger = ({
                       borderRadius: '10px',
                     }}
                   >
-                    <Avatar src={business.logoURL}></Avatar>
+                    <LoadingAvatar spinStyle={{}} src={business.logoURL}></LoadingAvatar>
                     <p>{business.name}</p>
                     <Avatar
                       style={{ visibility: 'hidden' }}

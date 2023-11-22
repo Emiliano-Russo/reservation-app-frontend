@@ -14,6 +14,7 @@ import { UserService } from '../../../services/user.service';
 import { setBusinessTypes } from '../../../redux/businessSlice';
 import { withAuth } from '../../../wrappers/WithAuth';
 import { updateStringProperty } from '../../../redux/userSlice';
+import LoadingAvatar from '../../../components/LoadingAvatar/LoadingAvatar';
 
 const userService = new UserService(REACT_APP_BASE_URL);
 
@@ -117,15 +118,16 @@ export const Home = withAuth(
       <>
         <FadeFromTop>
           <div className={styles.greetingContainer}>
-            <Avatar
+            <LoadingAvatar
               src={
                 userState!.profileImage
                   ? userState!.profileImage
                   : 'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'
               }
+              spinStyle={{ marginRight: '1rem' }}
               size={64}
               className={styles.avatarStyle}
-            ></Avatar>
+            />
             <p className={styles.greetingText}>Hola, {userState!.name}!</p>
           </div>
         </FadeFromTop>

@@ -1,6 +1,7 @@
 import { StarFilled } from '@ant-design/icons';
 import { Avatar, Rate } from 'antd';
 import Paragraph from 'antd/es/typography/Paragraph';
+import LoadingAvatar from '../LoadingAvatar/LoadingAvatar';
 
 interface Props {
   avatarUrl: string;
@@ -35,7 +36,7 @@ export const FeedbackCard = (item: Props) => {
             width: '80%',
           }}
         >
-          <Avatar src={item.avatarUrl} />
+          <LoadingAvatar spinStyle={{}} src={item.avatarUrl} />
           <p style={{ paddingLeft: '10px' }}>{item.name}</p>
         </div>
         <div

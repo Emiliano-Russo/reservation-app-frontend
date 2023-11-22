@@ -12,6 +12,7 @@ import { BusinessService } from '../../../services/business.service';
 import { REACT_APP_BASE_URL } from '../../../../env';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { generateRandomFilename } from '../../../utils/generator';
+import LoadingAvatar from '../../../components/LoadingAvatar/LoadingAvatar';
 
 const { Option } = Select;
 
@@ -186,7 +187,8 @@ export const EditBusinessProfile = () => {
         )}
 
         <div>
-          <Avatar
+          <LoadingAvatar
+            spinStyle={{}}
             size={64}
             src={avatarLogo || business?.logoURL}
             style={{ marginBottom: '15px', marginRight: '10px' }}
@@ -194,7 +196,8 @@ export const EditBusinessProfile = () => {
           <Button onClick={handleLogoChange}>Sube tu Logo</Button>
         </div>
         <div>
-          <Avatar
+          <LoadingAvatar
+            spinStyle={{}}
             size={64}
             src={avatarBanner || business?.banner}
             style={{ marginBottom: '15px', marginRight: '10px' }}

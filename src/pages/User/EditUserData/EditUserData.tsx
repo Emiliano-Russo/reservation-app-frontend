@@ -15,6 +15,7 @@ import { countries } from '../../../utils/countries';
 import { country_departments } from '../../../utils/country-departments';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { generateRandomFilename } from '../../../utils/generator';
+import LoadingAvatar from '../../../components/LoadingAvatar/LoadingAvatar';
 
 const userService = new UserService(REACT_APP_BASE_URL);
 
@@ -216,8 +217,9 @@ export const EditUserData = () => {
           <div style={{ marginTop: '30px' }}>
             <AnimatedFromLeft delay={0.4}>
               <div style={{ marginTop: '30px' }}>
-                <Avatar
+                <LoadingAvatar
                   size={64}
+                  spinStyle={{}}
                   src={
                     avatar ||
                     'https://i.pinimg.com/564x/d1/51/62/d15162b27cd9712860b90abe58cb60e7.jpg'

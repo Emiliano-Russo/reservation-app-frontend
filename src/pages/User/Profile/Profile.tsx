@@ -30,6 +30,7 @@ import { RootState } from '../../../redux/store';
 import { addUser } from '../../../redux/userSlice';
 import { iconLoyaltyPoints } from '../../../utils/config';
 import { MailService } from '../../../services/mail.service';
+import LoadingAvatar from '../../../components/LoadingAvatar/LoadingAvatar';
 
 interface IconInfo {
   icon: React.ReactNode;
@@ -114,9 +115,9 @@ const ProfileHeader = (props: PropsHeader) => {
     <>
       <div className={styles.profileHeader}>
         <div className={styles.avatarContainer}>
-          <Avatar src={props.url} size={80}>
+          <LoadingAvatar src={props.url} spinStyle={{ marginRight: '1rem' }} size={80}>
             E
-          </Avatar>
+          </LoadingAvatar>
           {/* 96px */}
         </div>
         <div className={styles.messageButtonContainer}>
