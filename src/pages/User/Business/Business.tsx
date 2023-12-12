@@ -34,6 +34,7 @@ import { IReservation } from '../../../interfaces/reservation/reservation.interf
 import { DayAvailability } from '../../../components/DayAvailability/DayAvailability';
 import { WeekDays } from '../../../interfaces/weekday.enum';
 import { RootState } from '../../../redux/store';
+import LoadingAvatar from '../../../components/LoadingAvatar/LoadingAvatar';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -176,7 +177,7 @@ export const Business = withPageLayout(
                   renderItem={(item: IReservation) => (
                     <div className={styles.review}>
                       <div className={styles.reviewHeader}>
-                        <Avatar src={item.user.profileImage} />
+                        <LoadingAvatar spinStyle={{}} src={item.user.profileImage} />
                         <span className={styles.author}>{item.user.name}</span>
                         <Rate disabled defaultValue={item.rating} />
                       </div>
