@@ -4,6 +4,7 @@
   "version": "0.5.0",
   "type": "module",
   "scripts": {
+    "start": "npx ionic serve --external",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",

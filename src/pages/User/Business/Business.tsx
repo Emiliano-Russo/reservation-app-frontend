@@ -154,8 +154,8 @@ export const Business = withPageLayout(
             </div>
           </FadeFromTop>
           <FadeFromTop>
-            <div>
-              <span style={{ marginRight: '10px' }}>
+            <div style={{ marginTop: '15px' }}>
+              <span style={{ marginRight: '10px'}}>
                 {business.averageRating}
               </span>
               <Rate allowHalf defaultValue={business.averageRating} />
