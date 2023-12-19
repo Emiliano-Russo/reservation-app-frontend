@@ -31,7 +31,7 @@ export class UserService {
   }
 
   async searchByUsername(username: string): Promise<any> {
-    const jwtToken = localStorage.getItem('jwtToken');
+    const jwtToken = localStorage.getItem('token');
     const response: AxiosResponse<any> = await this.api.get(
       `/users/search/${username}`,
       {
@@ -46,6 +46,7 @@ export class UserService {
     userId: string,
     userData: UpdateUserDto,
   ): Promise<any> {
+    const jwtToken = localStorage.getItem('token');
     const formData = new FormData();
 
     if (userData.name) formData.append('name', userData.name);
@@ -65,6 +66,7 @@ export class UserService {
     const response = await this.api.patch(`/user/${userId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${jwtToken}`,
       },
     });
     return response.data;
