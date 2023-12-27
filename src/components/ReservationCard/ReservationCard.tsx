@@ -39,10 +39,10 @@ export const ReservationCard = (ticket: Props) => {
   const [loading, setLoading] = useState(false);
   const statusStyle = getStatusColor(ticket.reservation.status);
 
-  const handleReservationUpdateState = (status: ReservationStatus) => {
+  const handleReservationUpdateState = (status: ReservationStatus, rejectionReason?: string) => {
     setLoading(true);
     reservationService
-      .updateReservation(ticket.reservation.id, { status: status })
+      .updateReservation(ticket.reservation.id, { status: status, rejectionReason: rejectionReason })
       .then(() => {
         ticket.changeStatusReservation(ticket.reservation.id, status);
       })
@@ -123,6 +123,7 @@ export const ReservationCard = (ticket: Props) => {
             status: ticket.reservation.status,
             alreadyRated: ticket.reservation.rating != undefined,
             bookingInstructions: ticket.reservation.bookingInstructions,
+            rejectionReason: ticket.reservation.rejectionReason
           }}
           onSendStars={(amount, comment) => {
             setLoading(true);

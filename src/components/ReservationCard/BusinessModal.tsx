@@ -1,7 +1,7 @@
-import { Button, Modal } from 'antd';
+import { Button, Input, Modal } from 'antd';
 import { renderExtra } from './ReservationCard';
 import { ReservationStatus } from '../../interfaces/reservation.status';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 interface Data {
   status: ReservationStatus;
@@ -16,10 +16,13 @@ interface Props {
   setIsModalVisible: Dispatch<SetStateAction<boolean>>;
   isModalVisible: boolean;
   loading: boolean;
-  handleReservationUpdateState: (status: ReservationStatus) => void;
+  handleReservationUpdateState: (status: ReservationStatus, rejectionReason?: string) => void;
 }
 
 export const BusinessModal = (props: Props) => {
+  const [isRejected, setIsRejected] = useState(false);
+  const [comment, setComment] = useState('');
+
   return (
     <Modal
       footer={null}
@@ -67,25 +70,58 @@ export const BusinessModal = (props: Props) => {
       >
         {props.data.status === ReservationStatus.Pending && (
           <>
-            <Button
-              loading={props.loading}
-              type="primary"
-              onClick={() => {
-                props.handleReservationUpdateState(ReservationStatus.Confirmed);
-              }}
-            >
-              Aceptar
-            </Button>
-            <Button
-              loading={props.loading}
-              type="primary"
-              danger
-              onClick={() => {
-                props.handleReservationUpdateState(ReservationStatus.Rejected);
-              }}
-            >
-              Rechazar
-            </Button>
+            {isRejected && (
+              <>
+                <Input
+                  style={{ marginTop: '10px' }}
+                  placeholder="Lamentamos haber cancelado su reserva"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                />
+                <Button
+                  loading={props.loading}
+                  type="primary"
+                  danger
+                  onClick={() => {
+                    setIsRejected(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  loading={props.loading}
+                  type="primary"
+                  onClick={() => {
+                    props.handleReservationUpdateState(ReservationStatus.Rejected, comment);
+                  }}
+                >
+                  Send
+                </Button>
+              </>
+            )}
+            {!isRejected && (
+              <>
+                <Button
+                  loading={props.loading}
+                  type="primary"
+                  onClick={() => {
+                    props.handleReservationUpdateState(ReservationStatus.Confirmed);
+                  }}
+                >
+                  Aceptar
+                </Button>
+                <Button
+                  loading={props.loading}
+                  type="primary"
+                  danger
+                  onClick={() => {
+                    setIsRejected(true);
+                  }}
+                >
+                  Rechazar
+                </Button>
+                )
+              </>)}
           </>
         )}
         {props.data.status === ReservationStatus.Confirmed && (
@@ -106,7 +142,7 @@ export const BusinessModal = (props: Props) => {
               loading={props.loading}
               onClick={() =>
                 props.handleReservationUpdateState(
-                  ReservationStatus.NotAttended,
+                  ReservationStatus.NotAttended
                 )
               }
             >
@@ -118,7 +154,7 @@ export const BusinessModal = (props: Props) => {
               type="primary"
               danger
               onClick={() =>
-                props.handleReservationUpdateState(ReservationStatus.Rejected)
+                setIsRejected(true)
               }
             >
               Rechazar Reserva
@@ -129,3 +165,4 @@ export const BusinessModal = (props: Props) => {
     </Modal>
   );
 };
+

@@ -12,6 +12,7 @@ interface Data {
   extras?: any;
   alreadyRated: boolean;
   bookingInstructions: string | undefined;
+  rejectionReason: string | undefined | null;
 }
 
 interface Props {
@@ -28,6 +29,7 @@ export const UserModal = (props: Props) => {
   const [comment, setComment] = useState('');
 
   return (
+
     <>
       <Modal
         title="Detalles de la Reserva"
@@ -56,7 +58,7 @@ export const UserModal = (props: Props) => {
                 danger
                 onClick={() =>
                   props.handleReservationUpdateState(
-                    ReservationStatus.Cancelled,
+                    ReservationStatus.Cancelled
                   )
                 }
               >
@@ -87,7 +89,16 @@ export const UserModal = (props: Props) => {
         ) : (
           <h1>No hay fecha de reserva ERROR</h1>
         )}{' '}
-        <p>{props.data.bookingInstructions}</p>
+        <p>
+          <p>{props.data.bookingInstructions}</p>
+          {(props.data.rejectionReason != null || props.data.rejectionReason != undefined)
+            &&
+            <>
+              <h3>Motivo de cancelacion</h3>
+              <p>{props.data.rejectionReason}</p>
+            </>}
+
+        </p>
         <br></br>
         {props.data.status == ReservationStatus.Realized &&
           !props.data.alreadyRated && (
@@ -128,3 +139,4 @@ export const UserModal = (props: Props) => {
     </>
   );
 };
+

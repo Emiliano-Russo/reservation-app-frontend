@@ -22,6 +22,7 @@ export interface IReservation {
   status: ReservationStatus;
   negotiable: INegotiable | null | undefined;
   createdAt: Date;
+  rejectionReason: string | null | undefined;
 }
 
 export enum AcceptStatus {
