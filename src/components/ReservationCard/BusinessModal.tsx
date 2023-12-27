@@ -16,7 +16,10 @@ interface Props {
   setIsModalVisible: Dispatch<SetStateAction<boolean>>;
   isModalVisible: boolean;
   loading: boolean;
-  handleReservationUpdateState: (status: ReservationStatus, rejectionReason?: string) => void;
+  handleReservationUpdateState: (
+    status: ReservationStatus,
+    rejectionReason?: string,
+  ) => void;
 }
 
 export const BusinessModal = (props: Props) => {
@@ -73,7 +76,7 @@ export const BusinessModal = (props: Props) => {
             {isRejected && (
               <>
                 <Input
-                  style={{ marginTop: '10px' }}
+                  style={{ marginTop: '10px', marginBottom: '20px' }}
                   placeholder="Lamentamos haber cancelado su reserva"
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
@@ -86,16 +89,19 @@ export const BusinessModal = (props: Props) => {
                     setIsRejected(false);
                   }}
                 >
-                  Cancel
+                  Cancelar
                 </Button>
                 <Button
                   loading={props.loading}
                   type="primary"
                   onClick={() => {
-                    props.handleReservationUpdateState(ReservationStatus.Rejected, comment);
+                    props.handleReservationUpdateState(
+                      ReservationStatus.Rejected,
+                      comment,
+                    );
                   }}
                 >
-                  Send
+                  Enviar
                 </Button>
               </>
             )}
@@ -105,7 +111,9 @@ export const BusinessModal = (props: Props) => {
                   loading={props.loading}
                   type="primary"
                   onClick={() => {
-                    props.handleReservationUpdateState(ReservationStatus.Confirmed);
+                    props.handleReservationUpdateState(
+                      ReservationStatus.Confirmed,
+                    );
                   }}
                 >
                   Aceptar
@@ -121,7 +129,8 @@ export const BusinessModal = (props: Props) => {
                   Rechazar
                 </Button>
                 )
-              </>)}
+              </>
+            )}
           </>
         )}
         {props.data.status === ReservationStatus.Confirmed && (
@@ -142,7 +151,7 @@ export const BusinessModal = (props: Props) => {
               loading={props.loading}
               onClick={() =>
                 props.handleReservationUpdateState(
-                  ReservationStatus.NotAttended
+                  ReservationStatus.NotAttended,
                 )
               }
             >
@@ -153,9 +162,7 @@ export const BusinessModal = (props: Props) => {
               loading={props.loading}
               type="primary"
               danger
-              onClick={() =>
-                setIsRejected(true)
-              }
+              onClick={() => setIsRejected(true)}
             >
               Rechazar Reserva
             </Button>
@@ -165,4 +172,3 @@ export const BusinessModal = (props: Props) => {
     </Modal>
   );
 };
-

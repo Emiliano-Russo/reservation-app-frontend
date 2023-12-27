@@ -58,7 +58,7 @@ export const UserModal = (props: Props) => {
                 danger
                 onClick={() =>
                   props.handleReservationUpdateState(
-                    ReservationStatus.Cancelled
+                    ReservationStatus.Cancelled,
                   )
                 }
               >
@@ -91,13 +91,17 @@ export const UserModal = (props: Props) => {
         )}{' '}
         <p>
           <p>{props.data.bookingInstructions}</p>
-          {(props.data.rejectionReason != null || props.data.rejectionReason != undefined)
-            &&
+          {
             <>
-              <h3>Motivo de cancelacion</h3>
-              <p>{props.data.rejectionReason}</p>
-            </>}
-
+              {props.data.rejectionReason && (
+                <>
+                  {' '}
+                  <h3>Motivo de cancelacion</h3>
+                  <p>{props.data.rejectionReason}</p>
+                </>
+              )}
+            </>
+          }
         </p>
         <br></br>
         {props.data.status == ReservationStatus.Realized &&
@@ -139,4 +143,3 @@ export const UserModal = (props: Props) => {
     </>
   );
 };
-
