@@ -77,9 +77,9 @@ export const Step3Turbo = (props: PropsStep) => {
 
   console.log('schedule: ', schedule);
 
-  const saveSchedule = () => {
+  const saveSchedule = (scheduleParam: IAvailability[]) => {
     setChangesPending(false);
-    const availabilityStringified = JSON.stringify(schedule);
+    const availabilityStringified = JSON.stringify(scheduleParam);
     console.log('availabilityStringified: ', availabilityStringified);
     props.setBusinessData((prev) => {
       console.log('a ver el stringify aviability: ', availabilityStringified);
@@ -117,6 +117,7 @@ export const Step3Turbo = (props: PropsStep) => {
           (item) => item.day !== mapDayToEnglish(day),
         );
         clonedPrev.push(daySchedule);
+        saveSchedule(clonedPrev);
         return clonedPrev;
       });
     } else {
@@ -124,6 +125,7 @@ export const Step3Turbo = (props: PropsStep) => {
         const clonedPrev = prev.filter(
           (item) => item.day !== mapDayToEnglish(day),
         );
+        saveSchedule(clonedPrev);
         return clonedPrev;
       });
     }
@@ -150,28 +152,6 @@ export const Step3Turbo = (props: PropsStep) => {
           />
         );
       })}
-      <div
-        style={{
-          marginTop: '20px',
-          display: 'flex',
-          width: '100%',
-          flexDirection: 'column',
-          alignItems: 'flex-end',
-        }}
-      >
-        {changesPending && (
-          <label style={{ color: 'gray', fontSize: '13px', padding: '10px' }}>
-            Hay cambios pendientes para guardar!
-          </label>
-        )}
-        <Button
-          type="primary"
-          style={{ width: '100px' }}
-          onClick={saveSchedule}
-        >
-          Guardar
-        </Button>
-      </div>
     </div>
   );
 };
