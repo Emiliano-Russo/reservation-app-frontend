@@ -73,12 +73,9 @@ const RowScheduleSelector = (props: PropsRowScheduleSelector) => {
 
 export const Step3Turbo = (props: PropsStep) => {
   const [schedule, setSchedule] = useState<IAvailability[]>([]);
-  const [changesPending, setChangesPending] = useState(false);
-
-  console.log('schedule: ', schedule);
+  const [breakDownWeekDays, setBreakDownWeekDays] = useState<boolean>(false);
 
   const saveSchedule = (scheduleParam: IAvailability[]) => {
-    setChangesPending(false);
     const availabilityStringified = JSON.stringify(scheduleParam);
     console.log('availabilityStringified: ', availabilityStringified);
     props.setBusinessData((prev) => {
@@ -103,7 +100,6 @@ export const Step3Turbo = (props: PropsStep) => {
     end: string,
     isOpen: boolean,
   ) => {
-    setChangesPending(true);
     //sabado o domingo
     if (isOpen) {
       const daySchedule: IAvailability = {
@@ -131,6 +127,10 @@ export const Step3Turbo = (props: PropsStep) => {
     }
   };
 
+  const weekDays = breakDownWeekDays
+    ? ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes']
+    : ['Lunes a Viernes'];
+
   return (
     <div
       style={{
@@ -140,7 +140,30 @@ export const Step3Turbo = (props: PropsStep) => {
         padding: '20px',
       }}
     >
-      {['Lunes a Viernes', 'Sabado', 'Domingo'].map((day: string) => {
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '20px', // Asegúrate de tener un poco de espacio debajo del interruptor.
+        }}
+      >
+        {/* Utiliza un término que indique claramente que se puede configurar un horario separado para cada día. */}
+        <label>
+          {breakDownWeekDays ? 'Horario Individual' : 'Agrupar L-V'}
+        </label>
+        <Switch
+          defaultChecked={false}
+          checked={breakDownWeekDays}
+          onChange={(checked: boolean) => {
+            setBreakDownWeekDays(checked);
+            // Potencialmente podrías realizar más lógica aquí, como reajustar los valores de los días de la semana.
+          }}
+        />
+      </div>
+
+      {[...weekDays, 'Sabado', 'Domingo'].map((day: string) => {
         return (
           <RowScheduleSelector
             day={day}
