@@ -96,7 +96,7 @@ export const UserModal = (props: Props) => {
               {props.data.rejectionReason && (
                 <>
                   {' '}
-                  <h3>Motivo de cancelacion</h3>
+                  <h5>Motivo de cancelación ❌</h5>
                   <p>{props.data.rejectionReason}</p>
                 </>
               )}
