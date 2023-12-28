@@ -38,13 +38,13 @@ export class BusinessService {
     return this.api.post('/business', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     });
   }
 
   async getBusiness(businessId: string): Promise<any> {
-    const jwtToken = localStorage.getItem('jwtToken');
+    const jwtToken = localStorage.getItem('token');
     const response: AxiosResponse<any> = await this.api.get(
       `/business?businessId=${businessId}`,
       {
@@ -58,7 +58,7 @@ export class BusinessService {
     ownerId: string,
     paginated: PaginationDto,
   ): Promise<PaginatedResponse<IBusiness>> {
-    const jwtToken = localStorage.getItem('jwtToken');
+    const jwtToken = localStorage.getItem('token');
     const response: AxiosResponse<any> = await this.api.get(
       `/business?ownerId=${ownerId}&${formatQueryParams(paginated)}`,
       {
@@ -75,7 +75,7 @@ export class BusinessService {
     country: string = '',
     department: string = '',
   ): Promise<PaginatedResponse<IBusiness>> {
-    const jwtToken = localStorage.getItem('jwtToken');
+    const jwtToken = localStorage.getItem('token');
     const response: AxiosResponse<any> = await this.api.get(
       `/business?typeId=${typeId}&${formatQueryParams(
         paginated,
@@ -118,7 +118,7 @@ export class BusinessService {
       {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       },
     );
@@ -126,7 +126,7 @@ export class BusinessService {
   }
 
   async searchByBusinessName(businessName: string): Promise<any> {
-    const jwtToken = localStorage.getItem('jwtToken');
+    const jwtToken = localStorage.getItem('token');
     const response: AxiosResponse<any> = await this.api.get(
       `/businesses/search/${businessName}`,
       {

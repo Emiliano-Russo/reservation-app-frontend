@@ -10,9 +10,13 @@ export class MailService {
   }
 
   async sendConfirmationEmail(email: string): Promise<any> {
+    const jwtToken = localStorage.getItem('token');
     const response: AxiosResponse<any> = await this.api.post(
       '/send-confirmation',
       { email },
+      {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      },
     );
     return response.data;
   }
