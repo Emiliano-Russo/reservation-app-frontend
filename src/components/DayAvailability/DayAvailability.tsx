@@ -1,13 +1,22 @@
 import { ClockCircleOutlined } from '@ant-design/icons';
 import { IAvailability } from '../../interfaces/business/business.interface';
-import { weekDayToSpanish } from '../../utils/dateFormat';
+import { getDayValue, weekDayToSpanish } from '../../utils/dateFormat';
 
 interface Props {
   availability: IAvailability;
+  lastAvailability?: IAvailability;
   oneCard: boolean;
 }
 
+
+
 export const DayAvailability = (props: Props) => {
+  function showDaysOrdered() {
+    return getDayValue(props.lastAvailability!.day) > getDayValue(props.availability!.day) 
+    ?  weekDayToSpanish(props.availability.day) + ' - ' + weekDayToSpanish(props.lastAvailability!.day) + ' '
+    : weekDayToSpanish(props.lastAvailability!.day) + ' - ' + weekDayToSpanish(props.availability.day) + ' '
+  }
+
   return (
     <div
       style={{
@@ -20,7 +29,7 @@ export const DayAvailability = (props: Props) => {
       }}
     >
       <strong style={{ fontSize: '18px', color: '#4a4a4a' }}>
-        {!props.oneCard ? weekDayToSpanish(props.availability.day) + ' ' : 'Lunes - ' + weekDayToSpanish(props.availability.day) + ' ' }
+        {!props.oneCard ? weekDayToSpanish(props.availability.day) + ' ' : showDaysOrdered() }
       </strong>
       <div key={props.availability.id} style={{ marginTop: '10px' }}>
         <p>

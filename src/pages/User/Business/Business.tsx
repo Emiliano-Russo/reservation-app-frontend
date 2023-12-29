@@ -136,7 +136,7 @@ export const Business = withPageLayout(
             height="40vh"
             src={business.banner}
             alt="Business Banner"
-            style={{ objectFit: 'cover' }} />}
+            style={{ objectFit: 'cover' }} /> }
           {loading && <Spin size='large' style={{ marginTop: '10rem' }} />}
 
         </FadeFromTop>
@@ -165,16 +165,13 @@ export const Business = withPageLayout(
           </FadeFromTop>
           <FadeFromTop>
             <div style={{ marginTop: '15px' }}>
-              <span style={{ marginRight: '10px' }}>
+              <span style={{ marginRight: '10px'}}>
                 {business.averageRating}
               </span>
               <Rate allowHalf defaultValue={business.averageRating} />
             </div>
           </FadeFromTop>
-          <AnimatedFromLeft
-          style={{
-            margin: '0px'
-          }}>
+          <AnimatedFromLeft>
             <Tabs
               id="BusinessTabs"
               defaultActiveKey="1"
@@ -213,7 +210,9 @@ export const Business = withPageLayout(
                   }}
                 >
                   {isOneHourView(business.availability) ?
-                  <DayAvailability availability={business.availability[business.availability.length - 1]} oneCard={true} />
+                  <DayAvailability availability={business.availability[0]} 
+                                   lastAvailability={business.availability[business.availability.length - 1]} 
+                                   oneCard={true} />
                   : <Row gutter={16}>
                     {business.availability
                       .sort((a, b) => getDayValue(a.day) - getDayValue(b.day))
