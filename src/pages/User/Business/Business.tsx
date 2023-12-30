@@ -10,6 +10,8 @@ import {
   Avatar,
   Spin,
   Modal,
+  Col,
+  Row,
 } from 'antd';
 import {
   ArrowLeftOutlined,
@@ -118,6 +120,14 @@ export const Business = withPageLayout(
       return `${day} ${month} ${year} ${hours}:${minutes}`;
     }
 
+    function isOneHourView(availabilities) {
+      if(!availabilities) return false;
+      const openingTime = availabilities[0].openingTime;
+      const closingTime = availabilities[0].closingTime;
+      return availabilities.every(item => item.openingTime === openingTime 
+        && item.closingTime === closingTime);
+    }
+
     return (
       <>
         <FadeFromTop>
@@ -128,7 +138,7 @@ export const Business = withPageLayout(
             alt="Business Banner"
             style={{ objectFit: 'cover' }} /> }
           {loading && <Spin size='large' style={{ marginTop: '10rem' }} />}
-          
+
         </FadeFromTop>
 
         <Button
@@ -196,14 +206,22 @@ export const Business = withPageLayout(
                     display: 'flex',
                     flexDirection: 'row',
                     flexWrap: 'wrap',
-                    padding: '0px 20px',
+                    padding: '0px 5px',
                   }}
                 >
-                  {business.availability
-                    .sort((a, b) => getDayValue(a.day) - getDayValue(b.day))
-                    .map((av) => (
-                      <DayAvailability availability={av} />
-                    ))}
+                  {isOneHourView(business.availability) ?
+                  <DayAvailability availability={business.availability[0]} 
+                                   lastAvailability={business.availability[business.availability.length - 1]} 
+                                   oneCard={true} />
+                  : <Row gutter={16}>
+                    {business.availability
+                      .sort((a, b) => getDayValue(a.day) - getDayValue(b.day))
+                      .map((av, index) => (
+                        <Col xs={12} sm={12} md={12} key={index}>
+                          <DayAvailability availability={av} oneCard={false} />
+                        </Col>
+                      ))}
+                  </Row>}
                 </div>
               </TabPane>
             </Tabs>
