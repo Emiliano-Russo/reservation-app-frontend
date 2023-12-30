@@ -169,7 +169,7 @@ export const BusinessProfile = withPageLayout(
                     }}
                   >
                     {business?.availability.map((avail, index) => (
-                      <DayAvailability key={index} availability={avail} />
+                      <DayAvailability key={index} oneCard={false} availability={avail} />
                     ))}
                   </div>
                 </div>
